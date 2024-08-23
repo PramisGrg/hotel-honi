@@ -17,6 +17,9 @@ import { PhoneInput } from "@/components/phone-input";
 import background from "../../assets/background.png";
 import womenwithtab from "../../assets/women-with-tab.png";
 import thunderbolt from "../../assets/thunderbolt.png";
+import axiosInstance from "@/services/axios";
+import { Toaster, toast } from "sonner";
+import ErrorResponse from "@/types";
 
 const CreateAccount = () => {
   const navigate = useNavigate();
@@ -24,21 +27,40 @@ const CreateAccount = () => {
   const form = useForm<z.infer<typeof userRegisterSchema>>({
     resolver: zodResolver(userRegisterSchema),
     defaultValues: {
-      fullname: "",
-      phonenumber: "",
+      name: "",
+      phoneNumber: "",
       password: "",
       confirmpassword: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof userRegisterSchema>) {
-    console.log("Pramis");
-    console.log(values);
-    navigate("/login");
+  async function onSubmit(values: z.infer<typeof userRegisterSchema>) {
+    const dialCode = values.phoneNumber.slice(1, 4);
+    const phoneNumber = values.phoneNumber.slice(4);
+
+    const requestData = {
+      name: values.name,
+      dialCode: dialCode,
+      phoneNumber: phoneNumber,
+      password: values.password,
+    };
+
+    try {
+      console.log(requestData);
+      const response = await axiosInstance.post("/auth/register", requestData);
+      toast.success(response.data.message);
+      navigate("/verify");
+    } catch (error: unknown) {
+      const err = (error as ErrorResponse)?.response?.data?.message;
+      toast.error(err);
+      form.reset();
+    }
   }
+
   return (
     /* From Component */
     <div className="min-h-screen flex items-center justify-center bg-[#EFECFF]">
+      <Toaster richColors />
       <div className="flex bg-white">
         <div className="w-96 p-6 ">
           <Form {...form}>
@@ -49,7 +71,7 @@ const CreateAccount = () => {
               </p>
               <FormField
                 control={form.control}
-                name="fullname"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Full Name</FormLabel>
@@ -66,7 +88,7 @@ const CreateAccount = () => {
               />
               <FormField
                 control={form.control}
-                name="phonenumber"
+                name="phoneNumber"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Phone Number</FormLabel>

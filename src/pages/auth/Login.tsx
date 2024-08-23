@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { userLoginSchema } from "@/schema/UserLoginSchema";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,26 +17,44 @@ import { PhoneInput } from "@/components/phone-input";
 import background from "../../assets/background.png";
 import womenwithtab from "../../assets/women-with-tab.png";
 import thunderbolt from "../../assets/thunderbolt.png";
+import axiosInstance from "@/services/axios";
+import { Toaster, toast } from "sonner";
+import ErrorResponse from "@/types";
 
 const CreateAccount = () => {
-  const navigate = useNavigate();
-
   const form = useForm<z.infer<typeof userLoginSchema>>({
     resolver: zodResolver(userLoginSchema),
     defaultValues: {
-      phonenumber: "",
+      phoneNumber: "",
       password: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof userLoginSchema>) {
-    console.log("Pramis");
-    console.log(values);
-    navigate("/");
+  async function onSubmit(values: z.infer<typeof userLoginSchema>) {
+    const dialCode = values.phoneNumber.slice(1, 4);
+    const phoneNumber = values.phoneNumber.slice(4);
+
+    const requiredValues = {
+      dialCode: dialCode,
+      phoneNumber: phoneNumber,
+      password: values.password,
+    };
+    console.log(requiredValues);
+    try {
+      const response = await axiosInstance.post("/auth/login", requiredValues);
+      console.log(response);
+      const res = response?.data?.message;
+      toast.success(res);
+    } catch (error: unknown) {
+      const err = (error as ErrorResponse)?.response?.data?.message;
+      toast.error(err);
+      form.reset();
+    }
   }
   return (
     //Form Component
     <div className="min-h-screen flex items-center justify-center bg-[#EFECFF]">
+      <Toaster richColors />
       <div className="flex bg-white">
         <div className="p-20">
           <Form {...form}>
@@ -48,7 +66,7 @@ const CreateAccount = () => {
               <div className="space-y-4 pt-4">
                 <FormField
                   control={form.control}
-                  name="phonenumber"
+                  name="phoneNumber"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="font-semibold">
