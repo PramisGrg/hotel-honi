@@ -11,13 +11,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PhoneInput } from "@/components/phone-input";
-import background from "../assets/background.png";
-import womenwithtab from "../assets/women-with-tab.png";
-import thunderbolt from "../assets/thunderbolt.png";
+import background from "../../assets/background.png";
+import womenwithtab from "../../assets/women-with-tab.png";
+import thunderbolt from "../../assets/thunderbolt.png";
 
 const CreateAccount = () => {
   const navigate = useNavigate();
@@ -35,19 +34,19 @@ const CreateAccount = () => {
   function onSubmit(values: z.infer<typeof userRegisterSchema>) {
     console.log("Pramis");
     console.log(values);
-
     navigate("/login");
   }
   return (
     /* From Component */
     <div className="min-h-screen flex items-center justify-center bg-[#EFECFF]">
       <div className="flex bg-white">
-        <div className="bg-red-100 ">
+        <div className="w-96 p-6 ">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <FormDescription className="text-3xl text-black font-bold ">
-                Create Account
-              </FormDescription>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <h1 className="text-3xl font-bold pt-4">Create Account</h1>
+              <p className="text-sm">
+                Please provide your information to create account
+              </p>
               <FormField
                 control={form.control}
                 name="fullname"
@@ -56,7 +55,7 @@ const CreateAccount = () => {
                     <FormLabel>Full Name</FormLabel>
                     <FormControl>
                       <Input
-                        className="bg-[#EFECFF] w-1/2"
+                        className="bg-[#EFECFF] w-full"
                         placeholder="Lal Kumar Pun"
                         {...field}
                       />
@@ -73,7 +72,7 @@ const CreateAccount = () => {
                     <FormLabel>Phone Number</FormLabel>
                     <FormControl>
                       <PhoneInput
-                        className="bg-[#EFECFF] w-1/2"
+                        className="bg-[#EFECFF] w-full"
                         placeholder="98XXXXXXXX"
                         {...field}
                       />
@@ -90,7 +89,8 @@ const CreateAccount = () => {
                     <FormLabel>New Password</FormLabel>
                     <FormControl>
                       <Input
-                        className="bg-[#EFECFF] w-1/2"
+                        type="password"
+                        className="bg-[#EFECFF] w-full"
                         placeholder="*******"
                         {...field}
                       />
@@ -107,7 +107,8 @@ const CreateAccount = () => {
                     <FormLabel>Confirm Password</FormLabel>
                     <FormControl>
                       <Input
-                        className="bg-[#EFECFF] w-1/2"
+                        type="password"
+                        className="bg-[#EFECFF] w-full"
                         placeholder="*******"
                         {...field}
                       />
@@ -116,12 +117,20 @@ const CreateAccount = () => {
                   </FormItem>
                 )}
               />
-              <Button className="bg-[#2722C0] w-1/2" type="submit">
+              <Button
+                className="bg-[#2722C0] hover:text-gray-300 duration-300 w-full"
+                type="submit"
+              >
                 Create Account
               </Button>
-              <div className="flex pl-24 gap-2">
+              <div className="flex items-center justify-center gap-2">
                 <p>Already have an account ?</p>
-                <Link to="/login">Login</Link>
+                <Link
+                  className="text-[#2722C0] hover:text-[#110f46]"
+                  to="/login"
+                >
+                  Login
+                </Link>
               </div>
             </form>
           </Form>
