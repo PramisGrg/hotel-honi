@@ -45,11 +45,18 @@ const CreateAccount = () => {
       password: values.password,
     };
 
+    const queryString = new URLSearchParams({
+      param1: dialCode,
+      param2: phoneNumber,
+    }).toString();
+
     try {
       console.log(requestData);
       const response = await axiosInstance.post("/auth/register", requestData);
-      toast.success(response.data.message);
-      navigate("/verify");
+      setTimeout(() => {
+        toast.success(response.data.message);
+      }, 1000);
+      navigate(`/verify?${queryString}`);
     } catch (error: unknown) {
       const err = (error as ErrorResponse)?.response?.data?.message;
       toast.error(err);
@@ -59,10 +66,10 @@ const CreateAccount = () => {
 
   return (
     /* From Component */
-    <div className="min-h-screen flex items-center justify-center bg-[#EFECFF]">
+    <div className="min-h-screen flex items-center w-full justify-center bg-[#EFECFF]">
       <Toaster richColors />
-      <div className="flex bg-white">
-        <div className="w-96 p-6 ">
+      <div className="flex bg-white w-9/12">
+        <div className="w-full p-10 ">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <h1 className="text-3xl font-bold pt-4">Create Account</h1>
@@ -99,7 +106,7 @@ const CreateAccount = () => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -117,7 +124,7 @@ const CreateAccount = () => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
@@ -135,12 +142,12 @@ const CreateAccount = () => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
               <Button
-                className="bg-[#2722C0] hover:text-gray-300 duration-300 w-full"
+                className="bg-[#2722C0] hover:text-gray-400 duration-400 w-full"
                 type="submit"
               >
                 Create Account
@@ -148,7 +155,7 @@ const CreateAccount = () => {
               <div className="flex items-center justify-center gap-2">
                 <p>Already have an account ?</p>
                 <Link
-                  className="text-[#2722C0] hover:text-[#110f46]"
+                  className="text-[#2722C0] duration-300 hover:text-gray-300"
                   to="/login"
                 >
                   Login
@@ -159,7 +166,7 @@ const CreateAccount = () => {
         </div>
         {/*This is Static component */}
         <div
-          className="flex justify-center items-center w-96 bg-cover"
+          className="flex justify-center items-center w-full p-16 bg-cover"
           style={{
             backgroundImage: `url(${background})`,
           }}

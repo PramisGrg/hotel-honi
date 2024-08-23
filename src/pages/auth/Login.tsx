@@ -20,8 +20,11 @@ import thunderbolt from "../../assets/thunderbolt.png";
 import axiosInstance from "@/services/axios";
 import { Toaster, toast } from "sonner";
 import ErrorResponse from "@/types";
+import { useNavigate } from "react-router-dom";
 
 const CreateAccount = () => {
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof userLoginSchema>>({
     resolver: zodResolver(userLoginSchema),
     defaultValues: {
@@ -45,6 +48,9 @@ const CreateAccount = () => {
       console.log(response);
       const res = response?.data?.message;
       toast.success(res);
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1000);
     } catch (error: unknown) {
       const err = (error as ErrorResponse)?.response?.data?.message;
       toast.error(err);
@@ -55,10 +61,13 @@ const CreateAccount = () => {
     //Form Component
     <div className="min-h-screen flex items-center justify-center bg-[#EFECFF]">
       <Toaster richColors />
-      <div className="flex bg-white">
-        <div className="p-20">
+      <div className="flex bg-white w-6/10">
+        <div className="p-16 w-2/3">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className=" w-full  space-y-2"
+            >
               <div>
                 <h1 className="text-3xl text-black font-bold pb-1">Log in</h1>
                 <p className="text-sm">Please provide your login details</p>
@@ -79,7 +88,7 @@ const CreateAccount = () => {
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs text-red-600" />
                     </FormItem>
                   )}
                 />
@@ -99,7 +108,7 @@ const CreateAccount = () => {
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs text-red-600" />
                     </FormItem>
                   )}
                 />
@@ -107,14 +116,14 @@ const CreateAccount = () => {
               <div className="py-2">
                 <div className="flex justify-end pb-2">
                   <Link
-                    className="text-[#2722C0] text-right hover:text-[#110f46]"
+                    className="text-[#2722C0] duration-300 text-right hover:text-gray-300"
                     to="/forgot"
                   >
                     Forgot password ?
                   </Link>
                 </div>
                 <Button
-                  className="bg-[#2722C0] hover:text-gray-400 w-full"
+                  className="bg-[#2722C0] duration-300 hover:text-gray-400 w-full"
                   type="submit"
                 >
                   Login
@@ -123,8 +132,8 @@ const CreateAccount = () => {
               <div className="flex gap-2">
                 <p>Don't have an account ?</p>
                 <Link
-                  className="text-[#2722C0] hover:text-[#110f46]"
-                  to="/create"
+                  className="text-[#2722C0] duration-300 hover:text-gray-300"
+                  to="/register"
                 >
                   Register
                 </Link>

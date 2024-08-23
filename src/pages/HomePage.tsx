@@ -6,7 +6,7 @@ import thunderbolt from "../assets/thunderbolt.png";
 const HomePage = () => {
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate("/create");
+    navigate("/register");
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#EFECFF]">
@@ -20,7 +20,7 @@ const HomePage = () => {
           </div>
           <div className="text-center py-8 text-white">
             <button
-              className="bg-[#2722C0] hover:text-gray-600 duration-300 p-2 w-full rounded-sm"
+              className="bg-[#2722C0] hover:text-gray-400 duration-300 p-2 w-full rounded-sm"
               onClick={handleClick}
             >
               Create Account
@@ -29,7 +29,7 @@ const HomePage = () => {
           <div className="flex justify-center gap-2">
             <p>Already have an account ? </p>
             <Link
-              className="text-[#2722C0] duration-300 hover:text-[#CBC4EE]"
+              className="text-[#2722C0] duration-300 hover:text-gray-300"
               to="/login"
             >
               Login
