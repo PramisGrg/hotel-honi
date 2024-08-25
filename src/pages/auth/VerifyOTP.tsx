@@ -5,9 +5,10 @@ import {
 } from "@/components/ui/input-otp";
 import axiosInstance from "@/services/axios";
 import ErrorResponse from "@/types";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import leftImage from "../../assets/leftImage.png";
 
 const VerifyOTP = () => {
   const [params, setParams] = useState<{
@@ -27,7 +28,6 @@ const VerifyOTP = () => {
 
   const handleChange = (value: string) => {
     if (value.length === 6) {
-      console.log(value);
       validateOtp(value);
     }
   };
@@ -39,45 +39,42 @@ const VerifyOTP = () => {
       dialCode: param1,
       phoneNumber: param2,
     };
+
     try {
-      console.log(data);
-      const response = await axiosInstance.patch("/auth/register", data);
-      console.log(response);
+      await axiosInstance.patch("/auth/register", data);
       toast.success("OTP verified successfully!");
-      setTimeout(() => {
-        navigate("/login");
-      }, 1000);
+      navigate("/login");
     } catch (error: unknown) {
-      console.log(error);
       const errMessage =
         (error as ErrorResponse)?.response?.data?.message ||
         "OTP verification failed";
-      console.log("Pramis");
       toast.error(errMessage);
-      setTimeout(() => {
-        navigate("/");
-      }, 1000);
+      navigate("/");
     }
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="flex-col text-center text-2xl p-40 space-y-4 font-bold">
-        <div>Verify OTP</div>
-        <div>
-          <InputOTP maxLength={6} onChange={handleChange}>
-            <InputOTPGroup>
-              <InputOTPSlot index={0} />
-              <InputOTPSlot index={1} />
-              <InputOTPSlot index={2} />
-              <InputOTPSlot index={3} />
-              <InputOTPSlot index={4} />
-              <InputOTPSlot index={5} />
-            </InputOTPGroup>
-          </InputOTP>
+    <div className="flex items-center justify-center min-h-screen p-6 bg-[#EFECFF]">
+      <div className="bg-red-300 max-w-[1120px] w-full grid md:grid-cols-2">
+        <div className="bg-white md:order-1 order-2">
+          <div className="space-y-4 flex flex-col items-center justify-center h-[600px]">
+            <h1 className="text-xl text-center">Verify OTP</h1>
+            <InputOTP maxLength={6} onChange={handleChange}>
+              <InputOTPGroup>
+                <InputOTPSlot index={0} />
+                <InputOTPSlot index={1} />
+                <InputOTPSlot index={2} />
+                <InputOTPSlot index={3} />
+                <InputOTPSlot index={4} />
+                <InputOTPSlot index={5} />
+              </InputOTPGroup>
+            </InputOTP>
+          </div>
+        </div>
+        <div className="md:order-2 order-1 h-[600px]">
+          <img className="h-full w-full object-cover" src={leftImage} />
         </div>
       </div>
-      <Toaster richColors />
     </div>
   );
 };

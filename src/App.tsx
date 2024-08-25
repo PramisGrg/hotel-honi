@@ -6,10 +6,12 @@ import Login from "./pages/auth/Login";
 import Dashboard from "./pages/Dashboard";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import VerifyOTP from "./pages/auth/VerifyOTP";
+import { Toaster } from "sonner";
 
 function App() {
   return (
     <>
+      <Toaster richColors />
       <Router>
         <Routes>
           <Route path="/" element={<HomePage />}></Route>
