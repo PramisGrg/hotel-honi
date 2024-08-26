@@ -19,6 +19,7 @@ import axiosInstance from "@/services/axios";
 import ErrorResponse from "@/types";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import endpoints from "@/lib/api.contant";
 
 const CreateAccount = () => {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const CreateAccount = () => {
     };
     console.log(requiredValues);
     try {
-      const response = await axiosInstance.post("/auth/login", requiredValues);
+      const response = await axiosInstance.post(endpoints.auth.login, requiredValues);
       const res = response?.data?.message;
       toast.success(res);
       navigate("/dashboard");

@@ -18,6 +18,7 @@ import leftImage from "../../assets/leftImage.png";
 import axiosInstance from "@/services/axios";
 import { toast } from "sonner";
 import ErrorResponse from "@/types";
+import endpoints from "@/lib/api.contant";
 
 const CreateAccount = () => {
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ const CreateAccount = () => {
     }).toString();
 
     try {
-      const response = await axiosInstance.post("/auth/register", requestData);
+      const response = await axiosInstance.post(endpoints.auth.register, requestData);
       toast.success(response.data.message);
       navigate(`/verify?${queryString}`);
     } catch (error: unknown) {
