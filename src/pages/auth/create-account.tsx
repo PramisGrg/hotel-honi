@@ -50,7 +50,10 @@ const CreateAccount = () => {
     }).toString();
 
     try {
-      const response = await axiosInstance.post(endpoints.auth.register, requestData);
+      const response = await axiosInstance.post(
+        endpoints.auth.register,
+        requestData
+      );
       toast.success(response.data.message);
       navigate(`/verify?${queryString}`);
     } catch (error: unknown) {
@@ -62,7 +65,7 @@ const CreateAccount = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen p-5 bg-[#EFECFF]">
-      <div className="max-w-[1120px] w-full grid md:grid-cols-2 bg-white ">
+      <div className="max-w-[1120px] w-full grid md:grid-cols-2 min-h-[600px] bg-white ">
         <div className="order-2 md:order-1 flex items-center justify-center w-full p-10">
           <div className="w-full">
             <Form {...form}>
@@ -70,10 +73,12 @@ const CreateAccount = () => {
                 onSubmit={form.handleSubmit(onSubmit)}
                 className="space-y-4"
               >
-                <h1 className="text-3xl font-bold">Create Account</h1>
-                <p className="text-sm">
-                  Please provide your information to create account
-                </p>
+                <div>
+                  <h1 className="text-3xl font-bold">Create Account</h1>
+                  <p className="text-sm">
+                    Please provide your information to create account
+                  </p>
+                </div>
                 <FormField
                   control={form.control}
                   name="name"
@@ -116,6 +121,7 @@ const CreateAccount = () => {
                       <FormLabel>New Password</FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="current-password"
                           type="password"
                           className="bg-[#EFECFF] w-full"
                           placeholder="*******"
@@ -134,6 +140,7 @@ const CreateAccount = () => {
                       <FormLabel>Confirm Password</FormLabel>
                       <FormControl>
                         <Input
+                          autoComplete="confirm-password"
                           type="password"
                           className="bg-[#EFECFF] w-full "
                           placeholder="*******"
@@ -170,7 +177,7 @@ const CreateAccount = () => {
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
-          className="order-1 md:order-2 h-full w-full object-cover"
+          className="order-1 md:block hidden md:order-2 h-full w-full object-cover"
         ></div>
       </div>
     </div>

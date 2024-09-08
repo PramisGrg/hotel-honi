@@ -16,7 +16,7 @@ const HomePage = () => {
           <div className="flex flex-col items-center justify-center gap-6 h-full">
             <h1 className="text-4xl">Welcome to Hotel Honi</h1>
             <h3 className="text-sm">
-              The best cloud based hotel management system{" "}
+              The best cloud based hotel management system
             </h3>
             <Button
               onClick={handleClick}
@@ -35,7 +35,7 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-        <div className="md:order-2 order-1 h-[600px]">
+        <div className="md:order-2 md:block hidden order-1 h-[600px]">
           <img
             className="h-full w-full object-cover"
             src={leftImage}
