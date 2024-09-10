@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 
-import { EditItems } from "../popup/EditItems";
-import { DeleteItems } from "../popup/DeleteItems";
+import { EditItems } from "../popup/edit-items";
+import { DeleteItems } from "../popup/delete-items";
 
 export type SpaceTableRef = {
   id: number;

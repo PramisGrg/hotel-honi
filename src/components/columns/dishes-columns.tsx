@@ -1,13 +1,13 @@
 import { ColumnDef } from "@tanstack/react-table";
 // import { Switch } from "../ui/switch";
-import { EditItems } from "../popup/EditItems";
-import { DeleteItems } from "../popup/DeleteItems";
+import { EditItems } from "../popup/edit-items";
+import { DeleteItems } from "../popup/delete-items";
 
 export type DishesColuumnRef = {
-  id: number;
+  id: string;
   name: string;
   image: string;
-  price: string;
+  price: number;
   description: string;
 };
 

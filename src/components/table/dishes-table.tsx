@@ -1,5 +1,3 @@
-// import { IoIosAddCircle } from "react-icons/io";
-
 import { Button } from "@/components/ui/button";
 import {
   ColumnDef,
@@ -9,6 +7,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
+  Row,
 } from "@tanstack/react-table";
 
 import {
@@ -22,13 +21,18 @@ import {
 import React from "react";
 import { Input } from "../ui/input";
 import AddMenuItems from "../popup/add-menu-items";
+import { useMenuIdStore } from "@/store/menu-id-store";
 
-interface DataTableProps<TData, TValue> {
+interface DataRow {
+  id: string;
+}
+
+interface DataTableProps<TData extends DataRow, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function DishesTable<TData, TValue>({
+export function DishesTable<TData extends DataRow, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -51,6 +55,16 @@ export function DishesTable<TData, TValue>({
       },
     },
   });
+
+  const { setSelectMenuID } = useMenuIdStore((state) => ({
+    setSelectMenuID: state.setSelectMenuId,
+  }));
+
+  const handleClick = (row: Row<DataRow>) => {
+    console.log("clicked");
+    console.log(row.original.id);
+    setSelectMenuID(row.original.id);
+  };
 
   return (
     <div className="">
@@ -93,6 +107,7 @@ export function DishesTable<TData, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
+                  onClick={() => handleClick(row)}
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >

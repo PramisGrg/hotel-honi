@@ -16,9 +16,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useDropzone } from "react-dropzone";
-import { useEffect, useState } from "react";
-import { MdOutlineFileUpload } from "react-icons/md";
-import { MdOutlineDelete } from "react-icons/md";
+import { useState } from "react";
+import { MdOutlineFileUpload, MdOutlineDelete } from "react-icons/md";
 import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
 import { UseAddDishesQuery } from "@/queries/table/dishes-menu.tsx/add-dishes-query";
 
@@ -26,11 +25,12 @@ const AddMenuItems = () => {
   const [rawFile, setRawFile] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState<number | undefined>();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setRawFile("");
+    setRawFile(null);
   };
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -41,28 +41,40 @@ const AddMenuItems = () => {
     },
   });
 
-  const handleSubmit = (e) => {
+  const createDishes = UseAddDishesQuery();
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (price === undefined) return;
+
     const dishes = {
       name,
-      price,
+      price: price,
       description,
+      category: "14ded12c-7cc3-40d1-9f90-21eb74bbc4ff",
     };
-    console.log(dishes);
-  };
-  // const dishmutation = UseAddDishesQuery();
-  // useEffect(() => {
-  //   dishmutation.mutate(dish);
-  // }, []);
 
-  const handleClick = () => {
-    console.log("Pramis");
+    console.log(dishes);
+
+    createDishes.mutate(dishes, {
+      onSuccess: () => {
+        console.log("Pramis is Handsome");
+        setIsDialogOpen(false);
+      },
+      onError: () => {
+        setName("");
+        setDescription("");
+        setPrice(undefined);
+      },
+    });
   };
 
   return (
-    <Dialog>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-500">Add New Items</Button>
+        <Button className="bg-blue-500" onClick={() => setIsDialogOpen(true)}>
+          Add New Items
+        </Button>
       </DialogTrigger>
       <DialogContent className="min-w-[900px]">
         <DialogHeader>
@@ -85,9 +97,10 @@ const AddMenuItems = () => {
               <div>
                 <Label htmlFor="price">Price</Label>
                 <Input
-                  value={price}
+                  type="number"
+                  value={price ?? ""}
                   id="price"
-                  onChange={(e) => setPrice(e.target.value)}
+                  onChange={(e) => setPrice(Number(e.target.value))}
                 />
               </div>
               <div>
@@ -141,7 +154,6 @@ const AddMenuItems = () => {
           </div>
           <DialogFooter>
             <Button
-              onClick={handleClick}
               className="bg-blue-600 duration-500 hover:text-gray-300"
               type="submit"
             >

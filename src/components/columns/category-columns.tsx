@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Switch } from "../ui/switch";
-import { EditItems } from "../popup/EditItems";
-import { DeleteItems } from "../popup/DeleteItems";
+import { EditItems } from "../popup/edit-items";
+import { DeleteItems } from "../popup/delete-items";
 
 export type CategoryColuumnRef = {
   id: number;
@@ -12,7 +12,7 @@ export type CategoryColuumnRef = {
   category: string;
 };
 
-export const dishescolumns: ColumnDef<DishesColuumnRef>[] = [
+export const dishescolumns: ColumnDef<CategoryColuumnRef>[] = [
   {
     accessorKey: "name",
     header: "Name",
@@ -40,7 +40,7 @@ export const dishescolumns: ColumnDef<DishesColuumnRef>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ getValue }) => {
-      const status = getValue() as DishesColuumnRef["status"];
+      const status = getValue() as CategoryColuumnRef["status"];
       const isEnabled = status === "Enabled";
       return (
         <div className="flex items-center gap-2">

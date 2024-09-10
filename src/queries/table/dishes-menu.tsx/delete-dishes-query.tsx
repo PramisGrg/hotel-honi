@@ -3,29 +3,23 @@ import { axiosAuthInstance } from "@/services/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-type Dish = {
-  name: string;
-  price: number;
-  description: string;
-};
-
-export function UseAddDishesQuery() {
+export function UseDeletDishesQuery() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (dish: Dish) => {
-      const response = await axiosAuthInstance.post(
-        endpoints.dishes.addDishes,
-        dish
+    mutationFn: async (id: string) => {
+      const response = await axiosAuthInstance.delete(
+        `${endpoints.dishes.deleteDishes}/${id}`
       );
       return response.data;
     },
     onSuccess: (data) => {
-      console.log(data.message, "🧐🧐🧐");
       queryClient.invalidateQueries({ queryKey: ["Dishes"] });
+      console.log("delete bhayo hahaha");
       toast.success(data.message);
     },
     onError: () => {
       toast.error("Please satisfy the given conditions");
+      console.log("Delete bhayena hahaha");
     },
   });
 }

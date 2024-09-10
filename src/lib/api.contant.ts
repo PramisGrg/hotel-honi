@@ -24,6 +24,8 @@ const endpoints = {
   dishes: {
     getDishes: mainEndpoint + "/menu/items/all",
     addDishes: mainEndpoint + "/menu/items/create",
+    deleteDishes: mainEndpoint + "/menu/items/delete",
+    editDishes: mainEndpoint + "/menu/items/update",
   },
 };
 
