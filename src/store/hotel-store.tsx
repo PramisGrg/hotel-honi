@@ -5,13 +5,17 @@ interface State {
   hotelName: string | undefined;
   hotelAddress: string | undefined;
   activeHotelId: string | undefined;
+  activeHotelName: string | undefined;
+  activeHotelAddress: string | undefined;
 }
 
 interface Actions {
-  setHotelId: (selectedHotelId: string) => void;
-  setHotelName: (selectHotelName: string) => void;
-  setHotelAddress: (selectHotelAddress: string) => void;
-  setActiveHotelId: (selectActiveHotel: string) => void;
+  setHotelId: (hotelId: string) => void;
+  setHotelName: (hotelName: string) => void;
+  setHotelAddress: (hotelAddress: string) => void;
+  setActiveHotelId: (activeHotelId: string) => void;
+  setActiveHotelName: (activeHotelName: string) => void;
+  setActiveHotelAddress: (activeHotelAddress: string) => void;
 }
 
 const hotelStoreInitialState: State = {
@@ -19,6 +23,8 @@ const hotelStoreInitialState: State = {
   hotelName: undefined,
   hotelAddress: undefined,
   activeHotelId: undefined,
+  activeHotelName: undefined,
+  activeHotelAddress: undefined,
 };
 
 export const useHotelInfoStore = create<State & Actions>()((set) => ({
@@ -38,5 +44,13 @@ export const useHotelInfoStore = create<State & Actions>()((set) => ({
 
   setActiveHotelId: (activeHotelId: string) => {
     set({ activeHotelId });
+  },
+
+  setActiveHotelName: (activeHotelName: string) => {
+    set({ activeHotelName });
+  },
+
+  setActiveHotelAddress: (activeHotelAddress: string) => {
+    set({ activeHotelAddress });
   },
 }));

@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Switch } from "../ui/switch";
+// import { Switch } from "../ui/switch";
 import { EditItems } from "../popup/EditItems";
 import { DeleteItems } from "../popup/DeleteItems";
 
@@ -8,8 +8,7 @@ export type DishesColuumnRef = {
   name: string;
   image: string;
   price: string;
-  status: "Enabled" | "Disabled";
-  category: string;
+  description: string;
 };
 
 export const dishescolumns: ColumnDef<DishesColuumnRef>[] = [
@@ -35,35 +34,40 @@ export const dishescolumns: ColumnDef<DishesColuumnRef>[] = [
     accessorKey: "price",
     header: "Price",
   },
-
   {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ getValue }) => {
-      const status = getValue() as DishesColuumnRef["status"];
-      const isEnabled = status === "Enabled";
-      return (
-        <div className="flex items-center gap-2">
-          <Switch
-            checked={isEnabled}
-            className={isEnabled ? "bg-green-500" : "bg-red-500"}
-          />
-          <span
-            className={`text-sm ${
-              isEnabled ? "text-green-600" : "text-red-600"
-            }`}
-          >
-            {status}
-          </span>
-        </div>
-      );
-    },
+    accessorKey: "description",
+    header: "Description",
   },
 
-  {
-    accessorKey: "category",
-    header: "Category",
-  },
+  // {
+  //   accessorKey: "status",
+  //   header: "Status",
+  //   cell: ({ getValue }) => {
+  //     const status = getValue() as DishesColuumnRef["status"];
+  //     const isEnabled = status === "Enabled";
+  //     return (
+  //       <div className="flex items-center gap-2">
+  //         <Switch
+  //           checked={isEnabled}
+  //           className={isEnabled ? "bg-green-500" : "bg-red-500"}
+  //         />
+  //         <span
+  //           className={`text-sm ${
+  //             isEnabled ? "text-green-600" : "text-red-600"
+  //           }`}
+  //         >
+  //           {status}
+  //         </span>
+  //       </div>
+  //     );
+  //   },
+  // },
+
+  // {
+  //   accessorKey: "category",
+  //   header: "Category",
+  // },
+
   {
     id: "actions",
     header: "Actions",

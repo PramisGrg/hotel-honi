@@ -6,6 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,7 +30,6 @@ export function CreateHotel({ onHotelCreated }: CreateHotelProps) {
       name: hotelName,
       address,
     };
-    console.log(data);
     try {
       await createHotelMutation.mutateAsync(data);
       setHotelName("");
@@ -44,14 +44,14 @@ export function CreateHotel({ onHotelCreated }: CreateHotelProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="">Create hotel</button>
+        <span>Create hotel</span>
       </DialogTrigger>
       <DialogContent className="max-w-[550px] space-y-2">
         <DialogHeader>
           <DialogTitle>Create Hotel</DialogTitle>
-          <p className="text-sm text-gray-500">
+          <DialogDescription>
             Please provide some information to create new hotel
-          </p>
+          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
           <div className="space-y-2">
@@ -78,8 +78,13 @@ export function CreateHotel({ onHotelCreated }: CreateHotelProps) {
               />
             </div>
           </div>
-          <DialogFooter>
-            <Button type="submit">Create Hotel</Button>
+          <DialogFooter className="pt-6">
+            <Button
+              className="bg-blue-500 hover:text-gray-200 hover:shadow-md duration-300"
+              type="submit"
+            >
+              Save Changes
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

@@ -1,30 +1,28 @@
 import Sidebar from "@/components/common/Sidebar";
 import burger from "@/assets/burger.png";
 import person from "@/assets/person.png";
-import Menu from "@/components/common/Menu";
+import Menu from "@/components/common/menu";
 import "driver.js/dist/driver.css";
 import { useHotelInfoStore } from "@/store/hotel-store";
 import Spinner from "@/components/common/spinner";
-import ActiveHotel from "@/components/dashboard-in/active-hotel";
-import { useSwitchHotel } from "@/queries/hotel/switch-hotel-queries";
+import ActiveHotel from "@/components/dashboard-in/hotel/active-hotel";
+import { UseSwitchHotel } from "@/queries/hotel/switch-hotel-queries";
 import { useEffect } from "react";
-import { useGetUserStore } from "@/store/user-store";
+import UserInfo from "@/components/dashboard-in/user-info";
 
 const Dashboard = () => {
-  const { name } = useGetUserStore((state) => ({
-    name: state.name,
-  }));
-  const { hotelId } = useHotelInfoStore((state) => ({
-    hotelId: state.hotelId,
+  const { activeHotelId } = useHotelInfoStore((state) => ({
+    activeHotelId: state.activeHotelId,
   }));
 
-  const switchHotel = useSwitchHotel();
+  const switchHotel = UseSwitchHotel();
 
   useEffect(() => {
-    if (hotelId && switchHotel.status === "idle") {
-      switchHotel.mutate(hotelId);
+    console.log(activeHotelId);
+    if (activeHotelId && switchHotel.status === "idle") {
+      switchHotel.mutate(activeHotelId);
     }
-  }, [hotelId, switchHotel]);
+  }, [activeHotelId, switchHotel]);
 
   if (switchHotel.isPending) {
     return <Spinner />;
@@ -42,10 +40,7 @@ const Dashboard = () => {
           {/*component 1*/}
 
           <div className="flex justify-between">
-            <div id="name" className="">
-              <h4 className="text-gray-600">Welcome back,</h4>
-              <h1 className="text-xl font-bold">{name}</h1>
-            </div>
+            <UserInfo />
 
             <ActiveHotel />
           </div>

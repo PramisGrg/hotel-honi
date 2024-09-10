@@ -1,4 +1,4 @@
-import { IoIosAddCircle } from "react-icons/io";
+// import { IoIosAddCircle } from "react-icons/io";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import React, { useState } from "react";
+import React from "react";
 import { Input } from "../ui/input";
 import AddMenuItems from "../popup/add-menu-items";
 
@@ -52,26 +52,11 @@ export function DishesTable<TData, TValue>({
     },
   });
 
-  const [openNewItem, setOpenNewItem] = useState(false);
-  const handleAddNewItems = () => {
-    setOpenNewItem(true);
-  };
-
-  const handleCloseNewItem = () => {
-    setOpenNewItem(false);
-  };
-
   return (
     <div className="">
       <div className="flex justify-between">
         <div className="py-2">
-          <button
-            onClick={handleAddNewItems}
-            className="bg-blue-500 text-white p-2 px-4 gap-2 rounded-md flex"
-          >
-            <IoIosAddCircle className="h-5 w-5" />
-            <p className="text-sm">Add New Item</p>
-          </button>
+          <AddMenuItems />
         </div>
         <div className="w-96 py-2">
           <Input
@@ -152,7 +137,6 @@ export function DishesTable<TData, TValue>({
           Next
         </Button>
       </div>
-      <AddMenuItems isOpen={openNewItem} onClose={handleCloseNewItem} />
     </div>
   );
 }

@@ -1,53 +1,22 @@
-import {
-  dishescolumns,
-  DishesColuumnRef,
-} from "@/components/columns/category-columns";
+import { dishescolumns } from "@/components/columns/dishes-columns";
 import Sidebar from "@/components/common/Sidebar";
 import { DishesTable } from "@/components/table/dishes-table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdOutlineFastfood } from "react-icons/md";
 import { TbCategory } from "react-icons/tb";
-import person from "@/assets/leftImage.png";
+import { useGetDishes } from "@/queries/table/dishes-menu.tsx/get-dishes-query";
 import { CategoryTable } from "@/components/table/category-table";
 
-const dishesMockData: DishesColuumnRef[] = [
-  {
-    id: 1,
-    name: "Antons Savill",
-    image: person,
-    price: "1",
-    status: "Enabled",
-    category: "veg mom",
-  },
-  {
-    id: 2,
-    name: "Olivie Buggs",
-    image: person,
-    price: "2",
-    status: "Disabled",
-    category: "momo",
-  },
-  {
-    id: 3,
-    name: "Brendon Bains",
-    image: person,
-    price: "3",
-    status: "Enabled",
-    category: "coke",
-  },
-  {
-    id: 4,
-    name: "Donnie Fahy",
-    image: person,
-    price: "4",
-    status: "Disabled",
-    category: "coke",
-  },
-];
-
 const FoodMenu = () => {
-  const data = dishesMockData;
   const [select, setSelect] = useState("dishes");
+  const [dishes, setDishes] = useState([]);
+
+  const { data } = useGetDishes();
+  useEffect(() => {
+    if (data) {
+      setDishes(data.data);
+    }
+  }, [data]);
 
   return (
     <div className="flex">
@@ -87,7 +56,7 @@ const FoodMenu = () => {
         </div>
         <div>
           {select === "dishes" && (
-            <DishesTable columns={dishescolumns} data={data} />
+            <DishesTable columns={dishescolumns} data={dishes} />
           )}
         </div>
         <div>

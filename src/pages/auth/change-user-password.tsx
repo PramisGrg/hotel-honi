@@ -26,6 +26,8 @@ const ChangeUserPassword = () => {
 
   const changeUserPasswordMutation = UseChangeUserPassword();
 
+  const { isDirty } = form.formState;
+
   async function onSubmit(values: z.infer<typeof ChangeUserPasswordSchema>) {
     const requiredValues = {
       currentPassword: values.currentPassword,
@@ -108,7 +110,7 @@ const ChangeUserPassword = () => {
           </div>
           <div className="py-2">
             <Button
-              className="bg-[#2722C0] duration-300 hover:text-gray-400 w-full"
+              className={`${isDirty ? "bg-blue-600" : "bg-blue-100"} w-full`}
               type="submit"
             >
               Change Password

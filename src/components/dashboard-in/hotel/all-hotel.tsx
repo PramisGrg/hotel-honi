@@ -1,3 +1,4 @@
+// all-hotel.tsx
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -6,9 +7,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { CreateHotel } from "./create-hotel";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { axiosAuthInstance } from "@/services/axios";
 import endpoints from "@/lib/api.contant";
 import { useHotelInfoStore } from "@/store/hotel-store";
@@ -26,67 +28,61 @@ type THotel = {
 
 export function AllHotel() {
   const [allHotel, setAllHotel] = useState<THotel[]>([]);
+
   const {
-    hotelName,
+    activeHotelName,
     activeHotelId,
-    hotelAddress,
-    setHotelId,
-    setHotelName,
-    setHotelAddress,
+    setActiveHotelId,
+    setActiveHotelName,
+    setActiveHotelAddress,
   } = useHotelInfoStore((state) => ({
+    activeHotelName: state.activeHotelName,
     activeHotelId: state.activeHotelId,
-    hotelAddress: state.hotelAddress,
-    hotelName: state.hotelName,
-    setHotelId: state.setHotelId,
-    setHotelName: state.setHotelName,
-    setHotelAddress: state.setHotelAddress,
+    setActiveHotelId: state.setActiveHotelId,
+    setActiveHotelName: state.setActiveHotelName,
+    setActiveHotelAddress: state.setActiveHotelAddress,
   }));
 
   const handleSwitch = (id: string, name: string, address: string) => {
-    setHotelId(id);
-    setHotelName(name);
-    setHotelAddress(address);
-    console.log(hotelName);
-    console.log(hotelAddress);
+    setActiveHotelId(id);
+    setActiveHotelName(name);
+    setActiveHotelAddress(address);
+    console.log(activeHotelId);
+    console.log(activeHotelName);
   };
 
-  const handleGetAllHotel = useCallback(async () => {
+  const handleGetAllHotel = async () => {
     try {
       const response = await axiosAuthInstance.get(endpoints.hotel.allHotel);
-      console.log(response, "👩‍❤️‍💋‍👩");
       const res = response.data.data;
       setAllHotel(res);
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  };
 
   return (
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <span
+          <Button
             onClick={handleGetAllHotel}
-            className="text-sm cursor-pointer bg-blue-600 rounded"
+            className="text-sm text-white bg-blue-600"
           >
-            Switch Hotel
-          </span>
+            Switch
+          </Button>
         </DialogTrigger>
         <DialogContent className="max-w-[550px]">
-          <DialogHeader>
+          <DialogHeader className="space-y-2">
             <DialogTitle>Switch Hotel</DialogTitle>
-            <p className="text-sm text-gray-500">
+            <DialogDescription>
               You can manage multiple hotels, select hotel you want to manage
-            </p>
+            </DialogDescription>
           </DialogHeader>
-          <div className="h-[22rem] overflow-y-auto border border-gray-300 rounded-lg">
-            <ul className="space-y-4 p-4">
+          <div className="h-[21rem] py-2 overflow-y-auto ">
+            <ul className="space-y-5">
               {allHotel.map((item) => (
-                <li
-                  key={item.hotel.id}
-                  className="bg-gray-100 p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300"
-                >
+                <li key={item.hotel.id} className="bg-[#EFECFF] rounded-lg p-4">
                   <div className="flex justify-between items-start">
                     <h3 className="text-xl font-semibold text-gray-800">
                       {item.hotel.name}
@@ -102,19 +98,15 @@ export function AllHotel() {
                             item.hotel.address
                           )
                         }
-                        className="bg-blue-500 p-2 text-white rounded-md"
+                        className="bg-blue-500 p-2 text-white hover:text-gray-200 hover:shadow-md duration-300 rounded-md"
                       >
-                        Switch Pramis
+                        Switch
                       </button>
                     )}
                   </div>
                   <div className="flex gap-6">
-                    <p className="text-xs text-gray-600">
-                      {item.hotel.address}
-                    </p>
-                    <span
-                      className={`text-xs p-1 rounded-sm ${"bg-yellow-500 text-white"}`}
-                    >
+                    <p className="text-gray-600">{item.hotel.address}</p>
+                    <span className="text-xs p-1 rounded-sm bg-yellow-400 text-white">
                       {item.role.name}
                     </span>
                   </div>
@@ -123,7 +115,10 @@ export function AllHotel() {
             </ul>
           </div>
           <DialogFooter>
-            <Button type="submit">
+            <Button
+              className="bg-blue-500 hover:shadow-md duration-300 hover:text-gray-300"
+              type="submit"
+            >
               <CreateHotel onHotelCreated={handleGetAllHotel} />
             </Button>
           </DialogFooter>

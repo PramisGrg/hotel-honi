@@ -3,7 +3,7 @@ import { Switch } from "../ui/switch";
 import { EditItems } from "../popup/EditItems";
 import { DeleteItems } from "../popup/DeleteItems";
 
-export type DishesColuumnRef = {
+export type CategoryColuumnRef = {
   id: number;
   name: string;
   image: string;

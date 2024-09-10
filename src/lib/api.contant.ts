@@ -21,6 +21,10 @@ const endpoints = {
     updateUser: mainEndpoint + "/user/update",
     changeUserPassword: mainEndpoint + "/user/change-password",
   },
+  dishes: {
+    getDishes: mainEndpoint + "/menu/items/all",
+    addDishes: mainEndpoint + "/menu/items/create",
+  },
 };
 
 export default endpoints;

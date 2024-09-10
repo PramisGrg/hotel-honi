@@ -2,7 +2,7 @@ import "./index.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/home-page";
 import CreateAccount from "./pages/auth/create-account";
-import Login from "./pages/auth/login";
+import Login from "./pages/auth/Login";
 import Dashboard from "./pages/dashboard";
 import VerifyOTP from "./pages/auth/verify-otp";
 import { Toaster } from "sonner";

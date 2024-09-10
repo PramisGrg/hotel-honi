@@ -8,7 +8,6 @@ export const useUpdateUser = () => {
   const { username, setName, setUsername, setPhone } = useGetUserStore(
     (state) => ({
       username: state.username,
-
       setName: state.setName,
       setUsername: state.setUsername,
       setPhone: state.setPhone,

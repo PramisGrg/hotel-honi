@@ -14,7 +14,6 @@ export const useCreateHotel = () => {
     },
 
     onSuccess: (data) => {
-      console.log("Hotel Create");
       toast.success(data.message);
     },
 
