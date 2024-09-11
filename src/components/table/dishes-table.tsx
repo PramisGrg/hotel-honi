@@ -20,8 +20,8 @@ import {
 } from "@/components/ui/table";
 import React from "react";
 import { Input } from "../ui/input";
-import AddMenuItems from "../popup/add-menu-items";
-import { useMenuIdStore } from "@/store/menu-id-store";
+import AddMenuItems from "../popup-table/dishes-table/add-menu";
+import { useTableIdStore } from "@/store/table-id-store";
 
 interface DataRow {
   id: string;
@@ -56,7 +56,7 @@ export function DishesTable<TData extends DataRow, TValue>({
     },
   });
 
-  const { setSelectMenuID } = useMenuIdStore((state) => ({
+  const { setSelectMenuID } = useTableIdStore((state) => ({
     setSelectMenuID: state.setSelectMenuId,
   }));
 

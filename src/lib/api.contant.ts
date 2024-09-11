@@ -27,6 +27,12 @@ const endpoints = {
     deleteDishes: mainEndpoint + "/menu/items/delete",
     editDishes: mainEndpoint + "/menu/items/update",
   },
+  category: {
+    getCategory: mainEndpoint + "/menu/category/all",
+    addCategory: mainEndpoint + "/menu/category/create",
+    deleteCategory: mainEndpoint + "/menu/category/delete",
+    editCategory: mainEndpoint + "/menu/category/update",
+  },
 };
 
 export default endpoints;

@@ -3,7 +3,7 @@ import burger from "@/assets/burger.png";
 import person from "@/assets/person.png";
 import Menu from "@/components/common/menu";
 import "driver.js/dist/driver.css";
-import { useHotelInfoStore } from "@/store/hotel-store";
+import { UseHotelInfoStore } from "@/store/hotel-store";
 import Spinner from "@/components/common/spinner";
 import ActiveHotel from "@/components/dashboard-in/hotel/active-hotel";
 import { UseSwitchHotel } from "@/queries/hotel/switch-hotel-queries";
@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import UserInfo from "@/components/dashboard-in/user-info";
 
 const Dashboard = () => {
-  const { activeHotelId } = useHotelInfoStore((state) => ({
+  const { activeHotelId } = UseHotelInfoStore((state) => ({
     activeHotelId: state.activeHotelId,
   }));
 

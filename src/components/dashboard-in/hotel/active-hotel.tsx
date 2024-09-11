@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useHotelInfoStore } from "@/store/hotel-store";
+import { UseHotelInfoStore } from "@/store/hotel-store";
 import { AllHotel } from "./all-hotel";
 import { useGetActiveHotel } from "@/queries/hotel/active-hotel-query";
 
@@ -10,7 +10,7 @@ const ActiveHotel = () => {
     setActiveHotelId,
     setActiveHotelName,
     setActiveHotelAddress,
-  } = useHotelInfoStore((state) => ({
+  } = UseHotelInfoStore((state) => ({
     activeHotelId: state.activeHotelId,
     activeHotelName: state.activeHotelName,
     activeHotelAddress: state.activeHotelAddress,
@@ -46,3 +46,23 @@ const ActiveHotel = () => {
 };
 
 export default ActiveHotel;
+// import React from "react";
+
+// interface ActiveHotelProps {
+//   id: string;
+//   name: string;
+//   address: string;
+// }
+
+// const ActiveHotel: React.FC<ActiveHotelProps> = ({ id, name, address }) => {
+//   return (
+//     <div>
+//       <h2>Active Hotel</h2>
+//       <p>ID: {id}</p>
+//       <p>Name: {name}</p>
+//       <p>Address: {address}</p>
+//     </div>
+//   );
+// };
+
+// export default ActiveHotel;

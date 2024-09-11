@@ -1,5 +1,3 @@
-import { IoIosAddCircle } from "react-icons/io";
-
 import { Button } from "@/components/ui/button";
 import {
   ColumnDef,
@@ -8,9 +6,9 @@ import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  Row,
   useReactTable,
 } from "@tanstack/react-table";
-
 import {
   Table,
   TableBody,
@@ -19,16 +17,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import React, { useState } from "react";
+import React from "react";
 import { Input } from "../ui/input";
-import AddMenuItems from "../popup/add-menu-items";
+import AddCategory from "../popup-table/category-table/add-category";
+import { useTableIdStore } from "@/store/table-id-store";
 
-interface DataTableProps<TData, TValue> {
+interface DataRow {
+  id: string;
+}
+
+interface DataTableProps<TData extends DataRow, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function CategoryTable<TData, TValue>({
+export function CategoryTable<TData extends DataRow, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -52,26 +55,21 @@ export function CategoryTable<TData, TValue>({
     },
   });
 
-  const [openNewItem, setOpenNewItem] = useState(false);
-  const handleAddNewItems = () => {
-    setOpenNewItem(true);
-  };
+  const { setSelectCategotyId } = useTableIdStore((state) => ({
+    setSelectCategotyId: state.setSelectCategoryId,
+  }));
 
-  const handleCloseNewItem = () => {
-    setOpenNewItem(false);
+  const handleClick = (row: Row<DataRow>) => {
+    console.log("clicked");
+    console.log(row.original.id);
+    setSelectCategotyId(row.original.id);
   };
 
   return (
     <div className="">
       <div className="flex justify-between">
         <div className="py-2">
-          <button
-            onClick={handleAddNewItems}
-            className="bg-blue-500 text-white p-2 px-4 gap-2 rounded-md flex"
-          >
-            <IoIosAddCircle className="h-5 w-5" />
-            <p className="text-sm">Add New Item</p>
-          </button>
+          <AddCategory />
         </div>
         <div className="w-96 py-2">
           <Input
@@ -108,6 +106,7 @@ export function CategoryTable<TData, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
+                  onClick={() => handleClick(row)}
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
@@ -152,7 +151,6 @@ export function CategoryTable<TData, TValue>({
           Next
         </Button>
       </div>
-      <AddMenuItems isOpen={openNewItem} onClose={handleCloseNewItem} />
     </div>
   );
 }

@@ -13,7 +13,7 @@ import { CreateHotel } from "./create-hotel";
 import { useState } from "react";
 import { axiosAuthInstance } from "@/services/axios";
 import endpoints from "@/lib/api.contant";
-import { useHotelInfoStore } from "@/store/hotel-store";
+import { UseHotelInfoStore } from "@/store/hotel-store";
 
 type THotel = {
   hotel: {
@@ -32,23 +32,29 @@ export function AllHotel() {
   const {
     activeHotelName,
     activeHotelId,
+    activeHotelAddress,
     setActiveHotelId,
     setActiveHotelName,
     setActiveHotelAddress,
-  } = useHotelInfoStore((state) => ({
+  } = UseHotelInfoStore((state) => ({
     activeHotelName: state.activeHotelName,
     activeHotelId: state.activeHotelId,
+    activeHotelAddress: state.activeHotelAddress,
     setActiveHotelId: state.setActiveHotelId,
     setActiveHotelName: state.setActiveHotelName,
     setActiveHotelAddress: state.setActiveHotelAddress,
   }));
 
   const handleSwitch = (id: string, name: string, address: string) => {
+    console.log(id);
+    console.log(address);
+    console.log(name);
     setActiveHotelId(id);
     setActiveHotelName(name);
     setActiveHotelAddress(address);
     console.log(activeHotelId);
     console.log(activeHotelName);
+    console.log(activeHotelAddress);
   };
 
   const handleGetAllHotel = async () => {

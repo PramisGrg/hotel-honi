@@ -18,7 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import React from "react";
-import AddNewItems from "../popup/AddNewItems";
+import AddMenuItems from "../popup-table/dishes-table/add-menu";
 import { Input } from "../ui/input";
 
 interface DataTableProps<TData, TValue> {
@@ -54,7 +54,7 @@ export function SpaceTable<TData, TValue>({
     <div className="">
       <div className="flex justify-between">
         <div className="py-2">
-          <AddNewItems />
+          <AddMenuItems />
         </div>
         <div className="w-96 py-2">
           <Input

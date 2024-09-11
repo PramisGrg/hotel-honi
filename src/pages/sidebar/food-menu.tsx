@@ -6,17 +6,27 @@ import { MdOutlineFastfood } from "react-icons/md";
 import { TbCategory } from "react-icons/tb";
 import { useGetDishes } from "@/queries/table/dishes-menu.tsx/get-dishes-query";
 import { CategoryTable } from "@/components/table/category-table";
+import { categorycolumns } from "@/components/columns/category-columns";
+import { UseGetCategory } from "@/queries/table/category-menu/get-category-query";
 
 const FoodMenu = () => {
   const [select, setSelect] = useState("dishes");
   const [dishes, setDishes] = useState([]);
+  const [categories, setCategories] = useState([]);
 
-  const { data } = useGetDishes();
+  const { data: dishesData } = useGetDishes();
   useEffect(() => {
-    if (data) {
-      setDishes(data.data);
+    if (dishesData) {
+      setDishes(dishesData.data);
     }
-  }, [data]);
+  }, [dishesData]);
+
+  const { data: categoryData } = UseGetCategory();
+  useEffect(() => {
+    if (categoryData) {
+      setCategories(categoryData.data);
+    }
+  }, [categoryData]);
 
   return (
     <div className="flex">
@@ -61,7 +71,7 @@ const FoodMenu = () => {
         </div>
         <div>
           {select === "categories" && (
-            <CategoryTable columns={dishescolumns} data={data} />
+            <CategoryTable columns={categorycolumns} data={categories} />
           )}
         </div>
       </div>

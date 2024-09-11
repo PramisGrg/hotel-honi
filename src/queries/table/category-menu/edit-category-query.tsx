@@ -1,40 +1,38 @@
-import { DataTypeMenu } from "@/components/popup-table/dishes-table/edit-menu";
+import { DataTypeCategory } from "@/components/popup-table/category-table/edit-category";
 import endpoints from "@/lib/api.contant";
 import { axiosAuthInstance } from "@/services/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-interface EditDishesParams {
+interface EditCategoryParams {
   id: string;
-  data: DataTypeMenu;
+  data: DataTypeCategory;
 }
 
-export function UseEditDishesQuery() {
+export function UseEditCategoryQuery() {
   const queryClient = useQueryClient();
-  return useMutation<unknown, Error, EditDishesParams>({
-    mutationFn: async ({ id, data }: EditDishesParams) => {
+  return useMutation<unknown, Error, EditCategoryParams>({
+    mutationFn: async ({ id, data }: EditCategoryParams) => {
       if (!id) {
         throw new Error("No menu item ID provided for editing");
       }
       console.log("Mutation ID:", id);
       console.log("Mutation Data:", data);
       const response = await axiosAuthInstance.patch(
-        `${endpoints.dishes.editDishes}/${id}`,
+        `${endpoints.category.editCategory}/${id}`,
         data
       );
       return response.data;
     },
     onSuccess: (data) => {
       console.log(data);
-      queryClient.invalidateQueries({ queryKey: ["Dishes"] });
-      console.log("edit bhayo hahaha");
-      toast.success("Menu item updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["Category"] });
+      toast.success("Category updated successfully");
     },
     onError: (error) => {
       toast.error(
-        error.message || "An error occurred while updating the menu item"
+        error.message || "An error occurred while updating the category"
       );
-      console.log("edit bhayena hahaha");
       console.log(error);
     },
   });

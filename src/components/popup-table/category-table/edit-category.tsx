@@ -9,47 +9,39 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { UseEditDishesQuery } from "@/queries/table/dishes-menu.tsx/edit-dishes-query";
-import { useMenuIdStore } from "@/store/menu-id-store";
+import { UseEditCategoryQuery } from "@/queries/table/category-menu/edit-category-query";
+import { useTableIdStore } from "@/store/table-id-store";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { MdOutlineEdit } from "react-icons/md";
 import { toast } from "sonner";
 
-export interface DataType {
+export interface DataTypeCategory {
   name: string;
-  price: number | undefined;
-  description: string;
-  category: string;
 }
 
-export function EditItems() {
+export function EditCategory() {
   const [name, setName] = useState("");
-  const [price, setPrice] = useState<number | undefined>(undefined);
-  const [description, setDescription] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const { selectMenuId } = useMenuIdStore((state) => ({
-    selectMenuId: state.selectMenuId,
+  const { selectCategoryId } = useTableIdStore((state) => ({
+    selectCategoryId: state.selectCategoryId,
   }));
 
-  const editMenu = UseEditDishesQuery();
+  const editCategory = UseEditCategoryQuery();
 
   const handleEdit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectMenuId) {
+    if (!selectCategoryId) {
       toast.error("No menu item selected for editing");
       return;
     }
-    const data: DataType = {
+    const data: DataTypeCategory = {
       name,
-      price,
-      description,
-      category: "14ded12c-7cc3-40d1-9f90-21eb74bbc4ff",
     };
 
-    editMenu.mutate(
-      { id: selectMenuId, data },
+    editCategory.mutate(
+      { id: selectCategoryId, data },
       {
         onSuccess: () => {
           console.log("Edit successful");
@@ -57,13 +49,11 @@ export function EditItems() {
         },
         onError: () => {
           setName("");
-          setDescription("");
-          setPrice(undefined);
         },
       }
     );
     console.log(data);
-    console.log(selectMenuId);
+    console.log(selectCategoryId);
     console.log("Edit submitted");
     setIsDialogOpen(false);
   };
@@ -79,7 +69,7 @@ export function EditItems() {
         <DialogHeader>
           <DialogTitle>Edit Menu Items</DialogTitle>
           <DialogDescription className="text-gray-400">
-            Edit your menu items here 🤪
+            Edit your category items here 🤪
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleEdit}>
@@ -94,38 +84,6 @@ export function EditItems() {
                 id="name"
                 className="col-span-3"
               />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
-                Price
-              </Label>
-              <Input
-                value={price}
-                onChange={(e) =>
-                  setPrice(
-                    e.target.value ? parseFloat(e.target.value) : undefined
-                  )
-                }
-                id="username"
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
-                Description
-              </Label>
-              <Input
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                id="username"
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
-                Category
-              </Label>
-              <Input id="username" className="col-span-3" />
             </div>
           </div>
           <DialogFooter>

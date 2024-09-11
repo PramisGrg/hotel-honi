@@ -3,17 +3,22 @@ import { axiosAuthInstance } from "@/services/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export function UseDeletDishesQuery() {
+type Category = {
+  name: string;
+};
+
+export function UseAddCategoryQuery() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (id: string) => {
-      const response = await axiosAuthInstance.delete(
-        `${endpoints.dishes.deleteDishes}/${id}`
+    mutationFn: async (category: Category) => {
+      const response = await axiosAuthInstance.post(
+        endpoints.category.addCategory,
+        category
       );
       return response.data;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["Dishes"] });
+      queryClient.invalidateQueries({ queryKey: ["Category"] });
       toast.success(data.message);
     },
     onError: () => {

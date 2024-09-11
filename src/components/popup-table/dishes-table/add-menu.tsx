@@ -16,17 +16,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useDropzone } from "react-dropzone";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdOutlineFileUpload, MdOutlineDelete } from "react-icons/md";
 import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
 import { UseAddDishesQuery } from "@/queries/table/dishes-menu.tsx/add-dishes-query";
+import { UseGetCategory } from "@/queries/table/category-menu/get-category-query";
 
 const AddMenuItems = () => {
   const [rawFile, setRawFile] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState<number | undefined>();
+  const [selectedCategory, setSelectedCategory] = useState<
+    string | undefined
+  >();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -42,38 +47,44 @@ const AddMenuItems = () => {
   });
 
   const createDishes = UseAddDishesQuery();
+  const { data: categoryData } = UseGetCategory();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (price === undefined) return;
+    if (price === undefined || !selectedCategory) return;
 
     const dishes = {
       name,
-      price: price,
+      price,
       description,
-      category: "14ded12c-7cc3-40d1-9f90-21eb74bbc4ff",
+      category: selectedCategory,
     };
-
-    console.log(dishes);
-
     createDishes.mutate(dishes, {
       onSuccess: () => {
-        console.log("Pramis is Handsome");
         setIsDialogOpen(false);
       },
       onError: () => {
         setName("");
         setDescription("");
         setPrice(undefined);
+        setSelectedCategory(undefined);
       },
     });
   };
+
+  useEffect(() => {
+    if (categoryData) {
+      setCategories(categoryData.data || []);
+      console.log(categoryData.data);
+    }
+    console.log("category");
+  }, [categoryData]);
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         <Button className="bg-blue-500" onClick={() => setIsDialogOpen(true)}>
-          Add New Items
+          Add New Item
         </Button>
       </DialogTrigger>
       <DialogContent className="min-w-[900px]">
@@ -113,14 +124,16 @@ const AddMenuItems = () => {
               </div>
               <div>
                 <Label htmlFor="category">Category</Label>
-                <Select>
+                <Select onValueChange={setSelectedCategory}>
                   <SelectTrigger>
                     <SelectValue placeholder="Category" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Lunch">Lunch</SelectItem>
-                    <SelectItem value="Dinner">Dinner</SelectItem>
-                    <SelectItem value="Cafe">Cafe</SelectItem>
+                    {categories.map((item) => (
+                      <SelectItem key={item.id} value={item.id}>
+                        {item.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -135,6 +148,7 @@ const AddMenuItems = () => {
                   <img
                     className="w-full h-full object-cover inset-0 absolute"
                     src={rawFile}
+                    alt="Uploaded file"
                   />
                   <button
                     onClick={handleDelete}

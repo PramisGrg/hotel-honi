@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 // import { Switch } from "../ui/switch";
-import { EditItems } from "../popup/edit-items";
-import { DeleteItems } from "../popup/delete-items";
+import { EditMenuItems } from "../popup-table/dishes-table/edit-menu";
+import { DeleteMenuItems } from "../popup-table/dishes-table/delete-menu";
 
 export type DishesColuumnRef = {
   id: string;
@@ -73,8 +73,8 @@ export const dishescolumns: ColumnDef<DishesColuumnRef>[] = [
     header: "Actions",
     cell: () => (
       <div className="flex gap-2">
-        <EditItems />
-        <DeleteItems />
+        <EditMenuItems />
+        <DeleteMenuItems />
       </div>
     ),
   },
