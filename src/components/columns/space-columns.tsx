@@ -1,45 +1,35 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { EditMenuItems } from "../popup-table/dishes-table/edit-menu";
-import { DeleteMenuItems } from "../popup-table/dishes-table/delete-menu";
+import { DeleteSpace } from "../popup-table/space-table/delete-space";
+import { EditRoom } from "../popup-table/room-table/edit-room";
 
-export type SpaceTableRef = {
-  id: number;
+export type SpaceTableColumnsRef = {
+  id: string;
   name: string;
-  room: number;
-  table: number;
-  status: "Available" | "Unavailable";
 };
 
-export const spacecolumns: ColumnDef<SpaceTableRef>[] = [
+export const spacecolumns: ColumnDef<SpaceTableColumnsRef>[] = [
   {
     accessorKey: "name",
     header: "Space Name",
   },
-  {
-    accessorKey: "room",
-    header: "Rooms",
-  },
-  {
-    accessorKey: "table",
-    header: "Tables",
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ getValue }) => {
-      const status = getValue() as SpaceTableRef["status"];
-      const statusClass =
-        status === "Available" ? "text-green-600" : "text-red-600";
-      return <span className={statusClass}>{status}</span>;
-    },
-  },
+
+  // {
+  //   accessorKey: "status",
+  //   header: "Status",
+  //   cell: ({ getValue }) => {
+  //     const status = getValue() as SpaceTableRef["status"];
+  //     const statusClass =
+  //       status === "Available" ? "text-green-600" : "text-red-600";
+  //     return <span className={statusClass}>{status}</span>;
+  //   },
+  // },
   {
     id: "actions",
     header: "Actions",
     cell: () => (
       <div className="flex gap-2">
-        <EditMenuItems />
-        <DeleteMenuItems />
+        <EditRoom />
+        <DeleteSpace />
       </div>
     ),
   },

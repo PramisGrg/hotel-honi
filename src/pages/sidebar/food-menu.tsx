@@ -4,7 +4,7 @@ import { DishesTable } from "@/components/table/dishes-table";
 import { useEffect, useState } from "react";
 import { MdOutlineFastfood } from "react-icons/md";
 import { TbCategory } from "react-icons/tb";
-import { useGetDishes } from "@/queries/table/dishes-menu.tsx/get-dishes-query";
+import { useGetDishes } from "@/queries/table/dishes-menu/get-dishes-query";
 import { CategoryTable } from "@/components/table/category-table";
 import { categorycolumns } from "@/components/columns/category-columns";
 import { UseGetCategory } from "@/queries/table/category-menu/get-category-query";

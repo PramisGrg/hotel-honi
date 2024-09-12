@@ -1,13 +1,13 @@
-// import { IoIosAddCircle } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
-  Row,
   useReactTable,
+  Row,
 } from "@tanstack/react-table";
+
 import {
   Table,
   TableBody,
@@ -16,17 +16,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useTableIdStore } from "@/store/table-id-store";
-import AddSpace from "../popup-table/space-table/add-space";
-import { SpaceTableColumnsRef } from "../columns/space-columns";
 import { Input } from "../ui/input";
+import { useTableIdStore } from "@/store/table-id-store";
+import { TableTableColumnsRef } from "../columns/table-columns";
+import AddRoom from "../popup-table/room-table/add-room";
 
-interface DataTableProps<TData extends SpaceTableColumnsRef, TValue> {
+interface DataTableProps<TData extends TableTableColumnsRef, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function SpaceTable<TData extends SpaceTableColumnsRef, TValue>({
+export function RoomTable<TData extends TableTableColumnsRef, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -42,22 +42,23 @@ export function SpaceTable<TData extends SpaceTableColumnsRef, TValue>({
     },
   });
 
-  const { setSelectSpaceId } = useTableIdStore((state) => ({
-    setSelectSpaceId: state.setSelectSpaceId,
+  const { setSelectRoomId } = useTableIdStore((state) => ({
+    setSelectRoomId: state.setSelectRoomId,
   }));
 
-  const handleClick = (row: Row<SpaceTableColumnsRef>) => {
-    setSelectSpaceId(row.original.id);
+  const handleClick = (row: Row<TableTableColumnsRef>) => {
+    console.log(row.original.id);
+    setSelectRoomId(row.original.id);
   };
 
   return (
     <div className="">
       <div className="flex justify-between">
         <div className="py-2">
-          <AddSpace />
+          <AddRoom />
         </div>
         <div className="w-96 py-2">
-          <Input placeholder="Filter spaces..." className="max-w-sm" />
+          <Input placeholder="Filter names..." className="max-w-sm" />
         </div>
       </div>
       <div>

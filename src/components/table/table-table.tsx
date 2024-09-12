@@ -1,13 +1,15 @@
-// import { IoIosAddCircle } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
-  Row,
   useReactTable,
+  Row,
 } from "@tanstack/react-table";
+
 import {
   Table,
   TableBody,
@@ -16,25 +18,34 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useTableIdStore } from "@/store/table-id-store";
-import AddSpace from "../popup-table/space-table/add-space";
-import { SpaceTableColumnsRef } from "../columns/space-columns";
+import React from "react";
 import { Input } from "../ui/input";
+import { useTableIdStore } from "@/store/table-id-store";
+import { TableTableColumnsRef } from "../columns/table-columns";
+import AddTable from "../popup-table/table-table/add-table";
 
-interface DataTableProps<TData extends SpaceTableColumnsRef, TValue> {
+interface DataTableProps<TData extends TableTableColumnsRef, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function SpaceTable<TData extends SpaceTableColumnsRef, TValue>({
+export function TableTable<TData extends TableTableColumnsRef, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      columnFilters,
+    },
     initialState: {
       pagination: {
         pageSize: 10,
@@ -42,22 +53,30 @@ export function SpaceTable<TData extends SpaceTableColumnsRef, TValue>({
     },
   });
 
-  const { setSelectSpaceId } = useTableIdStore((state) => ({
-    setSelectSpaceId: state.setSelectSpaceId,
+  const { setSelectTableId } = useTableIdStore((state) => ({
+    setSelectTableId: state.setSelectTableId,
   }));
 
-  const handleClick = (row: Row<SpaceTableColumnsRef>) => {
-    setSelectSpaceId(row.original.id);
+  const handleClick = (row: Row<TableTableColumnsRef>) => {
+    console.log(row.original.id);
+    setSelectTableId(row.original.id);
   };
 
   return (
     <div className="">
       <div className="flex justify-between">
         <div className="py-2">
-          <AddSpace />
+          <AddTable />
         </div>
         <div className="w-96 py-2">
-          <Input placeholder="Filter spaces..." className="max-w-sm" />
+          <Input
+            placeholder="Filter names..."
+            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
         </div>
       </div>
       <div>

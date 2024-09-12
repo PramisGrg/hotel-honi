@@ -9,62 +9,57 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { UseEditDishesQuery } from "@/queries/table/dishes-menu/edit-dishes-query";
+import { UseEditRoomQuery } from "@/queries/table/room-table/edit-room-query";
+import { useTableIdStore } from "@/store/table-id-store";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { MdOutlineEdit } from "react-icons/md";
 import { toast } from "sonner";
-import { useTableIdStore } from "@/store/table-id-store";
 
-export interface DataTypeMenu {
+export interface DataTypeRoom {
   name: string;
-  price: number | undefined;
-  description: string;
-  category: string;
+  capacity: number;
+  price: string;
 }
 
-export function EditMenuItems() {
+export function EditRoom() {
   const [name, setName] = useState("");
-  const [price, setPrice] = useState<number | undefined>(undefined);
-  const [description, setDescription] = useState("");
+  const [capacity, setCapacity] = useState<number>(0);
+  const [price, setPrice] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const { selectMenuId } = useTableIdStore((state) => ({
-    selectMenuId: state.selectMenuId,
+  const { selectRoomId } = useTableIdStore((state) => ({
+    selectRoomId: state.selectRoomId,
   }));
 
-  const editMenu = UseEditDishesQuery();
+  const editRoom = UseEditRoomQuery();
 
   const handleEdit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectMenuId) {
+    if (!selectRoomId) {
       toast.error("No menu item selected for editing");
       return;
     }
-    const data: DataTypeMenu = {
+    const data: DataTypeRoom = {
       name,
+      capacity,
       price,
-      description,
-      category: "14ded12c-7cc3-40d1-9f90-21eb74bbc4ff",
     };
 
-    editMenu.mutate(
-      { id: selectMenuId, data },
+    console.log(data);
+    editRoom.mutate(
+      { id: selectRoomId, data },
       {
         onSuccess: () => {
-          console.log("Edit successful");
           setIsDialogOpen(false);
         },
         onError: () => {
           setName("");
-          setDescription("");
-          setPrice(undefined);
+          setPrice("");
+          setCapacity(0);
         },
       }
     );
-    console.log(data);
-    console.log(selectMenuId);
-    console.log("Edit submitted");
     setIsDialogOpen(false);
   };
 
@@ -77,9 +72,9 @@ export function EditMenuItems() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit Menu Items</DialogTitle>
+          <DialogTitle>Edit Room</DialogTitle>
           <DialogDescription className="text-gray-400">
-            Edit your menu items here 🤪
+            Edit your room here 🤪
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleEdit}>
@@ -96,36 +91,26 @@ export function EditMenuItems() {
               />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
+              <Label htmlFor="name" className="text-right">
+                Capacity
+              </Label>
+              <Input
+                value={capacity}
+                onChange={(e) => setCapacity(Number(e.target.value))}
+                id="name"
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">
                 Price
               </Label>
               <Input
                 value={price}
-                onChange={(e) =>
-                  setPrice(
-                    e.target.value ? parseFloat(e.target.value) : undefined
-                  )
-                }
-                id="username"
+                onChange={(e) => setPrice(e.target.value)}
+                id="name"
                 className="col-span-3"
               />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
-                Description
-              </Label>
-              <Input
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                id="username"
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
-                Category
-              </Label>
-              <Input id="username" className="col-span-3" />
             </div>
           </div>
           <DialogFooter>

@@ -1,83 +1,42 @@
 import Sidebar from "@/components/common/Sidebar";
 import { SpaceTable } from "@/components/table/space-table";
-import { useState } from "react";
-import {
-  SpaceTableRef,
-  spacecolumns,
-} from "@/components/columns/space-columns";
-import RoomTable from "@/components/table/RoomTable";
-import TableTable from "@/components/table/TableTable";
-
-const spaceMockData: SpaceTableRef[] = [
-  {
-    id: 1,
-    name: "Antons Savill",
-    room: 1,
-    table: 1,
-    status: "Available",
-  },
-  {
-    id: 2,
-    name: "Olivie Buggs",
-    room: 2,
-    table: 2,
-    status: "Unavailable",
-  },
-  {
-    id: 3,
-    name: "Brendon Bains",
-    room: 3,
-    table: 3,
-    status: "Available",
-  },
-  {
-    id: 4,
-    name: "Donnie Fahy",
-    room: 4,
-    table: 4,
-    status: "Available",
-  },
-  {
-    id: 36,
-    name: "Gerri Beazey",
-    room: 36,
-    table: 36,
-    status: "Unavailable",
-  },
-  {
-    id: 37,
-    name: "Clarie Eastgate",
-    room: 37,
-    table: 37,
-    status: "Available",
-  },
-  {
-    id: 38,
-    name: "Avie Tume",
-    room: 38,
-    table: 38,
-    status: "Available",
-  },
-  {
-    id: 39,
-    name: "Darryl Richardson",
-    room: 39,
-    table: 39,
-    status: "Available",
-  },
-  {
-    id: 40,
-    name: "Phylis Studdal",
-    room: 40,
-    table: 40,
-    status: "Available",
-  },
-];
+import { useEffect, useState } from "react";
+import { spacecolumns } from "@/components/columns/space-columns";
+import { tablecolumns } from "@/components/columns/table-columns";
+import { roomcolumns } from "@/components/columns/room-columns";
+import { RoomTable } from "@/components/table/room-table";
+import { TableTable } from "@/components/table/table-table";
+import { UseGetSpaceQuery } from "@/queries/table/space-table/get-spaces-query";
+import { UseGetTableQuery } from "@/queries/table/table-table/get-table-query";
+import { useGetRoomsQuery } from "@/queries/table/room-table/get-room-query";
 
 const Room = () => {
-  const data = spaceMockData;
-
   const [toggle, setToggle] = useState("space");
+  const [allSpaces, setAllSpaces] = useState([]);
+  const [allTables, setAllTables] = useState([]);
+  const [allRooms, setAllRooms] = useState([]);
+
+  const { data: spaces } = UseGetSpaceQuery({ search: "" });
+  const { data: tables } = UseGetTableQuery();
+  const { data: rooms } = useGetRoomsQuery();
+
+  useEffect(() => {
+    if (spaces) {
+      setAllSpaces(spaces.data);
+    }
+  }, [spaces]);
+
+  useEffect(() => {
+    if (tables) {
+      setAllTables(tables.data);
+    }
+  }, [tables]);
+
+  useEffect(() => {
+    if (rooms) {
+      setAllRooms(rooms.data);
+    }
+  }, [rooms]);
 
   return (
     <div className="flex">
@@ -121,13 +80,23 @@ const Room = () => {
             Tables
           </button>
         </div>
+        {/* <div>
+          <Input
+            placeholder="Search"
+            onChange={(e) => handleSearch(e.target.value)}
+          ></Input>
+        </div> */}
 
         {/* Conditional Rendering */}
         {toggle === "space" && (
-          <SpaceTable columns={spacecolumns} data={data} />
+          <SpaceTable columns={spacecolumns} data={allSpaces} />
         )}
-        {toggle === "room" && <RoomTable />}
-        {toggle === "table" && <TableTable />}
+        {toggle === "room" && (
+          <RoomTable columns={roomcolumns} data={allRooms} />
+        )}
+        {toggle === "table" && (
+          <TableTable columns={tablecolumns} data={allTables} />
+        )}
       </div>
     </div>
   );

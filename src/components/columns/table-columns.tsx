@@ -1,33 +1,28 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { DeleteRoom } from "../popup-table/room-table/delete-room";
-import { EditRoom } from "../popup-table/room-table/edit-room";
+import { EditTable } from "../popup-table/table-table/edit-table";
+import { DeleteTable } from "../popup-table/table-table/delete-table";
 
-export type RoomTableRef = {
+export type TableTableColumnsRef = {
   id: string;
-  name: string;
   capacity: number;
-  price: string;
   status: "AVAILABLE" | "UNAVAILABLE";
+  name: string;
 };
 
-export const roomcolumns: ColumnDef<RoomTableRef>[] = [
+export const tablecolumns: ColumnDef<TableTableColumnsRef>[] = [
   {
     accessorKey: "name",
-    header: "Room Name",
+    header: "Space Name",
   },
   {
     accessorKey: "capacity",
     header: "Capacity",
   },
   {
-    accessorKey: "price",
-    header: "Price",
-  },
-  {
     accessorKey: "status",
     header: "Status",
     cell: ({ getValue }) => {
-      const status = getValue() as RoomTableRef["status"];
+      const status = getValue() as TableTableColumnsRef["status"];
       const statusClass =
         status === "AVAILABLE" ? "text-green-600" : "text-red-600";
       return <span className={statusClass}>{status}</span>;
@@ -38,8 +33,8 @@ export const roomcolumns: ColumnDef<RoomTableRef>[] = [
     header: "Actions",
     cell: () => (
       <div className="flex gap-2">
-        <EditRoom />
-        <DeleteRoom />
+        <EditTable />
+        <DeleteTable />
       </div>
     ),
   },

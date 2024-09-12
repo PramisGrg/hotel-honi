@@ -19,8 +19,13 @@ import { useDropzone } from "react-dropzone";
 import { useEffect, useState } from "react";
 import { MdOutlineFileUpload, MdOutlineDelete } from "react-icons/md";
 import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
-import { UseAddDishesQuery } from "@/queries/table/dishes-menu.tsx/add-dishes-query";
+import { UseAddDishesQuery } from "@/queries/table/dishes-menu/add-dishes-query";
 import { UseGetCategory } from "@/queries/table/category-menu/get-category-query";
+
+interface Category {
+  id: string;
+  name: string;
+}
 
 const AddMenuItems = () => {
   const [rawFile, setRawFile] = useState<string | null>(null);
@@ -31,7 +36,7 @@ const AddMenuItems = () => {
     string | undefined
   >();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();

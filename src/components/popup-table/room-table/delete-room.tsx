@@ -9,23 +9,22 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { UseDeletDishesQuery } from "@/queries/table/dishes-menu/delete-dishes-query";
+import { UseDeleteRoomQuery } from "@/queries/table/room-table/delete-room-query";
 import { useTableIdStore } from "@/store/table-id-store";
 import { MdOutlineDelete } from "react-icons/md";
 
-export function DeleteMenuItems() {
-  const { selectCategoryId } = useTableIdStore((state) => ({
-    selectCategoryId: state.selectCategoryId,
+export function DeleteRoom() {
+  const { selectRoomId } = useTableIdStore((state) => ({
+    selectRoomId: state.selectRoomId,
   }));
 
-  const deleteDish = UseDeletDishesQuery();
+  const deleteRoom = UseDeleteRoomQuery();
 
   const handleDelete = () => {
-    console.log("Delete");
-    console.log(selectCategoryId);
-    if (selectCategoryId) {
-      deleteDish.mutate(selectCategoryId);
+    if (selectRoomId) {
+      deleteRoom.mutate(selectRoomId);
     }
+    console.log("Elete");
   };
 
   return (
@@ -37,8 +36,8 @@ export function DeleteMenuItems() {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your food
-            Menu from our servers.
+            This action cannot be undone. This will permanently delete your
+            rooms from our servers.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

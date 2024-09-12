@@ -33,6 +33,24 @@ const endpoints = {
     deleteCategory: mainEndpoint + "/menu/category/delete",
     editCategory: mainEndpoint + "/menu/category/update",
   },
+  spaces: {
+    getSpaces: mainEndpoint + "/space/all",
+    addSpace: mainEndpoint + "/space/create",
+    deleteSpace: mainEndpoint + "/space/delete",
+    editSpace: mainEndpoint + "/space/update",
+  },
+  tables: {
+    getTables: mainEndpoint + "/table/all",
+    addTable: mainEndpoint + "/table/create",
+    deleteTable: mainEndpoint + "/table/delete",
+    editTable: mainEndpoint + "/table/update",
+  },
+  rooms: {
+    getRooms: mainEndpoint + "/room/all",
+    addRoom: mainEndpoint + "/room/create",
+    deleteRoom: mainEndpoint + "/room/delete",
+    editRoom: mainEndpoint + "/room/update",
+  },
 };
 
 export default endpoints;
