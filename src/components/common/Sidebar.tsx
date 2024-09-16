@@ -1,4 +1,4 @@
-import { sidebarItems } from "@/data/SidebarItems";
+import { sidebarItems } from "@/data/sidebar-items";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import tonicbyte from "@/assets/tonicbyte.jpeg";

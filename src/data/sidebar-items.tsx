@@ -11,6 +11,9 @@ import { ImSpoonKnife } from "react-icons/im";
 import { MdTableBar } from "react-icons/md";
 import { MdMeetingRoom } from "react-icons/md";
 import { LiaHotelSolid } from "react-icons/lia";
+import { MdOutlineFastfood } from "react-icons/md";
+import { BiCategoryAlt } from "react-icons/bi";
+import { FaPersonCircleCheck } from "react-icons/fa6";
 
 export const sidebarItems = [
   {
@@ -55,7 +58,21 @@ export const sidebarItems = [
     id: 4,
     title: "Food Menu",
     icons: <ImSpoonKnife />,
-    path: "/sidebar/food-menu",
+    sub: true,
+    subItems: [
+      {
+        id: 14,
+        title: "Dishes",
+        path: "/sidebar/food-menu/dishes",
+        icons: <MdOutlineFastfood />,
+      },
+      {
+        id: 15,
+        title: "Categories",
+        path: "/sidebar/food-menu/categories",
+        icons: <BiCategoryAlt />,
+      },
+    ],
   },
   {
     id: 5,
@@ -67,7 +84,21 @@ export const sidebarItems = [
     id: 6,
     title: "Cutomer & Suppliers",
     icons: <FaRegUser />,
-    path: "/sidebar/customer",
+    sub: true,
+    subItems: [
+      {
+        id: 14,
+        title: "Customers",
+        path: "/sidebar/customer-supplier/customers",
+        icons: <FaPersonCircleCheck />,
+      },
+      {
+        id: 15,
+        title: "Suppliers",
+        path: "/sidebar/customer-supplier/suppliers",
+        icons: <BiCategoryAlt />,
+      },
+    ],
   },
   {
     id: 7,

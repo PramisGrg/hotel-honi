@@ -9,20 +9,23 @@ import { Toaster } from "sonner";
 import SetPassword from "./pages/auth/forgot-password/SetPassword";
 import ResetPassword from "./pages/auth/forgot-password/ResetPassword";
 import Checkout from "./pages/dashboard/Checkout";
-import Customer from "./pages/dashboard/Customer";
 import Orders from "./pages/dashboard/Orders";
 import Settings from "./pages/dashboard/Settings";
 import Helpcenter from "./pages/dashboard/Helpcenter";
-import Room from "./pages/sidebar/room";
-import FoodMenu from "./pages/sidebar/food-menu";
 import Setting from "./pages/sidebar/setting";
 import { UseHotelInfoStore } from "@/store/hotel-store";
 import Spinner from "@/components/common/spinner";
 import { useSwitchHotelMutation } from "@/queries/hotel/switch-hotel-queries";
 import { useEffect } from "react";
-import RoomInside from "./pages/sidebar/room-and-space/room";
 import AppLayout from "./components/layout/app-layout";
 import { useGetActiveHotel } from "./queries/hotel/active-hotel-query";
+import Room from "./pages/sidebar/room-and-space/room";
+import Space from "./pages/sidebar/room-and-space/sapce";
+import Table from "./pages/sidebar/room-and-space/table";
+import Dishes from "./pages/sidebar/food-menu/dish";
+import Categories from "./pages/sidebar/food-menu/category";
+import Supplier from "./pages/sidebar/customer-and-supplier/supplier";
+import Customer from "./pages/sidebar/customer-and-supplier/customer";
 
 function App() {
   const { activeHotelId } = UseHotelInfoStore((state) => ({
@@ -65,23 +68,43 @@ function App() {
         </Routes>
 
         <Routes>
+          <Route path="/dashboard/" element={<AppLayout />}>
+            <Route path="customer" element={<Customer />}></Route>
+            <Route path="supplier" element={<Supplier />}></Route>
+          </Route>
+        </Routes>
+
+        <Routes>
           <Route path="/dashboard/checkout" element={<Checkout />}></Route>
-          <Route path="/dashboard/customer" element={<Customer />}></Route>
           <Route path="/dashboard/orders" element={<Orders />}></Route>
           <Route path="/dashboard/settings" element={<Settings />}></Route>
           <Route path="/dashboard/helpcenter" element={<Helpcenter />}></Route>
         </Routes>
 
         <Routes>
-          <Route path="/sidebar/room" element={<Room />}></Route>
-          <Route path="/sidebar/food-menu" element={<FoodMenu />}></Route>
           <Route path="/sidebar/setting" element={<Setting />}></Route>
           <Route path="/sidebar/customer" element={<Customer />}></Route>
         </Routes>
 
         <Routes>
           <Route path="/sidebar/room-and-space" element={<AppLayout />}>
-            <Route path="rooms" element={<RoomInside />}></Route>
+            <Route path="rooms" element={<Room />}></Route>
+            <Route path="spaces" element={<Space />}></Route>
+            <Route path="tables" element={<Table />}></Route>
+          </Route>
+        </Routes>
+
+        <Routes>
+          <Route path="/sidebar/food-menu/" element={<AppLayout />}>
+            <Route path="dishes" element={<Dishes />}></Route>
+            <Route path="categories" element={<Categories />}></Route>
+          </Route>
+        </Routes>
+
+        <Routes>
+          <Route path="/sidebar/customer-supplier/" element={<AppLayout />}>
+            <Route path="customers" element={<Customer />}></Route>
+            <Route path="suppliers" element={<Supplier />}></Route>
           </Route>
         </Routes>
       </Router>

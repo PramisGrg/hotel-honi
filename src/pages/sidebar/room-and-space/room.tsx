@@ -5,7 +5,7 @@ import { UseGetRoomQuery } from "@/queries/table/room-table/get-room-query";
 import { useDebounce } from "@/hooks/debounce";
 import { useDebounceValue } from "@/store/debounce-store";
 
-const RoomInside = () => {
+const Room = () => {
   const { debounceRoomValue } = useDebounceValue((state) => ({
     debounceRoomValue: state.debounceRoomValue,
   }));
@@ -25,12 +25,10 @@ const RoomInside = () => {
   return (
     <div className="flex">
       <div className="w-full p-8 space-y-6">
-        {/* Room and Spaces */}
-
         <div className="">
-          <h1 className="text-xl">Spaces</h1>
+          <h1 className="text-xl">Room</h1>
           <p className="text-sm text-gray-600">
-            View and manage all your rooms, spaces & tables
+            View and manage all your rooms
           </p>
         </div>
 
@@ -40,4 +38,4 @@ const RoomInside = () => {
   );
 };
 
-export default RoomInside;
+export default Room;
