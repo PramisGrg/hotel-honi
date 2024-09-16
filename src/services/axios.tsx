@@ -1,7 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const token = Cookies.get("token");
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_HOTEL_HONI_URL,
   headers: {
@@ -9,6 +8,8 @@ const axiosInstance = axios.create({
   },
 });
 
+const token = Cookies.get("token");
+console.log({ token }, "😅");
 const axiosAuthInstance = axios.create({
   baseURL: import.meta.env.VITE_HOTEL_HONI_URL,
   headers: {

@@ -8,17 +8,30 @@ import { RoomTable } from "@/components/table/room-table";
 import { TableTable } from "@/components/table/table-table";
 import { UseGetSpaceQuery } from "@/queries/table/space-table/get-spaces-query";
 import { UseGetTableQuery } from "@/queries/table/table-table/get-table-query";
-import { useGetRoomsQuery } from "@/queries/table/room-table/get-room-query";
+import { UseGetRoomQuery } from "@/queries/table/room-table/get-room-query";
+import { useDebounce } from "@/hooks/debounce";
+import { useDebounceValue } from "@/store/debounce-store";
 
 const Room = () => {
+  const { debounceRoomValue, debounceSpaceValue, debounceTableValue } =
+    useDebounceValue((state) => ({
+      debounceRoomValue: state.debounceRoomValue,
+      debounceSpaceValue: state.debounceSpaceValue,
+      debounceTableValue: state.debounceTableValue,
+    }));
+
+  const debounceSearchRoom = useDebounce(debounceRoomValue, 750);
+  const debounceSearchSpace = useDebounce(debounceSpaceValue, 750);
+  const debounceSearchTable = useDebounce(debounceTableValue, 750);
+
   const [toggle, setToggle] = useState("space");
   const [allSpaces, setAllSpaces] = useState([]);
   const [allTables, setAllTables] = useState([]);
   const [allRooms, setAllRooms] = useState([]);
 
-  const { data: spaces } = UseGetSpaceQuery({ search: "" });
-  const { data: tables } = UseGetTableQuery();
-  const { data: rooms } = useGetRoomsQuery();
+  const { data: spaces } = UseGetSpaceQuery({ search: debounceSearchSpace });
+  const { data: tables } = UseGetTableQuery({ search: debounceSearchTable });
+  const { data: rooms } = UseGetRoomQuery({ search: debounceSearchRoom });
 
   useEffect(() => {
     if (spaces) {

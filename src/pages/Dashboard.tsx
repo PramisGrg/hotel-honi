@@ -3,35 +3,10 @@ import burger from "@/assets/burger.png";
 import person from "@/assets/person.png";
 import Menu from "@/components/common/menu";
 import "driver.js/dist/driver.css";
-import { UseHotelInfoStore } from "@/store/hotel-store";
-import Spinner from "@/components/common/spinner";
 import ActiveHotel from "@/components/dashboard-in/hotel/active-hotel";
-import { UseSwitchHotel } from "@/queries/hotel/switch-hotel-queries";
-import { useEffect } from "react";
 import UserInfo from "@/components/dashboard-in/user-info";
 
 const Dashboard = () => {
-  const { activeHotelId } = UseHotelInfoStore((state) => ({
-    activeHotelId: state.activeHotelId,
-  }));
-
-  const switchHotel = UseSwitchHotel();
-
-  useEffect(() => {
-    console.log(activeHotelId);
-    if (activeHotelId && switchHotel.status === "idle") {
-      switchHotel.mutate(activeHotelId);
-    }
-  }, [activeHotelId, switchHotel]);
-
-  if (switchHotel.isPending) {
-    return <Spinner />;
-  }
-
-  if (switchHotel.isError) {
-    return <div>Error loading data</div>;
-  }
-
   return (
     <div className="flex">
       <Sidebar />

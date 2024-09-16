@@ -3,21 +3,20 @@ import { axiosAuthInstance } from "@/services/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export function UseDeleteRoomQuery() {
+export function UseDeleteSupplierQuery() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
       const response = await axiosAuthInstance.delete(
-        `${endpoints.rooms.deleteRoom}/${id}`
+        `${endpoints.suppliers.deleteSupplier}/${id}`
       );
       return response.data;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["Rooms"] });
+      queryClient.invalidateQueries({ queryKey: ["Suppliers"] });
       toast.success(data.message);
     },
-    onError: (error) => {
-      console.log(error);
+    onError: () => {
       toast.error("Please satisfy the given conditions");
     },
   });

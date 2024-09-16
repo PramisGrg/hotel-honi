@@ -3,8 +3,9 @@ import { axiosAuthInstance } from "@/services/axios";
 import { useMutation } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
+import { queryClient } from "@/main";
 
-export const UseSwitchHotel = () => {
+export const useSwitchHotelMutation = () => {
   return useMutation({
     mutationFn: async (hotelId: string) => {
       const response = await axiosAuthInstance.patch(
@@ -16,10 +17,10 @@ export const UseSwitchHotel = () => {
     },
 
     onSuccess: (data) => {
-      console.log(data, "Switching data");
-      console.log("token", data.data.token);
+      queryClient.clear();
       Cookies.set("token", data.data.token);
       toast.success("Hotel Switched");
+      window.location.reload();
     },
 
     onError: (error) => {

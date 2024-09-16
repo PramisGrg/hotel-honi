@@ -1,10 +1,8 @@
 import { Button } from "@/components/ui/button";
 import {
   ColumnDef,
-  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
   Row,
@@ -23,6 +21,7 @@ import { Input } from "../ui/input";
 import { useTableIdStore } from "@/store/table-id-store";
 import { TableTableColumnsRef } from "../columns/table-columns";
 import AddTable from "../popup-table/table-table/add-table";
+import { useDebounceValue } from "@/store/debounce-store";
 
 interface DataTableProps<TData extends TableTableColumnsRef, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -33,19 +32,11 @@ export function TableTable<TData extends TableTableColumnsRef, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
-    state: {
-      columnFilters,
-    },
     initialState: {
       pagination: {
         pageSize: 10,
@@ -56,10 +47,17 @@ export function TableTable<TData extends TableTableColumnsRef, TValue>({
   const { setSelectTableId } = useTableIdStore((state) => ({
     setSelectTableId: state.setSelectTableId,
   }));
+  const { setDebounceTableValue } = useDebounceValue((state) => ({
+    setDebounceTableValue: state.setDebounceTableValue,
+  }));
 
   const handleClick = (row: Row<TableTableColumnsRef>) => {
     console.log(row.original.id);
     setSelectTableId(row.original.id);
+  };
+
+  const handleTableChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDebounceTableValue(e.target.value);
   };
 
   return (
@@ -70,11 +68,8 @@ export function TableTable<TData extends TableTableColumnsRef, TValue>({
         </div>
         <div className="w-96 py-2">
           <Input
+            onChange={handleTableChange}
             placeholder="Filter names..."
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
-            }
             className="max-w-sm"
           />
         </div>

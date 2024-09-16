@@ -1,10 +1,8 @@
 import { Button } from "@/components/ui/button";
 import {
   ColumnDef,
-  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
   Row,
@@ -22,6 +20,7 @@ import React from "react";
 import { Input } from "../ui/input";
 import AddMenuItems from "../popup-table/dishes-table/add-menu";
 import { useTableIdStore } from "@/store/table-id-store";
+import { useDebounceValue } from "@/store/debounce-store";
 
 interface DataRow {
   id: string;
@@ -36,19 +35,12 @@ export function DishesTable<TData extends DataRow, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
-    state: {
-      columnFilters,
-    },
+
     initialState: {
       pagination: {
         pageSize: 10,
@@ -59,11 +51,17 @@ export function DishesTable<TData extends DataRow, TValue>({
   const { setSelectMenuID } = useTableIdStore((state) => ({
     setSelectMenuID: state.setSelectMenuId,
   }));
+  const { setDebounceDishValue } = useDebounceValue((state) => ({
+    setDebounceDishValue: state.setDebounceDishValue,
+  }));
 
   const handleClick = (row: Row<DataRow>) => {
-    console.log("clicked");
     console.log(row.original.id);
     setSelectMenuID(row.original.id);
+  };
+
+  const handleDishChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDebounceDishValue(e.target.value);
   };
 
   return (
@@ -74,11 +72,8 @@ export function DishesTable<TData extends DataRow, TValue>({
         </div>
         <div className="w-96 py-2">
           <Input
-            placeholder="Filter names..."
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
-            }
+            onChange={handleDishChange}
+            placeholder="Search Dishes..."
             className="max-w-sm"
           />
         </div>

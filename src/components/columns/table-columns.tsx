@@ -31,11 +31,14 @@ export const tablecolumns: ColumnDef<TableTableColumnsRef>[] = [
   {
     id: "actions",
     header: "Actions",
-    cell: () => (
-      <div className="flex gap-2">
-        <EditTable />
-        <DeleteTable />
-      </div>
-    ),
+    cell: (row) => {
+      console.log({ row });
+      return (
+        <div className="flex gap-2">
+          <EditTable />
+          <DeleteTable />
+        </div>
+      );
+    },
   },
 ];

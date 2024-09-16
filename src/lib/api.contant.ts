@@ -51,6 +51,18 @@ const endpoints = {
     deleteRoom: mainEndpoint + "/room/delete",
     editRoom: mainEndpoint + "/room/update",
   },
+  customers: {
+    getCustomers: mainEndpoint + "/customer/all",
+    addCustomer: mainEndpoint + "/customer/create",
+    deleteCustomer: mainEndpoint + "/customer/delete",
+    editCustomer: mainEndpoint + "/customer/update",
+  },
+  suppliers: {
+    getSuppliers: mainEndpoint + "/supplier/all",
+    addSupplier: mainEndpoint + "/supplier/create",
+    deleteSupplier: mainEndpoint + "/supplier/delete",
+    editSupplier: mainEndpoint + "/supplier/update",
+  },
 };
 
 export default endpoints;

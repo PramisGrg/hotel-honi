@@ -8,6 +8,9 @@ import { FiGlobe } from "react-icons/fi";
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoMdLogOut } from "react-icons/io";
 import { ImSpoonKnife } from "react-icons/im";
+import { MdTableBar } from "react-icons/md";
+import { MdMeetingRoom } from "react-icons/md";
+import { LiaHotelSolid } from "react-icons/lia";
 
 export const sidebarItems = [
   {
@@ -24,9 +27,29 @@ export const sidebarItems = [
   },
   {
     id: 3,
-    title: "Room & Spaces",
+    title: "Room & Space",
     icons: <MdOutlineHomeWork />,
-    path: "/sidebar/room",
+    sub: true,
+    subItems: [
+      {
+        id: 11,
+        title: "Rooms",
+        path: "/sidebar/room-and-space/rooms",
+        icons: <MdMeetingRoom />,
+      },
+      {
+        id: 12,
+        title: "Spaces",
+        path: "/sidebar/room-and-space/spaces",
+        icons: <LiaHotelSolid />,
+      },
+      {
+        id: 13,
+        title: "Tables",
+        path: "/sidebar/room-and-space/tables",
+        icons: <MdTableBar />,
+      },
+    ],
   },
   {
     id: 4,
@@ -68,7 +91,7 @@ export const sidebarItems = [
     id: 10,
     title: "Logout",
     icons: <IoMdLogOut />,
-    showRed: "true",
+    showRed: true,
     path: "/dashboard",
   },
 ];

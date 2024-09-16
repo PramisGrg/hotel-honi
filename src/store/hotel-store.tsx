@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 interface State {
   activeHotelId: string | undefined;
@@ -18,18 +19,26 @@ const hotelInfoInitailState: State = {
   activeHotelAddress: undefined,
 };
 
-export const UseHotelInfoStore = create<State & Actions>()((set) => ({
-  ...hotelInfoInitailState,
+export const UseHotelInfoStore = create<State & Actions>()(
+  persist(
+    (set) => ({
+      ...hotelInfoInitailState,
 
-  setActiveHotelId: (activeHotelId: string) => {
-    set({ activeHotelId });
-  },
+      setActiveHotelId: (activeHotelId: string) => {
+        set({ activeHotelId });
+      },
 
-  setActiveHotelName: (activeHotelName: string) => {
-    set({ activeHotelName });
-  },
+      setActiveHotelName: (activeHotelName: string) => {
+        set({ activeHotelName });
+      },
 
-  setActiveHotelAddress: (activeHotelAddress: string) => {
-    set({ activeHotelAddress });
-  },
-}));
+      setActiveHotelAddress: (activeHotelAddress: string) => {
+        set({ activeHotelAddress });
+      },
+    }),
+    {
+      name: "hotel-info-store",
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);

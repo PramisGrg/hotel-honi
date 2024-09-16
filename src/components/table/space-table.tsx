@@ -1,4 +1,3 @@
-// import { IoIosAddCircle } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import {
   ColumnDef,
@@ -20,6 +19,7 @@ import { useTableIdStore } from "@/store/table-id-store";
 import AddSpace from "../popup-table/space-table/add-space";
 import { SpaceTableColumnsRef } from "../columns/space-columns";
 import { Input } from "../ui/input";
+import { useDebounceValue } from "@/store/debounce-store";
 
 interface DataTableProps<TData extends SpaceTableColumnsRef, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -42,12 +42,20 @@ export function SpaceTable<TData extends SpaceTableColumnsRef, TValue>({
     },
   });
 
+  const { setDebounceSpaceValue } = useDebounceValue((state) => ({
+    setDebounceSpaceValue: state.setDebounceSpaceValue,
+  }));
+
   const { setSelectSpaceId } = useTableIdStore((state) => ({
     setSelectSpaceId: state.setSelectSpaceId,
   }));
 
   const handleClick = (row: Row<SpaceTableColumnsRef>) => {
     setSelectSpaceId(row.original.id);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDebounceSpaceValue(e.target.value);
   };
 
   return (
@@ -57,7 +65,11 @@ export function SpaceTable<TData extends SpaceTableColumnsRef, TValue>({
           <AddSpace />
         </div>
         <div className="w-96 py-2">
-          <Input placeholder="Filter spaces..." className="max-w-sm" />
+          <Input
+            onChange={handleSearchChange}
+            placeholder="Filter spaces..."
+            className="max-w-sm"
+          />
         </div>
       </div>
       <div>

@@ -20,6 +20,7 @@ import { Input } from "../ui/input";
 import { useTableIdStore } from "@/store/table-id-store";
 import { TableTableColumnsRef } from "../columns/table-columns";
 import AddRoom from "../popup-table/room-table/add-room";
+import { useDebounceValue } from "@/store/debounce-store";
 
 interface DataTableProps<TData extends TableTableColumnsRef, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -45,10 +46,17 @@ export function RoomTable<TData extends TableTableColumnsRef, TValue>({
   const { setSelectRoomId } = useTableIdStore((state) => ({
     setSelectRoomId: state.setSelectRoomId,
   }));
+  const { setDebounceRoomValue } = useDebounceValue((state) => ({
+    setDebounceRoomValue: state.setDebounceRoomValue,
+  }));
 
   const handleClick = (row: Row<TableTableColumnsRef>) => {
     console.log(row.original.id);
     setSelectRoomId(row.original.id);
+  };
+
+  const handleRoomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDebounceRoomValue(e.target.value);
   };
 
   return (
@@ -58,7 +66,11 @@ export function RoomTable<TData extends TableTableColumnsRef, TValue>({
           <AddRoom />
         </div>
         <div className="w-96 py-2">
-          <Input placeholder="Filter names..." className="max-w-sm" />
+          <Input
+            onChange={handleRoomChange}
+            placeholder="Search rooms..."
+            className="max-w-sm"
+          />
         </div>
       </div>
       <div>
