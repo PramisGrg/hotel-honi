@@ -1,7 +1,6 @@
-import Sidebar from "@/components/common/Sidebar";
 import burger from "@/assets/burger.png";
 import person from "@/assets/person.png";
-import Menu from "@/components/common/menu";
+import MenuLinks from "@/components/dashboard-in/menu-links";
 import "driver.js/dist/driver.css";
 import ActiveHotel from "@/components/dashboard-in/hotel/active-hotel";
 import UserInfo from "@/components/dashboard-in/user-info";
@@ -9,7 +8,6 @@ import UserInfo from "@/components/dashboard-in/user-info";
 const Dashboard = () => {
   return (
     <div className="flex">
-      <Sidebar />
       <div className="w-full">
         <div className="py-10 max-w-[700px] mx-auto p-4">
           {/*component 1*/}
@@ -20,7 +18,7 @@ const Dashboard = () => {
             <ActiveHotel />
           </div>
 
-          {/* conponent 3*/}
+          {/* conponent 2*/}
           <div className="py-8">
             <h4 className="text-sm pb-2 text-gray-600">
               You can perform some quick actions
@@ -50,7 +48,7 @@ const Dashboard = () => {
 
           {/* Component 3*/}
           <div>
-            <Menu />
+            <MenuLinks />
           </div>
         </div>
       </div>

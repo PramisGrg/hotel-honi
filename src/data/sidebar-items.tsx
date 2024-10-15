@@ -1,128 +1,121 @@
-import { MdOutlineDashboard } from "react-icons/md";
-import { AiOutlineCalendar } from "react-icons/ai";
-import { MdOutlineHomeWork } from "react-icons/md";
-import { TbCube } from "react-icons/tb";
-import { FaRegUser } from "react-icons/fa";
-import { RiMoneyDollarCircleLine } from "react-icons/ri";
-import { FiGlobe } from "react-icons/fi";
-import { IoSettingsOutline } from "react-icons/io5";
-import { IoMdLogOut } from "react-icons/io";
-import { ImSpoonKnife } from "react-icons/im";
-import { MdTableBar } from "react-icons/md";
-import { MdMeetingRoom } from "react-icons/md";
-import { LiaHotelSolid } from "react-icons/lia";
-import { MdOutlineFastfood } from "react-icons/md";
-import { BiCategoryAlt } from "react-icons/bi";
-import { FaPersonCircleCheck } from "react-icons/fa6";
+import {
+  Rss,
+  Settings,
+  SquareUserRound,
+  Utensils,
+  LayoutGrid,
+  LucideIcon,
+  ShoppingCart,
+  Building,
+  DollarSign,
+} from "lucide-react";
 
-export const sidebarItems = [
-  {
-    id: 1,
-    title: "Dashboard",
-    icons: <MdOutlineDashboard />,
-    path: "/dashboard",
-  },
-  {
-    id: 2,
-    title: "Bookings",
-    icons: <AiOutlineCalendar />,
-    path: "/dashboard/bookings",
-  },
-  {
-    id: 3,
-    title: "Room & Space",
-    icons: <MdOutlineHomeWork />,
-    sub: true,
-    subItems: [
-      {
-        id: 11,
-        title: "Rooms",
-        path: "/sidebar/room-and-space/rooms",
-        icons: <MdMeetingRoom />,
-      },
-      {
-        id: 12,
-        title: "Spaces",
-        path: "/sidebar/room-and-space/spaces",
-        icons: <LiaHotelSolid />,
-      },
-      {
-        id: 13,
-        title: "Tables",
-        path: "/sidebar/room-and-space/tables",
-        icons: <MdTableBar />,
-      },
-    ],
-  },
-  {
-    id: 4,
-    title: "Food Menu",
-    icons: <ImSpoonKnife />,
-    sub: true,
-    subItems: [
-      {
-        id: 14,
-        title: "Dishes",
-        path: "/sidebar/food-menu/dishes",
-        icons: <MdOutlineFastfood />,
-      },
-      {
-        id: 15,
-        title: "Categories",
-        path: "/sidebar/food-menu/categories",
-        icons: <BiCategoryAlt />,
-      },
-    ],
-  },
-  {
-    id: 5,
-    title: "Inventory",
-    icons: <TbCube />,
-    path: "/sidebar/inventory",
-  },
-  {
-    id: 6,
-    title: "Cutomer & Suppliers",
-    icons: <FaRegUser />,
-    sub: true,
-    subItems: [
-      {
-        id: 14,
-        title: "Customers",
-        path: "/sidebar/customer-supplier/customers",
-        icons: <FaPersonCircleCheck />,
-      },
-      {
-        id: 15,
-        title: "Suppliers",
-        path: "/sidebar/customer-supplier/suppliers",
-        icons: <BiCategoryAlt />,
-      },
-    ],
-  },
-  {
-    id: 7,
-    title: "Finance",
-    icons: <RiMoneyDollarCircleLine />,
-    path: "/sidebar/finance",
-  },
-  {
-    id: 8,
-    title: "Website",
-    icons: <FiGlobe />,
-    path: "/sidebar/website",
-  },
-  {
-    id: 9,
-    title: "Setting",
-    icons: <IoSettingsOutline />,
-    path: "/sidebar/setting",
-  },
-  {
-    id: 10,
-    title: "Logout",
-    icons: <IoMdLogOut />,
-    showRed: true,
-    path: "/dashboard",
-  },
-];
+type Submenu = {
+  href: string;
+  label: string;
+  active?: boolean;
+};
+
+type Menu = {
+  href: string;
+  label: string;
+  active?: boolean;
+  icon: LucideIcon;
+  submenus?: Submenu[];
+};
+
+type Group = {
+  groupLabel: string;
+  menus: Menu[];
+};
+
+export function getMenuList(pathname: string): Group[] {
+  return [
+    {
+      groupLabel: "",
+      menus: [
+        {
+          href: "/dashboard/home",
+          label: "Dashboard",
+          icon: LayoutGrid,
+          submenus: [],
+        },
+      ],
+    },
+    {
+      groupLabel: "Contents",
+      menus: [
+        {
+          href: "",
+          label: "Room & Spaces",
+          icon: Building,
+          submenus: [
+            {
+              href: "/dashboard/rooms",
+              label: "Rooms",
+            },
+            {
+              href: "/dashboard/spaces",
+              label: "Spaces",
+            },
+          ],
+        },
+        {
+          href: "",
+          label: " Food & Menu",
+          icon: Utensils,
+          submenus: [
+            {
+              href: "/dashboard/dishes",
+              label: "Dishes",
+            },
+            {
+              href: "/dashboard/categories",
+              label: "Categories",
+            },
+          ],
+        },
+        {
+          href: "/sidebar/food-menu/categories",
+          label: "Inventory",
+          icon: ShoppingCart,
+        },
+        {
+          href: "",
+          label: "Customer & Supplier",
+          icon: SquareUserRound,
+          submenus: [
+            {
+              href: "/dashboard/customers",
+              label: "Customer",
+            },
+            {
+              href: "/dashboard/suppliers",
+              label: "Supplier",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      groupLabel: "Settings",
+      menus: [
+        {
+          href: "/website",
+          label: "Website",
+          icon: Rss,
+        },
+        {
+          href: "/users",
+          label: "Finance",
+          icon: DollarSign,
+        },
+        {
+          href: "/dashboard/setting",
+          label: "Account",
+          icon: Settings,
+        },
+      ],
+    },
+  ];
+}

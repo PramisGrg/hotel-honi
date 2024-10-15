@@ -16,7 +16,9 @@ import { EditUserSchema } from "@/schema/edit-user-info-schema";
 import { useGetUserStore } from "@/store/user-store";
 import { useUpdateUser } from "@/queries/user/update-user-query";
 import ChangeUserPassword from "@/pages/auth/change-user-password";
-import RecentDevices from "../common/recent-devices";
+import { useDropzone } from "react-dropzone";
+import { MdOutlineDelete, MdOutlineFileUpload } from "react-icons/md";
+import { useState } from "react";
 
 const User = () => {
   const { name, username, phone } = useGetUserStore((state) => ({
@@ -24,6 +26,8 @@ const User = () => {
     username: state.username,
     phone: state.phone,
   }));
+
+  const [rawFile, setRawFile] = useState<string | null>(null);
 
   const updateUserMutation = useUpdateUser();
 
@@ -34,6 +38,14 @@ const User = () => {
       phoneNumber: `+977${phone}`,
       username: username,
     },
+  });
+
+  const { getRootProps, getInputProps } = useDropzone({
+    // multiple: false,
+    // onDrop: (files: File[]) => {
+    //   // const imageData = files[0];
+    //   // setRawFile(imageData);
+    // },
   });
 
   const handleDiscard = () => {
@@ -50,11 +62,18 @@ const User = () => {
       phoneNumber: phoneNumber,
       name: values.name,
       username: values.username,
+      file: rawFile,
     };
     console.log(requiredValues);
+
     updateUserMutation.mutate(requiredValues);
     form.reset();
   }
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setRawFile(null);
+  };
 
   return (
     <div className="space-y-10">
@@ -132,8 +151,37 @@ const User = () => {
                     )}
                   />
                 </div>
+
+                {/*Image dropbox*/}
                 <div className="flex flex-col justify-between">
-                  <h1>Image Dropbox here</h1>
+                  <div
+                    {...getRootProps()}
+                    className="border-2 border-dashed border-gray-300 p-6 text-center overflow-hidden relative cursor-pointer"
+                  >
+                    <input {...getInputProps()} />
+                    {rawFile ? (
+                      <div>
+                        <img
+                          className="w-full h-full object-cover inset-0 absolute"
+                          src={rawFile}
+                          alt="Uploaded file"
+                        />
+                        <button
+                          onClick={handleDelete}
+                          className="absolute text-2xl text-red-500 top-2 right-2"
+                        >
+                          <MdOutlineDelete />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center h-full justify-center flex-col">
+                        <MdOutlineFileUpload className="text-blue-500 w-10 h-10 " />
+                        <p>Drag 'n' drop an image here,</p>
+                        <p>or click to select one</p>
+                      </div>
+                    )}
+                  </div>
+
                   <div className="flex gap-8">
                     <Button
                       type="button"
@@ -166,7 +214,7 @@ const User = () => {
           <ChangeUserPassword />
         </div>
         <div className="border-2  border-gray-100 rounded-xl p-6">
-          <RecentDevices />
+          {/*Recent Deviecs herer*/}
         </div>
       </div>
     </div>

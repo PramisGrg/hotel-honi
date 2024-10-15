@@ -10,7 +10,6 @@ import SetPassword from "./pages/auth/forgot-password/SetPassword";
 import ResetPassword from "./pages/auth/forgot-password/ResetPassword";
 import Checkout from "./pages/dashboard/Checkout";
 import Orders from "./pages/dashboard/Orders";
-import Settings from "./pages/dashboard/Settings";
 import Helpcenter from "./pages/dashboard/Helpcenter";
 import Setting from "./pages/sidebar/setting";
 import { UseHotelInfoStore } from "@/store/hotel-store";
@@ -53,6 +52,7 @@ function App() {
   if (switchHotel.isError) {
     return <div>Error loading data</div>;
   }
+
   return (
     <>
       <Toaster richColors />
@@ -61,7 +61,6 @@ function App() {
           <Route path="/" element={<HomePage />}></Route>
           <Route path="/register" element={<CreateAccount />}></Route>
           <Route path="/login" element={<Login />}></Route>
-          <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route path="/resetpassword" element={<ResetPassword />}></Route>
           <Route path="/setpassword" element={<SetPassword />}></Route>
           <Route path="/verify" element={<VerifyOTP />}></Route>
@@ -69,43 +68,26 @@ function App() {
 
         <Routes>
           <Route path="/dashboard/" element={<AppLayout />}>
-            <Route path="customer" element={<Customer />}></Route>
-            <Route path="supplier" element={<Supplier />}></Route>
+            <Route path="home" element={<Dashboard />}></Route>
+
+            <Route path="customers" element={<Customer />}></Route>
+            <Route path="suppliers" element={<Supplier />}></Route>
+
+            <Route path="dishes" element={<Dishes />}></Route>
+            <Route path="categories" element={<Categories />}></Route>
+
+            <Route path="rooms" element={<Room />}></Route>
+            <Route path="spaces" element={<Space />}></Route>
+            <Route path="tables" element={<Table />}></Route>
+
+            <Route path="setting" element={<Setting />}></Route>
           </Route>
         </Routes>
 
         <Routes>
           <Route path="/dashboard/checkout" element={<Checkout />}></Route>
           <Route path="/dashboard/orders" element={<Orders />}></Route>
-          <Route path="/dashboard/settings" element={<Settings />}></Route>
           <Route path="/dashboard/helpcenter" element={<Helpcenter />}></Route>
-        </Routes>
-
-        <Routes>
-          <Route path="/sidebar/setting" element={<Setting />}></Route>
-          <Route path="/sidebar/customer" element={<Customer />}></Route>
-        </Routes>
-
-        <Routes>
-          <Route path="/sidebar/room-and-space" element={<AppLayout />}>
-            <Route path="rooms" element={<Room />}></Route>
-            <Route path="spaces" element={<Space />}></Route>
-            <Route path="tables" element={<Table />}></Route>
-          </Route>
-        </Routes>
-
-        <Routes>
-          <Route path="/sidebar/food-menu/" element={<AppLayout />}>
-            <Route path="dishes" element={<Dishes />}></Route>
-            <Route path="categories" element={<Categories />}></Route>
-          </Route>
-        </Routes>
-
-        <Routes>
-          <Route path="/sidebar/customer-supplier/" element={<AppLayout />}>
-            <Route path="customers" element={<Customer />}></Route>
-            <Route path="suppliers" element={<Supplier />}></Route>
-          </Route>
         </Routes>
       </Router>
     </>

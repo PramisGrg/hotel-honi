@@ -9,7 +9,7 @@ const axiosInstance = axios.create({
 });
 
 const token = Cookies.get("token");
-console.log({ token }, "😅");
+
 const axiosAuthInstance = axios.create({
   baseURL: import.meta.env.VITE_HOTEL_HONI_URL,
   headers: {

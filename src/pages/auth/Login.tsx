@@ -51,7 +51,7 @@ const Login = () => {
       Cookies.set("token", response.data.data.token);
       const res = response?.data?.message;
       toast.success(res);
-      navigate("/dashboard");
+      navigate("/dashboard/home");
     } catch (error: unknown) {
       const err = (error as ErrorResponse)?.response?.data?.message;
       toast.error(err);
