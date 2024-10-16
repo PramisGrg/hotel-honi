@@ -8,6 +8,7 @@ interface State {
   selectRoomId: string | undefined;
   selectCustomerId: string | undefined;
   selectSupplierId: string | undefined;
+  selectInventoryId: string | undefined;
 }
 
 interface Actions {
@@ -18,6 +19,7 @@ interface Actions {
   setSelectRoomId: (selectRoomId: string) => void;
   setSelectCustomerId: (selectCustomerId: string) => void;
   setSelectSupplierId: (selectSupplierId: string) => void;
+  setSelectInventoryId: (selectInventoryId: string) => void;
 }
 
 const tableIdInitialaState: State = {
@@ -28,6 +30,7 @@ const tableIdInitialaState: State = {
   selectRoomId: undefined,
   selectCustomerId: undefined,
   selectSupplierId: undefined,
+  selectInventoryId: undefined,
 };
 
 export const useTableIdStore = create<State & Actions>()((set) => ({
@@ -59,5 +62,9 @@ export const useTableIdStore = create<State & Actions>()((set) => ({
 
   setSelectSupplierId: (selectSupplierId: string) => {
     set({ selectSupplierId });
+  },
+
+  setSelectInventoryId: (selectInventoryId: string) => {
+    set({ selectInventoryId });
   },
 }));

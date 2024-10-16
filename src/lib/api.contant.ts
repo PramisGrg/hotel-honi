@@ -63,6 +63,13 @@ const endpoints = {
     deleteSupplier: mainEndpoint + "/supplier/delete",
     editSupplier: mainEndpoint + "/supplier/update",
   },
+
+  inventory: {
+    getInventory: mainEndpoint + "/inventory/all",
+    addInventory: mainEndpoint + "/inventory/create",
+    deleteInventory: mainEndpoint + "/inventory/delete",
+    editInventory: mainEndpoint + "/inventory/update",
+  },
 };
 
 export default endpoints;

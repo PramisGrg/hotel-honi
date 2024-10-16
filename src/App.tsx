@@ -25,6 +25,7 @@ import Dishes from "./pages/sidebar/food-menu/dish";
 import Categories from "./pages/sidebar/food-menu/category";
 import Supplier from "./pages/sidebar/customer-and-supplier/supplier";
 import Customer from "./pages/sidebar/customer-and-supplier/customer";
+import Inventory from "./pages/dashboard/inventory";
 
 function App() {
   const { activeHotelId } = UseHotelInfoStore((state) => ({
@@ -81,6 +82,8 @@ function App() {
             <Route path="tables" element={<Table />}></Route>
 
             <Route path="setting" element={<Setting />}></Route>
+
+            <Route path="inventory" element={<Inventory />}></Route>
           </Route>
         </Routes>
 

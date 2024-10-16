@@ -62,9 +62,6 @@ export function EditMenuItems() {
         },
       }
     );
-    console.log(data);
-    console.log(selectMenuId);
-    console.log("Edit submitted");
     setIsDialogOpen(false);
   };
 
@@ -79,7 +76,7 @@ export function EditMenuItems() {
         <DialogHeader>
           <DialogTitle>Edit Menu Items</DialogTitle>
           <DialogDescription className="text-gray-400">
-            Edit your menu items here 🤪
+            Edit your menu items here
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleEdit}>

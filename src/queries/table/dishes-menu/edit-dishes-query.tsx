@@ -16,26 +16,20 @@ export function UseEditDishesQuery() {
       if (!id) {
         throw new Error("No menu item ID provided for editing");
       }
-      console.log("Mutation ID:", id);
-      console.log("Mutation Data:", data);
       const response = await axiosAuthInstance.patch(
         `${endpoints.dishes.editDishes}/${id}`,
         data
       );
       return response.data;
     },
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["Dishes"] });
-      console.log("edit bhayo hahaha");
       toast.success("Menu item updated successfully");
     },
     onError: (error) => {
       toast.error(
         error.message || "An error occurred while updating the menu item"
       );
-      console.log("edit bhayena hahaha");
-      console.log(error);
     },
   });
 }

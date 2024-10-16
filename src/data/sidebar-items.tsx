@@ -76,7 +76,7 @@ export function getMenuList(pathname: string): Group[] {
           ],
         },
         {
-          href: "/sidebar/food-menu/categories",
+          href: "/dashboard/inventory",
           label: "Inventory",
           icon: ShoppingCart,
         },
