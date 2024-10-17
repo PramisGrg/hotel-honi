@@ -20,6 +20,7 @@ interface CreateHotelProps {
 export function CreateHotel({ onHotelCreated }: CreateHotelProps) {
   const [hotelName, setHotelName] = useState("");
   const [address, setAddress] = useState("");
+  const [primaryContact, setPrimaryContact] = useState("");
   const [open, setOpen] = useState(false);
 
   const createHotelMutation = useCreateHotel();
@@ -29,6 +30,7 @@ export function CreateHotel({ onHotelCreated }: CreateHotelProps) {
     const data = {
       name: hotelName,
       address,
+      primaryContact,
     };
     try {
       await createHotelMutation.mutateAsync(data);
@@ -75,6 +77,17 @@ export function CreateHotel({ onHotelCreated }: CreateHotelProps) {
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 id="address"
+              />
+            </div>
+            <div>
+              <Label htmlFor="primaryContact" className="text-right">
+                Primary Contact
+              </Label>
+              <Input
+                placeholder="9866060075"
+                value={primaryContact}
+                onChange={(e) => setPrimaryContact(e.target.value)}
+                id="primaryContact"
               />
             </div>
           </div>

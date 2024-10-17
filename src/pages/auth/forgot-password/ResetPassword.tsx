@@ -52,8 +52,7 @@ const ResetPassword = () => {
         endpoints.auth.resetPasswordSend,
         requiredValues
       );
-      console.log(requiredValues);
-      console.log(response);
+
       if (!response.data) {
         throw new Error("An unexpected error occoured");
       }

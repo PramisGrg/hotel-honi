@@ -9,9 +9,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { Upload } from "lucide-react";
 import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
-import { useDropzone } from "react-dropzone";
+import ReusableDropzone from "@/hooks/dropzone";
 import { useAddInventoryQuery } from "@/queries/table/inventory-table/add-inventory-query";
 
 const AddInventory = () => {
@@ -23,16 +22,6 @@ const AddInventory = () => {
 
   const createInventory = useAddInventoryQuery();
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop: (acceptedFiles: File[]) => {
-      setSelectedFiles(acceptedFiles);
-    },
-    accept: {
-      "image/*": [".jpeg", ".png", ".jpg"],
-    },
-    multiple: false,
-  });
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const formData = {
@@ -42,8 +31,6 @@ const AddInventory = () => {
       image: selectedFiles[0],
       unit: "kg",
     };
-
-    console.log("Hi from Pramis", formData);
 
     createInventory.mutate(formData, {
       onSuccess: () => {
@@ -99,33 +86,10 @@ const AddInventory = () => {
             </div>
 
             <div>
-              <div
-                {...getRootProps()}
-                className={`dropzone border-2 border-dashed border-gray-400 p-6 rounded-lg cursor-pointer text-center ${
-                  isDragActive ? "bg-gray-100" : ""
-                } relative h-64`}
-              >
-                <input {...getInputProps()} />
-                {selectedFiles.length === 0 ? (
-                  <div className="text-gray-500 ">
-                    Drag & drop an image here, or click to select an image
-                    <div className="flex items-center justify-center p-4 text-green-400">
-                      <Upload />
-                    </div>
-                  </div>
-                ) : (
-                  <div className="absolute inset-0">
-                    {selectedFiles.map((file, index) => (
-                      <img
-                        key={index}
-                        src={URL.createObjectURL(file)}
-                        alt="Preview"
-                        className="w-full h-full object-cover rounded-lg"
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
+              <ReusableDropzone
+                onFileSelected={setSelectedFiles}
+                selectedFiles={selectedFiles}
+              />
             </div>
           </div>
           <DialogFooter>

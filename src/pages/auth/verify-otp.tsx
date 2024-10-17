@@ -76,15 +76,11 @@ const VerifyOTP = () => {
           endpoints.auth.verifyOTP,
           data
         );
-        console.log(response);
         const resetToken = response?.data?.data?.resetToken;
         Cookies.set("resetToken", resetToken);
         navigate("/setpassword");
-        console.log(token);
-        console.log(resetToken);
       } else {
         await axiosInstance.patch(endpoints.auth.register, data);
-        console.log(data);
         toast.success("OTP verified successfully!");
         navigate("/login");
       }
@@ -93,7 +89,6 @@ const VerifyOTP = () => {
         (error as ErrorResponse)?.response?.data?.message ||
         "OTP verification failed";
       toast.error(errMessage);
-      console.log(data);
       navigate("/");
     }
   };
