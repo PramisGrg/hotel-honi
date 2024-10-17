@@ -15,12 +15,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useDropzone } from "react-dropzone";
 import { useEffect, useState } from "react";
-import { MdOutlineFileUpload, MdOutlineDelete } from "react-icons/md";
 import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
 import { UseAddDishesQuery } from "@/queries/table/dishes-menu/add-dishes-query";
 import { UseGetCategory } from "@/queries/table/category-menu/get-category-query";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { DishesSchema, DishesType } from "@/schema/table/dish-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ReusableDropzone from "@/hooks/reusable-dropzone";
 
 interface Category {
   id: string;
@@ -28,51 +30,47 @@ interface Category {
 }
 
 const AddMenuItems = () => {
-  const [rawFile, setRawFile] = useState<string | null>(null);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState<number | undefined>();
-  const [selectedCategory, setSelectedCategory] = useState<
-    string | undefined
-  >();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+    setValue,
+  } = useForm<DishesType>({
+    resolver: zodResolver(DishesSchema),
+  });
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
-
-  const handleDelete = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setRawFile(null);
-  };
-
-  const { getRootProps, getInputProps } = useDropzone({
-    multiple: false,
-    onDrop: (files: File[]) => {
-      const imageData = URL.createObjectURL(files[0]);
-      setRawFile(imageData);
-    },
-  });
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const createDishes = UseAddDishesQuery();
   const { data: categoryData } = UseGetCategory();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (price === undefined || !selectedCategory) return;
+  const handleFileSelected = (files: File[]) => {
+    setSelectedFiles(files);
+    if (files.length > 0) {
+      setValue("image", files[0], { shouldValidate: true });
+    }
+  };
 
-    const dishes = {
-      name,
-      price,
-      description,
+  const onSubmit: SubmitHandler<DishesType> = (data) => {
+    const formData = {
+      ...data,
+      image: selectedFiles[0],
       category: selectedCategory,
     };
-    createDishes.mutate(dishes, {
+
+    createDishes.mutate(formData, {
       onSuccess: () => {
         setIsDialogOpen(false);
+        reset();
+        setSelectedFiles([]);
+        setCategories([]);
       },
       onError: () => {
-        setName("");
-        setDescription("");
-        setPrice(undefined);
-        setSelectedCategory(undefined);
+        reset();
       },
     });
   };
@@ -80,9 +78,7 @@ const AddMenuItems = () => {
   useEffect(() => {
     if (categoryData) {
       setCategories(categoryData.data || []);
-      console.log(categoryData.data);
     }
-    console.log("category");
   }, [categoryData]);
 
   return (
@@ -99,37 +95,44 @@ const AddMenuItems = () => {
             Please provide all details about the items to add
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 grid-cols-2 py-4">
             <div className="w-[400px] space-y-4">
               <div>
                 <Label htmlFor="name">Name</Label>
-                <Input
-                  value={name}
-                  id="name"
-                  onChange={(e) => setName(e.target.value)}
-                />
+                <Input id="name" {...register("name")} />
               </div>
+              {errors.name && (
+                <p className="text-red-400 text-sm">
+                  {errors.name.message as string}
+                </p>
+              )}
               <div>
                 <Label htmlFor="price">Price</Label>
-                <Input
-                  type="number"
-                  value={price ?? ""}
-                  id="price"
-                  onChange={(e) => setPrice(Number(e.target.value))}
-                />
+                <Input id="price" {...register("price")} />
               </div>
+              {errors.price && (
+                <p className="text-red-400 text-sm">
+                  {errors.price.message as string}
+                </p>
+              )}
               <div>
                 <Label htmlFor="description">Description</Label>
-                <Input
-                  id="description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
+                <Input id="description" {...register("description")} />
               </div>
+              {errors.description && (
+                <p className="text-red-400 text-sm">
+                  {errors.description.message as string}
+                </p>
+              )}
               <div>
                 <Label htmlFor="category">Category</Label>
-                <Select onValueChange={setSelectedCategory}>
+                <Select
+                  onValueChange={(value) => {
+                    setSelectedCategory(value);
+                    setValue("category", value, { shouldValidate: true });
+                  }}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Category" />
                   </SelectTrigger>
@@ -141,33 +144,22 @@ const AddMenuItems = () => {
                     ))}
                   </SelectContent>
                 </Select>
+                {errors.category && (
+                  <p className="text-red-400 text-sm">
+                    {errors.category.message}
+                  </p>
+                )}
               </div>
             </div>
-            <div
-              {...getRootProps()}
-              className="border-2 border-dashed border-gray-300 p-6 text-center overflow-hidden relative cursor-pointer"
-            >
-              <input {...getInputProps()} />
-              {rawFile ? (
-                <div>
-                  <img
-                    className="w-full h-full object-cover inset-0 absolute"
-                    src={rawFile}
-                    alt="Uploaded file"
-                  />
-                  <button
-                    onClick={handleDelete}
-                    className="absolute text-2xl text-red-500 top-2 right-2"
-                  >
-                    <MdOutlineDelete />
-                  </button>
-                </div>
-              ) : (
-                <div className="flex items-center h-full justify-center flex-col">
-                  <MdOutlineFileUpload className="text-blue-500 w-10 h-10 " />
-                  <p>Drag 'n' drop an image here,</p>
-                  <p>or click to select one</p>
-                </div>
+            <div>
+              <ReusableDropzone
+                onFileSelected={handleFileSelected}
+                selectedFiles={selectedFiles}
+              />
+              {errors.image && (
+                <p className="text-red-400 text-sm">
+                  {errors.image.message as string}
+                </p>
               )}
             </div>
           </div>

@@ -14,7 +14,7 @@ export type DishesColuumnRef = {
 export const dishescolumns: ColumnDef<DishesColuumnRef>[] = [
   {
     accessorKey: "name",
-    header: "Name",
+    header: "Dish name",
   },
   {
     accessorKey: "image",
@@ -38,35 +38,6 @@ export const dishescolumns: ColumnDef<DishesColuumnRef>[] = [
     accessorKey: "description",
     header: "Description",
   },
-
-  // {
-  //   accessorKey: "status",
-  //   header: "Status",
-  //   cell: ({ getValue }) => {
-  //     const status = getValue() as DishesColuumnRef["status"];
-  //     const isEnabled = status === "Enabled";
-  //     return (
-  //       <div className="flex items-center gap-2">
-  //         <Switch
-  //           checked={isEnabled}
-  //           className={isEnabled ? "bg-green-500" : "bg-red-500"}
-  //         />
-  //         <span
-  //           className={`text-sm ${
-  //             isEnabled ? "text-green-600" : "text-red-600"
-  //           }`}
-  //         >
-  //           {status}
-  //         </span>
-  //       </div>
-  //     );
-  //   },
-  // },
-
-  // {
-  //   accessorKey: "category",
-  //   header: "Category",
-  // },
 
   {
     id: "actions",

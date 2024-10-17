@@ -5,31 +5,31 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useState } from "react";
+import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
+import ReusableDropzone from "@/hooks/reusable-dropzone";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { InventorySchema } from "@/schema/table/inventory-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { InventoryFormData } from "@/schema/table/inventory-schema";
+import { MdOutlineEdit } from "react-icons/md";
 import { useEditInventory } from "@/queries/table/inventory-table/edit-inventory-query";
 import { useTableIdStore } from "@/store/table-id-store";
-import { DialogDescription } from "@radix-ui/react-dialog";
-import { useState } from "react";
-import { useDropzone } from "react-dropzone";
-import { MdOutlineEdit } from "react-icons/md";
 import { toast } from "sonner";
 
-export interface InventoryType {
-  name: string;
-  quantity: number;
-  description: string;
-  image: File;
-  unit: string;
-}
-
-export function EditInventory() {
-  const [name, setName] = useState("");
-  const [unit, setUnit] = useState("");
-  const [quantity, setQuantity] = useState(0);
-  const [description, setDescription] = useState("");
+const EditInventory = () => {
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    setValue,
+    reset,
+  } = useForm<InventoryFormData>({
+    resolver: zodResolver(InventorySchema),
+  });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
@@ -37,48 +37,38 @@ export function EditInventory() {
     selectInventoryId: state.selectInventoryId,
   }));
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop: (acceptedFiles: File[]) => {
-      setSelectedFiles(acceptedFiles);
-    },
-    accept: {
-      "image/*": [".jpeg", ".png", ".jpg"],
-    },
-    multiple: false,
-  });
-
   const editInventory = useEditInventory();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit: SubmitHandler<InventoryFormData> = (data) => {
     if (!selectInventoryId) {
       toast.error("No menu item selected for editing");
       return;
     }
-    const data: InventoryType = {
-      name,
-      quantity,
-      description,
-      unit,
+    const formData = {
+      ...data,
       image: selectedFiles[0],
     };
 
     editInventory.mutate(
-      { id: selectInventoryId, data },
+      { id: selectInventoryId, formData },
       {
         onSuccess: () => {
-          console.log("Edit successful");
           setIsDialogOpen(false);
+          reset();
+          setSelectedFiles([]);
         },
         onError: () => {
-          setName("");
-          setDescription("");
-          setQuantity(0);
-          setUnit("");
-          setSelectedFiles([]);
+          reset();
         },
       }
     );
+  };
+
+  const handleFileSelected = (files: File[]) => {
+    setSelectedFiles(files);
+    if (files.length > 0) {
+      setValue("image", files[0], { shouldValidate: true });
+    }
   };
 
   return (
@@ -88,88 +78,74 @@ export function EditInventory() {
           <MdOutlineEdit className="text-green-700 w-6 h-6" />
         </button>
       </DialogTrigger>
-      <DialogContent className="max-w-[850px]">
+      <DialogContent className="min-w-[800px]">
         <DialogHeader>
           <DialogTitle>Edit Inventory</DialogTitle>
           <DialogDescription className="text-gray-400">
             Edit your inventory here
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <div className="grid gap-4 grid-cols-2 py-4">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="grid grid-cols-2 py-4">
             <div className="w-[350px] space-y-4">
               <div>
                 <Label htmlFor="name">Inventory Name</Label>
-                <Input
-                  value={name}
-                  id="name"
-                  onChange={(e) => setName(e.target.value)}
-                />
+                <Input id="name" {...register("name")} />
               </div>
-              <div>
-                <Label htmlFor="name">Unit</Label>
-                <Input
-                  value={unit}
-                  id="name"
-                  onChange={(e) => setUnit(e.target.value)}
-                />
-              </div>
+              {errors.name && (
+                <p className="text-red-400 text-sm">{errors.name.message}</p>
+              )}
               <div>
                 <Label htmlFor="price">Quantity</Label>
-                <Input
-                  value={quantity}
-                  id="price"
-                  onChange={(e) => setQuantity(Number(e.target.value))}
-                />
+                <Input id="price" {...register("quantity")} />
               </div>
+              {errors.quantity && (
+                <p className="text-red-400 text-sm">
+                  {errors.quantity.message}
+                </p>
+              )}
               <div>
                 <Label htmlFor="description">Description</Label>
-                <Input
-                  id="description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
+                <Input id="description" {...register("description")} />
               </div>
-            </div>
-
-            <div>
-              <div
-                {...getRootProps()}
-                className={`dropzone border-2 border-dashed border-gray-400 p-6 rounded-lg cursor-pointer text-center ${
-                  isDragActive ? "bg-gray-100" : ""
-                } relative h-64`}
-              >
-                <input {...getInputProps()} />
-                {selectedFiles.length === 0 ? (
-                  <div className="text-gray-500 ">
-                    Drag & drop an image here, or click to select an image
-                    <div className="flex items-center justify-center p-4 text-green-400"></div>
-                  </div>
-                ) : (
-                  <div className="absolute inset-0">
-                    {selectedFiles.map((file, index) => (
-                      <img
-                        key={index}
-                        src={URL.createObjectURL(file)}
-                        alt="Preview"
-                        className="w-full h-full object-cover rounded-lg"
-                      />
-                    ))}
-                  </div>
+              {errors.description && (
+                <p className="text-red-400 text-sm">
+                  {errors.description.message}
+                </p>
+              )}
+              <div>
+                <Label htmlFor="unit">Unit</Label>
+                <Input id="unit" {...register("unit")} />
+                {errors.unit && (
+                  <p className="text-red-400 text-sm">{errors.unit.message}</p>
                 )}
               </div>
+            </div>
+            <div>
+              <ReusableDropzone
+                onFileSelected={handleFileSelected}
+                selectedFiles={selectedFiles}
+              />
+              {errors.image && (
+                <p className="text-red-400 text-sm">
+                  {errors.image.message as string}
+                </p>
+              )}
             </div>
           </div>
           <DialogFooter>
             <Button
               className="bg-blue-600 duration-500 hover:text-gray-300"
               type="submit"
+              disabled={editInventory.isPending}
             >
-              Save changes
+              {editInventory.isPending ? "Saving..." : "Edit Inventory"}
             </Button>
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export default EditInventory;

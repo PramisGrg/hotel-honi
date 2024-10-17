@@ -4,8 +4,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 type Dish = {
+  image: File;
+  category: string | null;
   name: string;
-  price: number;
+  price: string;
   description: string;
 };
 
@@ -20,7 +22,6 @@ export function UseAddDishesQuery() {
       return response.data;
     },
     onSuccess: (data) => {
-      console.log(data.message, "🧐🧐🧐");
       queryClient.invalidateQueries({ queryKey: ["Dishes"] });
       toast.success(data.message);
     },

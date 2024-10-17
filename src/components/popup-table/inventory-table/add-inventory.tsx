@@ -10,36 +10,51 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
-import ReusableDropzone from "@/hooks/dropzone";
+import ReusableDropzone from "@/hooks/reusable-dropzone";
 import { useAddInventoryQuery } from "@/queries/table/inventory-table/add-inventory-query";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { InventorySchema } from "@/schema/table/inventory-schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { InventoryFormData } from "@/schema/table/inventory-schema";
 
 const AddInventory = () => {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [quantity, setQuantity] = useState(0);
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    setValue,
+    reset,
+  } = useForm<InventoryFormData>({
+    resolver: zodResolver(InventorySchema),
+  });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const createInventory = useAddInventoryQuery();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit: SubmitHandler<InventoryFormData> = (data) => {
     const formData = {
-      name,
-      quantity,
-      description,
+      ...data,
       image: selectedFiles[0],
-      unit: "kg",
     };
 
     createInventory.mutate(formData, {
       onSuccess: () => {
         setIsDialogOpen(false);
+        reset();
+        setSelectedFiles([]);
       },
       onError: () => {
-        setName("");
+        reset();
       },
     });
+  };
+
+  const handleFileSelected = (files: File[]) => {
+    setSelectedFiles(files);
+    if (files.length > 0) {
+      setValue("image", files[0], { shouldValidate: true });
+    }
   };
 
   return (
@@ -56,48 +71,61 @@ const AddInventory = () => {
             Please provide inventory info to add
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <div className="grid gap-4 grid-cols-2 py-4">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="grid grid-cols-2 py-4">
             <div className="w-[350px] space-y-4">
               <div>
                 <Label htmlFor="name">Inventory Name</Label>
-                <Input
-                  value={name}
-                  id="name"
-                  onChange={(e) => setName(e.target.value)}
-                />
+                <Input id="name" {...register("name")} />
               </div>
+              {errors.name && (
+                <p className="text-red-400 text-sm">{errors.name.message}</p>
+              )}
               <div>
                 <Label htmlFor="price">Quantity</Label>
-                <Input
-                  value={quantity}
-                  id="price"
-                  onChange={(e) => setQuantity(Number(e.target.value))}
-                />
+                <Input id="price" {...register("quantity")} />
               </div>
+              {errors.quantity && (
+                <p className="text-red-400 text-sm">
+                  {errors.quantity.message}
+                </p>
+              )}
               <div>
                 <Label htmlFor="description">Description</Label>
-                <Input
-                  id="description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
+                <Input id="description" {...register("description")} />
+              </div>
+              {errors.description && (
+                <p className="text-red-400 text-sm">
+                  {errors.description.message}
+                </p>
+              )}
+              <div>
+                <Label htmlFor="unit">Unit</Label>
+                <Input id="unit" {...register("unit")} />
+                {errors.unit && (
+                  <p className="text-red-400 text-sm">{errors.unit.message}</p>
+                )}
               </div>
             </div>
-
             <div>
               <ReusableDropzone
-                onFileSelected={setSelectedFiles}
+                onFileSelected={handleFileSelected}
                 selectedFiles={selectedFiles}
               />
+              {errors.image && (
+                <p className="text-red-400 text-sm">
+                  {errors.image.message as string}
+                </p>
+              )}
             </div>
           </div>
           <DialogFooter>
             <Button
               className="bg-blue-600 duration-500 hover:text-gray-300"
               type="submit"
+              disabled={createInventory.isPending}
             >
-              Save changes
+              {createInventory.isPending ? "Saving..." : "Add Inventory"}
             </Button>
           </DialogFooter>
         </form>

@@ -31,7 +31,6 @@ function App() {
   const { activeHotelId } = UseHotelInfoStore((state) => ({
     activeHotelId: state.activeHotelId,
   }));
-  console.log(activeHotelId);
 
   const { data, isLoading } = useGetActiveHotel();
 

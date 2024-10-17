@@ -3,17 +3,17 @@ import { axiosAuthInstance } from "@/services/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-interface Inventory {
+export interface InventoryType {
   name: string;
   description: string;
-  quantity: number;
+  quantity: string;
   image: File;
 }
 
 export function useAddInventoryQuery() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (inventory: Inventory) => {
+    mutationFn: async (inventory: InventoryType) => {
       const response = await axiosAuthInstance.post(
         endpoints.inventory.addInventory,
         inventory
