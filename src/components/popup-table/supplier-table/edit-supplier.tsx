@@ -21,6 +21,7 @@ export interface DataTypeCustomer {
   address: string;
   contactNumber: string;
   email: string;
+  balance: string;
 }
 
 export function EditSupplier() {
@@ -28,6 +29,7 @@ export function EditSupplier() {
   const [address, setAddress] = useState("");
   const [contactNumber, setContactNumber] = useState("");
   const [email, setEmail] = useState("");
+  const [balance, setBalance] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { selectSupplierId } = useTableIdStore((state) => ({
@@ -47,6 +49,7 @@ export function EditSupplier() {
       address,
       contactNumber,
       email,
+      balance,
     };
 
     console.log(data);
@@ -75,7 +78,7 @@ export function EditSupplier() {
         <DialogHeader>
           <DialogTitle>Edit Supplier</DialogTitle>
           <DialogDescription className="text-gray-400">
-            Edit your supplier here 🤪
+            Edit your supplier here
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleEdit}>
@@ -109,6 +112,17 @@ export function EditSupplier() {
               <Input
                 value={contactNumber}
                 onChange={(e) => setContactNumber(e.target.value)}
+                id="name"
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="balance" className="text-right">
+                Balance
+              </Label>
+              <Input
+                value={balance}
+                onChange={(e) => setBalance(e.target.value)}
                 id="name"
                 className="col-span-3"
               />

@@ -22,7 +22,7 @@ const ActiveHotel = () => {
   const { data } = useGetActiveHotel();
 
   useEffect(() => {
-    if (data) {
+    if (data && data.data) {
       setActiveHotelId(data.data.id);
       setActiveHotelName(data.data.name);
       setActiveHotelAddress(data.data.address);
@@ -46,23 +46,3 @@ const ActiveHotel = () => {
 };
 
 export default ActiveHotel;
-// import React from "react";
-
-// interface ActiveHotelProps {
-//   id: string;
-//   name: string;
-//   address: string;
-// }
-
-// const ActiveHotel: React.FC<ActiveHotelProps> = ({ id, name, address }) => {
-//   return (
-//     <div>
-//       <h2>Active Hotel</h2>
-//       <p>ID: {id}</p>
-//       <p>Name: {name}</p>
-//       <p>Address: {address}</p>
-//     </div>
-//   );
-// };
-
-// export default ActiveHotel;

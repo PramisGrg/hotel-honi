@@ -26,6 +26,7 @@ import Categories from "./pages/sidebar/food-menu/category";
 import Supplier from "./pages/sidebar/customer-and-supplier/supplier";
 import Customer from "./pages/sidebar/customer-and-supplier/customer";
 import Inventory from "./pages/dashboard/inventory";
+import VerifyOtpForgot from "./pages/auth/forgot-password/verify-otp-forgot";
 
 function App() {
   const { activeHotelId } = UseHotelInfoStore((state) => ({
@@ -64,6 +65,7 @@ function App() {
           <Route path="/resetpassword" element={<ResetPassword />}></Route>
           <Route path="/setpassword" element={<SetPassword />}></Route>
           <Route path="/verify" element={<VerifyOTP />}></Route>
+          <Route path="/verify-forgot" element={<VerifyOtpForgot />}></Route>
         </Routes>
 
         <Routes>

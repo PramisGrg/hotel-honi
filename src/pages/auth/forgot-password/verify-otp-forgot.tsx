@@ -8,24 +8,28 @@ import ErrorResponse from "@/types";
 import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import leftImage from "../../assets/leftImage.png";
+import leftImage from "@/assets/leftImage.png";
 import endpoints from "@/lib/api.contant";
 
-const VerifyOTP = () => {
-  const [params, setParams] = useState<{
-    param1?: string | null;
-    param2?: string | null;
-  }>({});
+const VerifyOtpForgot = () => {
+  const [id, setId] = useState<string | null>("");
+  const [countdown, setCountdown] = useState(60);
+  const [showResendButton, setShowResendButton] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
-    const param1 = queryParams.get("param1");
-    const param2 = queryParams.get("param2");
-    setParams({ param1, param2 });
-  }, [location.search]);
+    const id = queryParams.get("id");
+    setId(id);
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setShowResendButton(true);
+    }
+  }, [location.search, countdown]);
 
   const handleChange = (value: string) => {
     if (value.length === 6) {
@@ -34,24 +38,30 @@ const VerifyOTP = () => {
   };
 
   const validateOtp = async (otp: string) => {
-    const { param1, param2 } = params;
     const data = {
       otp: otp,
-      dialCode: param1,
-      phoneNumber: param2,
-      oneSignalId: "oneSignalId123",
+      id,
     };
-
     try {
-      await axiosInstance.patch(endpoints.auth.register, data);
+      const response = await axiosInstance.post(endpoints.auth.verifyOTP, data);
       toast.success("OTP verified successfully!");
-      navigate("/login");
+      console.log(response, "This is response");
+      const resetToken = response.data.data.resetToken;
+      navigate(`/setpassword?resetToken=${resetToken}`);
     } catch (error: unknown) {
       const errMessage =
         (error as ErrorResponse)?.response?.data?.message ||
         "OTP verification failed";
       toast.error(errMessage);
       navigate("/");
+    }
+  };
+
+  const handleResendOTP = async () => {
+    try {
+      await axiosInstance.post(endpoints.auth.verifyOTPResend, { id });
+    } catch (error: unknown) {
+      console.log(error);
     }
   };
 
@@ -77,6 +87,19 @@ const VerifyOTP = () => {
                 <InputOTPSlot className="bg-[#EFECFF] w-12 h-12" index={5} />
               </InputOTPGroup>
             </InputOTP>
+
+            <div className="flex">
+              {showResendButton ? (
+                <button
+                  onClick={handleResendOTP}
+                  className="text-blue-800 text-sm hover:text-blue-600 -ml-4"
+                >
+                  Resend OTP
+                </button>
+              ) : (
+                <p className="text-sm">Resend OTP in {countdown}s</p>
+              )}
+            </div>
           </div>
         </div>
         <div className="md:order-2 order-1 md:block hidden h-[600px]">
@@ -87,4 +110,4 @@ const VerifyOTP = () => {
   );
 };
 
-export default VerifyOTP;
+export default VerifyOtpForgot;

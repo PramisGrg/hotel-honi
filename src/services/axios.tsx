@@ -14,8 +14,8 @@ const axiosAuthInstance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
   headers: {
     Authorization: `Bearer ${token}`,
-    // "Content-Type": "application/json",
-    "Content-Type": "multipart/form-data",
+    "Content-Type": "application/json",
+    // "Content-Type": "multipart/form-data",
   },
 });
 

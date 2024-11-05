@@ -19,8 +19,6 @@ import axiosInstance from "@/services/axios";
 import { toast } from "sonner";
 import endpoints from "@/lib/api.contant";
 import ErrorResponse from "@/types";
-import Cookies from "js-cookie";
-
 interface IAuthResetPasswordResponse {
   message: string;
   data: {
@@ -52,16 +50,14 @@ const ResetPassword = () => {
         endpoints.auth.resetPasswordSend,
         requiredValues
       );
-
       if (!response.data) {
         throw new Error("An unexpected error occoured");
       }
       const responseData: IAuthResetPasswordResponse = response.data;
       const res = responseData.message;
-      const cookie = responseData.data.id;
+      const id = responseData.data.id;
       toast.success(res);
-      Cookies.set("token", cookie);
-      navigate("/verify");
+      navigate(`/verify-forgot?id=${id}`);
     } catch (error: unknown) {
       const err = (error as ErrorResponse)?.response?.data?.message;
       toast.error(err);

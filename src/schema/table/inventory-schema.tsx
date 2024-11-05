@@ -12,6 +12,7 @@ export const InventorySchema = z.object({
   name: z.string().min(1, "Please enter a valid inventory name"),
   quantity: z.string().min(1, "Quantity can't be empty"),
   unit: z.string().min(1, "Unit can't be empty"),
+  price: z.string().min(1, "Enter a valid price"),
   image: z
     .any()
     .refine((file) => file?.size <= MAX_FILE_SIZE, `Max image size is 2MB.`)

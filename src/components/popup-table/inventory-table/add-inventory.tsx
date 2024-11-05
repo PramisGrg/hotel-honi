@@ -37,7 +37,7 @@ const AddInventory = () => {
       ...data,
       image: selectedFiles[0],
     };
-
+    console.log(formData);
     createInventory.mutate(formData, {
       onSuccess: () => {
         setIsDialogOpen(false);
@@ -46,6 +46,7 @@ const AddInventory = () => {
       },
       onError: () => {
         reset();
+        setSelectedFiles([]);
       },
     });
   };
@@ -82,8 +83,8 @@ const AddInventory = () => {
                 <p className="text-red-400 text-sm">{errors.name.message}</p>
               )}
               <div>
-                <Label htmlFor="price">Quantity</Label>
-                <Input id="price" {...register("quantity")} />
+                <Label htmlFor="quantity">Quantity</Label>
+                <Input id="" {...register("quantity")} />
               </div>
               {errors.quantity && (
                 <p className="text-red-400 text-sm">
@@ -98,6 +99,13 @@ const AddInventory = () => {
                 <p className="text-red-400 text-sm">
                   {errors.description.message}
                 </p>
+              )}
+              <div>
+                <Label htmlFor="price">Price</Label>
+                <Input id="price" {...register("price")} />
+              </div>
+              {errors.price && (
+                <p className="text-red-400 text-sm">{errors.price.message}</p>
               )}
               <div>
                 <Label htmlFor="unit">Unit</Label>

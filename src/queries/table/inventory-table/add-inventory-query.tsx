@@ -6,7 +6,7 @@ import { toast } from "sonner";
 export interface InventoryType {
   name: string;
   description: string;
-  quantity: string;
+  quantity: number;
   image: File;
 }
 

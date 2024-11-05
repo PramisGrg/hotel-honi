@@ -17,6 +17,7 @@ const AddSupplier = () => {
   const [address, setAddress] = useState("");
   const [contactNumber, setContactNumber] = useState("");
   const [emailAddress, setEmailAdddress] = useState("");
+  const [balance, setBalance] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const createSupplier = UseAddSupplierQuery();
@@ -78,6 +79,14 @@ const AddSupplier = () => {
                 value={contactNumber}
                 id="name"
                 onChange={(e) => setContactNumber(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label htmlFor="balance">Balance</Label>
+              <Input
+                value={balance}
+                id="balance"
+                onChange={(e) => setBalance(e.target.value)}
               />
             </div>
             <div>
