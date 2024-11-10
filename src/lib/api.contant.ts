@@ -70,6 +70,22 @@ const endpoints = {
     deleteInventory: mainEndpoint + "/inventory/delete",
     editInventory: mainEndpoint + "/inventory/update",
   },
+
+  invitations: {
+    getInvitations: mainEndpoint + "/user/invitation/all",
+    invitationAction: mainEndpoint + "/staff/invite/action",
+  },
+
+  staff: {
+    getStaff: mainEndpoint + "/staff/all",
+    inviteStaff: mainEndpoint + "/staff/invite",
+    deleteStaff: mainEndpoint + "/staff/delete-staff",
+    updateStaff: mainEndpoint + "/staff/update",
+  },
+
+  role: {
+    getRole: mainEndpoint + "/role/all",
+  },
 };
 
 export default endpoints;

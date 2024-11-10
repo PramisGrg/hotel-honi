@@ -42,7 +42,6 @@ const Login = () => {
       phoneNumber: phoneNumber,
       password: values.password,
     };
-    console.log(requiredValues);
     try {
       const response = await axiosInstance.post(
         endpoints.auth.login,
@@ -50,8 +49,13 @@ const Login = () => {
       );
       Cookies.set("token", response.data.data.token);
       const res = response?.data?.message;
+      const activeHotelId = response?.data?.data?.activeHotelId;
       toast.success(res);
-      navigate("/dashboard/home");
+      if (activeHotelId) {
+        navigate("/dashboard/home");
+      } else {
+        navigate("/onboarding");
+      }
     } catch (error: unknown) {
       const err = (error as ErrorResponse)?.response?.data?.message;
       toast.error(err);

@@ -30,8 +30,6 @@ const AddCustomer = () => {
       emailAddress,
     };
 
-    console.log(customer);
-
     createCustomer.mutate(customer, {
       onSuccess: () => {
         setIsDialogOpen(false);

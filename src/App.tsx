@@ -27,6 +27,8 @@ import Supplier from "./pages/sidebar/customer-and-supplier/supplier";
 import Customer from "./pages/sidebar/customer-and-supplier/customer";
 import Inventory from "./pages/dashboard/inventory";
 import VerifyOtpForgot from "./pages/auth/forgot-password/verify-otp-forgot";
+import OnBoarding from "./pages/onbaording";
+import Staff from "./pages/sidebar/staff";
 
 function App() {
   const { activeHotelId } = UseHotelInfoStore((state) => ({
@@ -69,6 +71,10 @@ function App() {
         </Routes>
 
         <Routes>
+          <Route path="/onboarding" element={<OnBoarding />}></Route>
+        </Routes>
+
+        <Routes>
           <Route path="/dashboard/" element={<AppLayout />}>
             <Route path="home" element={<Dashboard />}></Route>
 
@@ -85,6 +91,8 @@ function App() {
             <Route path="setting" element={<Setting />}></Route>
 
             <Route path="inventory" element={<Inventory />}></Route>
+
+            <Route path="staff" element={<Staff />}></Route>
           </Route>
         </Routes>
 
