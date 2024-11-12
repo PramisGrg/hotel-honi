@@ -11,9 +11,13 @@ interface EditStaffParams {
   };
 }
 
+interface UpdateStaffResponse {
+  message: string;
+}
+
 export function useUpdateStaff() {
   const queryClient = useQueryClient();
-  return useMutation<unknown, Error, EditStaffParams>({
+  return useMutation<UpdateStaffResponse, Error, EditStaffParams>({
     mutationFn: async (data: EditStaffParams) => {
       const response = await axiosAuthInstance.patch(
         endpoints.staff.updateStaff,
@@ -29,7 +33,6 @@ export function useUpdateStaff() {
       toast.error(
         error.message || "An error occurred while updating the category"
       );
-      console.log(error);
     },
   });
 }

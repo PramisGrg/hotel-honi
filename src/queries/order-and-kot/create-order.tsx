@@ -3,25 +3,29 @@ import { axiosAuthInstance } from "@/services/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export interface InventoryType {
-  name: string;
-  description: string;
-  quantity: string;
-  image: File;
-}
+type Order = {
+  orderFor: string;
+  spaceId: string;
+  items: [
+    {
+      itemId: string;
+      quantity: number;
+    }
+  ];
+};
 
-export function useAddInventoryQuery() {
+export function useCreateOrder() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (inventory: InventoryType) => {
-      const response = await axiosAuthInstance.postForm(
-        endpoints.inventory.addInventory,
-        inventory
+    mutationFn: async (order: Order) => {
+      const response = await axiosAuthInstance.post(
+        endpoints.orderAndKot.createOrder,
+        order
       );
       return response.data;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["Inventory"] });
+      queryClient.invalidateQueries({ queryKey: ["Order"] });
       toast.success(data.message);
     },
     onError: () => {

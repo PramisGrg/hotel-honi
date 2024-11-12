@@ -9,6 +9,7 @@ import {
   Building,
   DollarSign,
   User,
+  Notebook,
 } from "lucide-react";
 
 type Submenu = {
@@ -47,6 +48,11 @@ export function getMenuList(): Group[] {
       groupLabel: "Contents",
       menus: [
         {
+          href: "/dashboard/order",
+          label: "Order",
+          icon: Notebook,
+        },
+        {
           href: "",
           label: "Room & Spaces",
           icon: Building,
@@ -58,6 +64,10 @@ export function getMenuList(): Group[] {
             {
               href: "/dashboard/spaces",
               label: "Spaces",
+            },
+            {
+              href: "/dashboard/tables",
+              label: "Tables",
             },
           ],
         },

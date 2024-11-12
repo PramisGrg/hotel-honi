@@ -86,6 +86,12 @@ const endpoints = {
   role: {
     getRole: mainEndpoint + "/role/all",
   },
+
+  orderAndKot: {
+    createOrder: mainEndpoint + "/order/create",
+    getOrder: mainEndpoint + "/order/all",
+    getKot: mainEndpoint + "/order/kot/all",
+  },
 };
 
 export default endpoints;

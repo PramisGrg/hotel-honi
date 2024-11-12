@@ -16,16 +16,13 @@ export function UseEditCategoryQuery() {
       if (!id) {
         throw new Error("No menu item ID provided for editing");
       }
-      console.log("Mutation ID:", id);
-      console.log("Mutation Data:", data);
       const response = await axiosAuthInstance.patch(
         `${endpoints.category.editCategory}/${id}`,
         data
       );
       return response.data;
     },
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["Category"] });
       toast.success("Category updated successfully");
     },

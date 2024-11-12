@@ -8,7 +8,7 @@ interface UseGetTableQueryParams {
   search?: string;
 }
 
-export const UseGetTableQuery = ({
+export const useGetTableQuery = ({
   take = 25,
   skip = 0,
   search = "",

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { tablecolumns } from "@/components/columns/table-columns";
 import { TableTable } from "@/components/table/table-table";
-import { UseGetTableQuery } from "@/queries/table/table-table/get-table-query";
+import { useGetTableQuery } from "@/queries/table/table-table/get-table-query";
 import { useDebounce } from "@/hooks/debounce";
 import { useDebounceValue } from "@/store/debounce-store";
 
@@ -14,7 +14,7 @@ const Table = () => {
 
   const [allTables, setAllTables] = useState([]);
 
-  const { data: tables } = UseGetTableQuery({ search: debounceSearchTable });
+  const { data: tables } = useGetTableQuery({ search: debounceSearchTable });
 
   useEffect(() => {
     if (tables) {

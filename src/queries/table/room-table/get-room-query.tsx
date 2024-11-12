@@ -8,7 +8,7 @@ interface UseGetRoomQueryParams {
   search?: string;
 }
 
-export const UseGetRoomQuery = ({
+export const useGetRoomQuery = ({
   take = 25,
   skip = 0,
   search = "",

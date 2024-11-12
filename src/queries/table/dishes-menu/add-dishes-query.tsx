@@ -15,7 +15,7 @@ export function UseAddDishesQuery() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (dish: Dish) => {
-      const response = await axiosAuthInstance.post(
+      const response = await axiosAuthInstance.postForm(
         endpoints.dishes.addDishes,
         dish
       );

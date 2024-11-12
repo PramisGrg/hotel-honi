@@ -181,7 +181,7 @@ const InviteStaff = () => {
                 className="bg-blue-600 duration-500 hover:text-gray-300"
                 type="submit"
               >
-                Save changes
+                Invite Staff
               </Button>
             </DialogFooter>
           </div>

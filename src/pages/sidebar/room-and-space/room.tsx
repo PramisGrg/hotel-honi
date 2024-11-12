@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { roomcolumns } from "@/components/columns/room-columns";
 import { RoomTable } from "@/components/table/room-table";
-import { UseGetRoomQuery } from "@/queries/table/room-table/get-room-query";
+import { useGetRoomQuery } from "@/queries/table/room-table/get-room-query";
 import { useDebounce } from "@/hooks/debounce";
 import { useDebounceValue } from "@/store/debounce-store";
 
@@ -14,7 +14,7 @@ const Room = () => {
 
   const [allRooms, setAllRooms] = useState([]);
 
-  const { data: rooms } = UseGetRoomQuery({ search: debounceSearchRoom });
+  const { data: rooms } = useGetRoomQuery({ search: debounceSearchRoom });
 
   useEffect(() => {
     if (rooms) {
