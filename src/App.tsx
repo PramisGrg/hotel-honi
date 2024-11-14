@@ -30,6 +30,8 @@ import VerifyOtpForgot from "./pages/auth/forgot-password/verify-otp-forgot";
 import OnBoarding from "./pages/onbaording";
 import Staff from "./pages/sidebar/staff";
 import Order from "./pages/sidebar/order";
+import Kot from "./pages/dashboard/kot";
+import KotUpdate from "./pages/dashboard/kot-update";
 
 function App() {
   const { activeHotelId } = UseHotelInfoStore((state) => ({
@@ -94,7 +96,9 @@ function App() {
             <Route path="inventory" element={<Inventory />}></Route>
 
             <Route path="staff" element={<Staff />}></Route>
+            <Route path="kot-update/:orderId" element={<KotUpdate />}></Route>
             <Route path="order" element={<Order />}></Route>
+            <Route path="kot/:orderId" element={<Kot />}></Route>
           </Route>
         </Routes>
 

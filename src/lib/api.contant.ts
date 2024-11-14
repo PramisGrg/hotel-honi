@@ -90,7 +90,7 @@ const endpoints = {
   orderAndKot: {
     createOrder: mainEndpoint + "/order/create",
     getOrder: mainEndpoint + "/order/all",
-    getKot: mainEndpoint + "/order/kot/all",
+    // getKot: mainEndpoint + "/order/kot/all",
   },
 };
 
