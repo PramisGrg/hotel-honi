@@ -39,6 +39,9 @@ const Kot = () => {
     );
   };
 
+  const url = window.location.href;
+  const checkUrl = url.includes("kot");
+
   // const handleClick = (kotData: Kot) => {
   //   setPopup(true);
   //   setKotData(kotData);
@@ -50,6 +53,27 @@ const Kot = () => {
         <div>
           <h1 className="text-xl font-semibold">Kot</h1>
           <p className="text-sm text-gray-600">View and manage all your Kots</p>
+        </div>
+
+        <div className="space-x-6">
+          <Link to={`/dashboard/kot/${orderId}`}>
+            <button
+              className={`${
+                checkUrl ? "bg-blue-500 text-white" : "bg-none text-black"
+              }  p-2 rounded-md`}
+            >
+              Kot Details
+            </button>
+          </Link>
+          <Link to={`/dashboard/kot-update/${orderId}`}>
+            <button
+              className={`${
+                checkUrl ? "bg-none text-black" : "bg-blue-500 text-white"
+              }  p-2 rounded-md`}
+            >
+              Update Kot
+            </button>
+          </Link>
         </div>
 
         <div className="grid grid-cols-4 gap-4">

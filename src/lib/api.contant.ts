@@ -92,6 +92,13 @@ const endpoints = {
     getOrder: mainEndpoint + "/order/all",
     // getKot: mainEndpoint + "/order/kot/all",
   },
+
+  bill: {
+    getbill: "/hotel/billing-information",
+  },
+
+  payment: "/hotel/payment-methods",
+  checkout: "/order/checkout",
 };
 
 export default endpoints;
