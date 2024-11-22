@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 const Order = () => {
   const { data: order } = useGetOrder();
   const orders = order?.data || [];
-  console.log(orders, "This si orders");
+  console.log(orders, "This is orders");
 
   return (
     <div className="flex">
@@ -26,7 +26,7 @@ const Order = () => {
               <Link
                 key={order.id}
                 className="border rounded-md p-2 text-sm"
-                to={`/dashboard/kot/${order.id}`}
+                to={`/dashboard/kot/${order.id}/${order.status}`}
               >
                 <div>
                   <div className="flex justify-between">

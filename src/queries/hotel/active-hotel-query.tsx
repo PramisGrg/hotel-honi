@@ -2,13 +2,14 @@ import endpoints from "@/lib/api.contant";
 import { axiosAuthInstance } from "@/services/axios";
 import { useQuery } from "@tanstack/react-query";
 
-interface ActiveHotel {
+export interface ActiveHotel {
   id: string;
   name: string;
   address: string;
+  primaryContact: string;
 }
 
-interface ActiveHotelType {
+export interface ActiveHotelType {
   data: ActiveHotel;
 }
 

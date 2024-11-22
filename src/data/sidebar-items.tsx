@@ -10,6 +10,7 @@ import {
   DollarSign,
   User,
   Notebook,
+  UserCog,
 } from "lucide-react";
 
 type Submenu = {
@@ -129,6 +130,11 @@ export function getMenuList(): Group[] {
         {
           href: "/dashboard/setting",
           label: "Account",
+          icon: UserCog,
+        },
+        {
+          href: "/dashboard/hotel-setting",
+          label: "Hotel Setting",
           icon: Settings,
         },
       ],

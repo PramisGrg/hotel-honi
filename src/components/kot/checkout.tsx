@@ -7,7 +7,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { useGetBill } from "@/queries/bill/get-bill-query";
+// import { useGetBill } from "@/queries/bill/get-bill-query";
 import { Input } from "../ui/input";
 import { useState } from "react";
 import {
@@ -39,8 +39,7 @@ export function Checkout({
   totalAmount,
   orderId,
 }: CheckoutProps) {
-  const { data: bill } = useGetBill();
-  console.log(bill, "Bill is here");
+  // const { data: bill } = useGetBill();
 
   const [discountType, setDiscountType] = useState("");
   const [discount, setDiscount] = useState<number>();
@@ -110,7 +109,6 @@ export function Checkout({
         discountType: "PERCENTAGE",
       };
     }
-    console.log(requiredData);
     createCheckout.mutate(requiredData);
     setShowCheckoutSheet(true);
   };

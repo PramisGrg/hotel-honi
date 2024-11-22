@@ -15,6 +15,7 @@ const endpoints = {
     allHotel: mainEndpoint + "/hotel/all",
     switchHotel: mainEndpoint + "/hotel/switch",
     getActiveHotel: mainEndpoint + "/hotel",
+    updateHotel: mainEndpoint + "/hotel/update",
   },
   user: {
     getUser: mainEndpoint + "/user",

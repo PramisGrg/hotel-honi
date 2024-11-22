@@ -32,6 +32,8 @@ import Staff from "./pages/sidebar/staff";
 import Order from "./pages/sidebar/order";
 import Kot from "./pages/dashboard/kot";
 import KotUpdate from "./pages/dashboard/kot-update";
+import NotFound from "./pages/404-not-found";
+import HotelSetting from "./pages/dashboard/hotel-settings";
 
 function App() {
   const { activeHotelId } = UseHotelInfoStore((state) => ({
@@ -96,9 +98,13 @@ function App() {
             <Route path="inventory" element={<Inventory />}></Route>
 
             <Route path="staff" element={<Staff />}></Route>
-            <Route path="kot-update/:orderId" element={<KotUpdate />}></Route>
+            <Route
+              path="kot-update/:orderId/:status"
+              element={<KotUpdate />}
+            ></Route>
             <Route path="order" element={<Order />}></Route>
-            <Route path="kot/:orderId" element={<Kot />}></Route>
+            <Route path="kot/:orderId/:status" element={<Kot />}></Route>
+            <Route path="hotel-setting" element={<HotelSetting />}></Route>
           </Route>
         </Routes>
 
@@ -106,6 +112,7 @@ function App() {
           <Route path="/dashboard/checkout" element={<Checkout />}></Route>
           <Route path="/dashboard/orders" element={<Orders />}></Route>
           <Route path="/dashboard/helpcenter" element={<Helpcenter />}></Route>
+          <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </Router>
     </>

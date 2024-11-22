@@ -41,7 +41,7 @@ const KotUpdate = () => {
   const [kotItems, setKotItems] = useState<KotItem>();
   const [selectStatus, setSelectStatus] = useState("");
 
-  const { orderId } = useParams();
+  const { orderId, status } = useParams();
   const { data: kot } = useGetKot(orderId);
   const updateKot = useUpdateKot();
 
@@ -96,7 +96,7 @@ const KotUpdate = () => {
           </div>
 
           <div className="space-x-6">
-            <Link to={`/dashboard/kot/${orderId}`}>
+            <Link to={`/dashboard/kot/${orderId}/${status}`}>
               <button
                 className={`${
                   checkUrl ? "bg-none text-black" : "bg-blue-500 text-white"
@@ -212,6 +212,7 @@ const KotUpdate = () => {
                     <span>{totalPrice}</span>
                   </div>
                   <Button
+                    disabled={!(status === "SERVED")}
                     onClick={() => {
                       setShowCheckoutSheet(true);
                     }}

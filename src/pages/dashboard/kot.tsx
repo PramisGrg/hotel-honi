@@ -22,7 +22,7 @@ interface Kot {
 }
 
 const Kot = () => {
-  const { orderId } = useParams();
+  const { orderId, status } = useParams();
   const { data: kot } = useGetKot(orderId);
   // const [popup, setPopup] = useState(false);
   // const [kotData, setKotData] = useState<Kot>();
@@ -56,7 +56,7 @@ const Kot = () => {
         </div>
 
         <div className="space-x-6">
-          <Link to={`/dashboard/kot/${orderId}`}>
+          <Link to={`/dashboard/kot/${orderId}/${status}`}>
             <button
               className={`${
                 checkUrl ? "bg-blue-500 text-white" : "bg-none text-black"
@@ -65,7 +65,7 @@ const Kot = () => {
               Kot Details
             </button>
           </Link>
-          <Link to={`/dashboard/kot-update/${orderId}`}>
+          <Link to={`/dashboard/kot-update/${orderId}/${status}`}>
             <button
               className={`${
                 checkUrl ? "bg-none text-black" : "bg-blue-500 text-white"

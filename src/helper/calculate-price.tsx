@@ -19,8 +19,6 @@ export const calculatePrice = ({
   let discountAmount = 0;
   let serviceChargeAmount = 0;
 
-  console.log("calculating price haha");
-
   if (discountType === "PERCENTAGE") {
     discountAmount = totalAmount * (Number(discount) / 100);
     totalAmountAfterDiscount = totalAmount - discountAmount;

@@ -32,6 +32,7 @@ export function CreateHotel({ onHotelCreated }: CreateHotelProps) {
       address,
       primaryContact,
     };
+
     try {
       await createHotelMutation.mutateAsync(data);
       setHotelName("");

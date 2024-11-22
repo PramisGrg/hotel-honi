@@ -31,6 +31,7 @@ export function CreateHotelOnboarding() {
       address,
       primaryContact,
     };
+    console.log(data);
     try {
       await createHotelMutation.mutateAsync(data);
       setHotelName("");

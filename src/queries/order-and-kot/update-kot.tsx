@@ -19,7 +19,6 @@ export function useUpdateKot() {
       kotItemId,
       ...kotUpdateData
     }: KotUpdateData) => {
-      console.log(kotUpdateData);
       const response = await axiosAuthInstance.patch(
         `/order/${orderId}/kot/${kotId}/${kotItemId}`,
         kotUpdateData
