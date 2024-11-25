@@ -5,3 +5,5 @@ export const GetHotelSchema = z.object({
   address: z.string().min(2, "Enter a valid hotel address"),
   primaryContact: z.string().min(2, "Enter a valid phone Number"),
 });
+
+export type GetHotelSchemaType = z.infer<typeof GetHotelSchema>;

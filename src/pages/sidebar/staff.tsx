@@ -12,17 +12,6 @@ interface RequiredDataFormat {
   phoneNumber: string;
 }
 
-interface StaffMember {
-  role: {
-    name: string;
-  };
-  user: {
-    id: string;
-    name: string;
-    phoneNumber: string;
-  };
-}
-
 const Staff = () => {
   //   const { debounceRoomValue } = useDebounceValue((state) => ({
   //     debounceRoomValue: state.debounceRoomValue,
@@ -33,10 +22,11 @@ const Staff = () => {
   const [allStaff, setAllStaff] = useState<RequiredDataFormat[]>([]);
 
   const { data: staff } = useGetStaff();
+  const staffData = staff?.data || [];
 
   useEffect(() => {
     if (staff?.data) {
-      const formattedData = staff.data.map((staffMember: StaffMember) => ({
+      const formattedData = staffData.map((staffMember) => ({
         id: staffMember.user.id,
         role: staffMember.role.name,
         name: staffMember.user.name,

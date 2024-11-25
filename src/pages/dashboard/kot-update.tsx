@@ -275,7 +275,7 @@ const KotUpdate = () => {
 
           {/*Sheet for Checkout*/}
           <Checkout
-            orderId={orderId}
+            orderId={orderId ?? ""}
             totalAmount={totalPrice}
             showCheckoutSheet={showCheckoutSheet}
             setShowCheckoutSheet={setShowCheckoutSheet}

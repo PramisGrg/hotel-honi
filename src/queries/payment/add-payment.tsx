@@ -3,27 +3,20 @@ import { axiosAuthInstance } from "@/services/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-interface Order {
-  orderFor: string;
-  spaceId: string;
-  items: {
-    itemId: string;
-    quantity: number;
-  }[];
-}
+type Payment = {
+  name: string;
+  remarks: string;
+};
 
-export function useCreateOrder() {
+export function useAddPaymentMethod() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (order: Order) => {
-      const response = await axiosAuthInstance.post(
-        endpoints.orderAndKot.createOrder,
-        order
-      );
+    mutationFn: async (payment: Payment) => {
+      const response = await axiosAuthInstance.post(endpoints.payment, payment);
       return response.data;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ["Order"] });
+      queryClient.invalidateQueries({ queryKey: ["Payment"] });
       toast.success(data.message);
     },
     onError: () => {

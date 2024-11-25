@@ -19,7 +19,7 @@ export const useCreateHotel = () => {
 
     onError: (error) => {
       console.log("Error", error);
-      console.log(error?.response.data.message);
+      // console.log(error?.response.data.message);
       toast.error("Failed to create hotel");
     },
   });

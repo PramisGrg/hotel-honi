@@ -2,15 +2,19 @@ import endpoints from "@/lib/api.contant";
 import { axiosAuthInstance } from "@/services/axios";
 import { useQuery } from "@tanstack/react-query";
 
-interface Customer {
+export interface CustomerType {
   id: string;
   name: string;
+  address: string;
+  contactNumber: string;
+  email: string;
+  balance: number;
 }
 
-interface CutomerResponse {
-  data: Customer[];
+interface CustomerResponse {
+  data: CustomerType[];
 }
-interface useGetCustomerQueryParams {
+interface GetCustomerQueryParams {
   take?: number;
   skip?: number;
   search?: string;
@@ -20,14 +24,14 @@ export const UseGetCustomerQuery = ({
   take = 25,
   skip = 0,
   search = "",
-}: useGetCustomerQueryParams) => {
+}: GetCustomerQueryParams) => {
   const params = {
     take,
     skip,
     search,
   };
 
-  return useQuery<CutomerResponse>({
+  return useQuery<CustomerResponse>({
     queryKey: ["Customers", { take, skip, search }],
     queryFn: async () => {
       const response = await axiosAuthInstance.get(

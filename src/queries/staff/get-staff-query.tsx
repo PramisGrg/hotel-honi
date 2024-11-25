@@ -6,6 +6,10 @@ interface StaffMember {
   user: {
     id: string;
     name: string;
+    phoneNumber: string;
+  };
+  role: {
+    name: string;
   };
 }
 

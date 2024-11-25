@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 interface PaymentType {
   id: string;
   name: string;
+  remarks: string;
 }
 
 interface PaymentResponse {

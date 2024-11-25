@@ -4,9 +4,10 @@ import { customercolumns } from "@/components/columns/customer-columns";
 import { UseGetCustomerQuery } from "@/queries/table/customer-table/get-cutomer-query";
 import { useDebounceValue } from "@/store/debounce-store";
 import { useEffect, useState } from "react";
+import { CustomerType } from "@/queries/table/customer-table/get-cutomer-query";
 
 const Customer = () => {
-  const [allCustomer, setAllCustomer] = useState([]);
+  const [allCustomer, setAllCustomer] = useState<CustomerType[]>([]);
 
   const { debounceCustomerValue } = useDebounceValue((state) => ({
     debounceCustomerValue: state.debounceCustomerValue,
@@ -20,7 +21,7 @@ const Customer = () => {
 
   useEffect(() => {
     if (customers) {
-      setAllCustomer(customers.data);
+      setAllCustomer(customers?.data);
     }
   }, [customers]);
 

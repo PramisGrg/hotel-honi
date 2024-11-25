@@ -83,6 +83,7 @@ const AddOrder = () => {
     };
 
     const handleConfirmOrder = async () => {
+      if (!selectedTable?.id) return;
       const orderPayload = {
         orderFor: "TABLE",
         spaceId: selectedTable?.id,
@@ -173,11 +174,14 @@ const AddOrder = () => {
                       className="border rounded-md p-2 space-y-1"
                     >
                       <div className="flex justify-between">
-                        <img
-                          className="h-10 w-10 rounded-full"
-                          src={items.image}
-                          alt="Item Image"
-                        />
+                        <div className="flex space-x-4">
+                          <img
+                            className="h-10 w-10 rounded-full"
+                            src={items.image}
+                            alt="Item Image"
+                          />
+                          <h1 className="pt-2">{items.name}</h1>
+                        </div>
                         <h3 className="text-blue-500">Rs {items.price}</h3>
                       </div>
                       <button className="bg-blue-600 w-full flex justify-between px-2 text-white rounded-md text-sm py-1">
