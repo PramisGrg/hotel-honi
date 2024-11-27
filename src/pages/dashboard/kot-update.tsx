@@ -170,6 +170,8 @@ const KotUpdate = () => {
                 ))}
               </div>
             </div>
+
+            {/*Order Summary*/}
             <div className="w-1/3 h-[75vh] rounded-md border">
               <h1 className="text-center pt-4 font-mono">Order Summary</h1>
               <div className="p-4 flex flex-col h-[550px] justify-between rounded-md">
@@ -275,6 +277,7 @@ const KotUpdate = () => {
 
           {/*Sheet for Checkout*/}
           <Checkout
+            kotData={kotData}
             orderId={orderId ?? ""}
             totalAmount={totalPrice}
             showCheckoutSheet={showCheckoutSheet}
