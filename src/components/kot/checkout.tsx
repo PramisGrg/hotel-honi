@@ -167,6 +167,7 @@ export function Checkout({
         console.error("Error generating PDF:", error);
       });
   };
+  
 
   const showStaffAndCustomer = () => {
     return (
