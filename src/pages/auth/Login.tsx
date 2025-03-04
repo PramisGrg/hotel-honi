@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PhoneInput } from "@/components/phone-input";
-import leftImage from "../../assets/leftImage.png";
 import axiosInstance from "@/services/axios";
 import ErrorResponse from "@/types";
 import { useNavigate } from "react-router-dom";
@@ -41,7 +40,10 @@ const Login = () => {
       dialCode: dialCode,
       phoneNumber: phoneNumber,
       password: values.password,
+      oneSignalId: "123",
     };
+
+    console.log(requiredValues, "This is required values");
     try {
       const response = await axiosInstance.post(
         endpoints.auth.login,
@@ -146,13 +148,6 @@ const Login = () => {
               </form>
             </Form>
           </div>
-        </div>
-        <div className="order-1 md:block hidden md:order-2 h-[600px]">
-          <img
-            className="h-full w-full object-cover"
-            src={leftImage}
-            alt="Left Side Image"
-          />
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@ import "./index.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/home-page";
 import CreateAccount from "./pages/auth/create-account";
-import Login from "./pages/auth/Login";
+import Login from "./pages/auth/login";
 import Dashboard from "./pages/dashboard";
 import VerifyOTP from "./pages/auth/verify-otp";
 import { Toaster } from "sonner";
@@ -12,12 +12,12 @@ import Checkout from "./pages/dashboard/Checkout";
 import Orders from "./pages/dashboard/Orders";
 import Helpcenter from "./pages/dashboard/Helpcenter";
 import Setting from "./pages/sidebar/setting";
-import { UseHotelInfoStore } from "@/store/hotel-store";
-import Spinner from "@/components/common/spinner";
-import { useSwitchHotelMutation } from "@/queries/hotel/switch-hotel-queries";
-import { useEffect } from "react";
+// import { UseHotelInfoStore } from "@/store/hotel-store";
+// import Spinner from "@/components/common/spinner";
+// import { useSwitchHotelMutation } from "@/queries/hotel/switch-hotel-queries";
+// import { useEffect } from "react";
+// import { useGetActiveHotel } from "./queries/hotel/active-hotel-query";
 import AppLayout from "./components/layout/app-layout";
-import { useGetActiveHotel } from "./queries/hotel/active-hotel-query";
 import Room from "./pages/sidebar/room-and-space/room";
 import Space from "./pages/sidebar/room-and-space/sapce";
 import Table from "./pages/sidebar/room-and-space/table";
@@ -32,34 +32,33 @@ import Staff from "./pages/sidebar/staff";
 import Order from "./pages/sidebar/order";
 import Kot from "./pages/dashboard/kot";
 import KotUpdate from "./pages/dashboard/kot-update";
-import NotFound from "./pages/404-not-found";
 import HotelSetting from "./pages/dashboard/hotel-settings";
 
 function App() {
-  const { activeHotelId } = UseHotelInfoStore((state) => ({
-    activeHotelId: state.activeHotelId,
-  }));
+  // const { activeHotelId } = UseHotelInfoStore((state) => ({
+  //   activeHotelId: state.activeHotelId,
+  // }));
 
-  const { data, isLoading } = useGetActiveHotel();
+  // const { data, isLoading } = useGetActiveHotel();
 
-  const switchHotel = useSwitchHotelMutation();
+  // const switchHotel = useSwitchHotelMutation();
 
-  useEffect(() => {
-    if (isLoading) {
-      return;
-    }
-    if (activeHotelId && activeHotelId !== data?.data.id) {
-      switchHotel.mutate(activeHotelId);
-    }
-  }, [activeHotelId]);
+  // useEffect(() => {
+  //   if (isLoading) {
+  //     return;
+  //   }
+  //   if (activeHotelId && activeHotelId !== data?.data.id) {
+  //     switchHotel.mutate(activeHotelId);
+  //   }
+  // }, [activeHotelId]);
 
-  if (switchHotel.isPending) {
-    return <Spinner />;
-  }
+  // if (switchHotel.isPending) {
+  //   return <Spinner />;
+  // }
 
-  if (switchHotel.isError) {
-    return <div>Error loading data</div>;
-  }
+  // if (switchHotel.isError) {
+  //   return <div>Error loading data</div>;
+  // }
 
   return (
     <>
@@ -112,7 +111,6 @@ function App() {
           <Route path="/dashboard/checkout" element={<Checkout />}></Route>
           <Route path="/dashboard/orders" element={<Orders />}></Route>
           <Route path="/dashboard/helpcenter" element={<Helpcenter />}></Route>
-          <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </Router>
     </>

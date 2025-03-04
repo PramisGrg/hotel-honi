@@ -38,7 +38,6 @@ const AddRoom = () => {
         setPrice("");
       },
     });
-    console.log("Pramis");
   };
 
   return (

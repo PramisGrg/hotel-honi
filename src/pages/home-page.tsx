@@ -1,47 +1,37 @@
 import { Link, useNavigate } from "react-router-dom";
-import leftImage from "../assets/leftImage.png";
-import { Button } from "@/components/ui/button";
+import { Spotlight } from "@/components/ui/spotlight";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 
 const HomePage = () => {
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    navigate("/register");
-  };
-
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#EFECFF] p-6">
-      <div className="grid md:grid-cols-2 max-w-[1120px] w-full">
-        <div className="md:order-1 order-2 bg-white h-[600px] ">
-          <div className="flex flex-col items-center justify-center gap-6 h-full">
-            <h1 className="text-4xl">Welcome to Hotel Honi</h1>
-            <h3 className="text-sm">
-              The best cloud based hotel management system
-            </h3>
-            <Button
-              onClick={handleClick}
-              className="bg-[#2722C0] w-2/3 duration-300 hover:text-gray-400"
-            >
-              Start Managing My Hotel{" "}
-            </Button>
-            <div className="flex gap-2">
-              <p>Already have an account ?</p>
-              <Link
-                className="text-[#2722C0] duration-300 hover:text-gray-400"
-                to="/login"
-              >
-                Login
-              </Link>
-            </div>
-          </div>
+    <div className="h-screen w-full rounded-md flex md:items-center md:justify-center antialiased bg-grid-white/[0.02] relative overflow-hidden">
+      <Spotlight />
+      <div className=" p-4 max-w-7xl  mx-auto relative z-10  w-full pt-20 md:pt-0">
+        <h1 className="text-4xl md:text-7xl font-bold text-center bg-clip-text text bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50">
+          RestroFlow <br />{" "}
+          <span className="font-bold text-3xl text-neutral-400">
+            a place where efficency meets exceptional dinning 🍽️✨
+          </span>
+        </h1>
+        <p className="mt-4 font-normal text-normal text-neutral-400 max-w-lg text-center mx-auto">
+          Manage all your resturant from one place
+        </p>
+        <div className="max-w-lg mx-auto flex gap-4 mt-4 justify-center">
+          <InteractiveHoverButton onClick={() => navigate("/register")}>
+            Get Started
+          </InteractiveHoverButton>
         </div>
-        <div className="md:order-2 md:block hidden order-1 h-[600px]">
-          <img
-            className="h-full w-full object-cover"
-            src={leftImage}
-            alt="Left side image"
-          />
-        </div>
+        <p className="mt-4 font-normal text-normal text-neutral-400 max-w-lg text-center mx-auto">
+          Already have an account ?
+          <Link
+            className="ml-2 hover:text-neutral-600 font-bold text-neutral-500"
+            to={"/login"}
+          >
+            Login
+          </Link>
+        </p>
       </div>
     </div>
   );
