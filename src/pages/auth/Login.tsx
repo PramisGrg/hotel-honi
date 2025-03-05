@@ -1,8 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { userLoginSchema } from "@/schema/UserLoginSchema";
+import { userLoginSchema } from "@/schema/auth/user-login-schema";
 import { Link } from "react-router-dom";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -20,11 +19,12 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import endpoints from "@/lib/api.contant";
 import Cookies from "js-cookie";
+import { TUserLoginSchema } from "@/schema/auth/user-login-schema";
 
 const Login = () => {
   const navigate = useNavigate();
 
-  const form = useForm<z.infer<typeof userLoginSchema>>({
+  const form = useForm<TUserLoginSchema>({
     resolver: zodResolver(userLoginSchema),
     defaultValues: {
       phoneNumber: "",
@@ -32,7 +32,7 @@ const Login = () => {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof userLoginSchema>) {
+  async function onSubmit(values: TUserLoginSchema) {
     const dialCode = values.phoneNumber.slice(1, 4);
     const phoneNumber = values.phoneNumber.slice(4);
 
@@ -40,10 +40,8 @@ const Login = () => {
       dialCode: dialCode,
       phoneNumber: phoneNumber,
       password: values.password,
-      oneSignalId: "123",
     };
 
-    console.log(requiredValues, "This is required values");
     try {
       const response = await axiosInstance.post(
         endpoints.auth.login,
@@ -65,90 +63,76 @@ const Login = () => {
     }
   }
   return (
-    <div className="flex items-center justify-center min-h-screen p-6 bg-[#EFECFF]">
-      <div className="grid max-w-[1120px] w-full md:grid-cols-2 bg-white border">
-        <div className="p-8 order-2 md:order-1 flex items-center justify-center">
-          <div className="w-full">
-            <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-2"
-              >
-                <div>
-                  <h1 className="text-3xl text-black font-bold pb-1">Log in</h1>
-                  <p className="text-sm">Please provide your login details</p>
-                </div>
-                <div className="space-y-4 ">
-                  <FormField
-                    control={form.control}
-                    name="phoneNumber"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="font-semibold">
-                          Phone Number
-                        </FormLabel>
-                        <FormControl>
-                          <PhoneInput
-                            className=""
-                            placeholder="98XXXXXXXX"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-xs text-red-600" />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="font-semibold">
-                          New Password
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            autoComplete="current-password"
-                            type="password"
-                            className="bg-[#EFECFF]"
-                            placeholder="*******"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage className="text-xs text-red-600" />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="py-2">
-                  <div className="flex justify-end pb-2">
-                    <Link
-                      className="text-[#2722C0] duration-300 text-right hover:text-gray-300"
-                      to="/resetpassword"
-                    >
-                      Forgot password ?
-                    </Link>
-                  </div>
-                  <Button
-                    className="bg-[#2722C0] duration-300 hover:text-gray-400 w-full"
-                    type="submit"
-                  >
-                    Login
-                  </Button>
-                </div>
-                <div className="flex gap-2">
-                  <p>Don't have an account ?</p>
-                  <Link
-                    className="text-[#2722C0] duration-300 hover:text-gray-300"
-                    to="/register"
-                  >
-                    Register
-                  </Link>
-                </div>
-              </form>
-            </Form>
-          </div>
+    <div className="flex max-w-lg mx-auto items-center justify-center h-screen px-8">
+      <div className="border border-neutral-200 rounded-md w-full p-8 space-y-4">
+        <div>
+          <h1 className="text-3xl text-netural-700 font-bold">Log in</h1>
+          <p className="text-normal text-neutral-500">
+            Please provide your login details
+          </p>
         </div>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="phoneNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">
+                      Phone Number
+                    </FormLabel>
+                    <FormControl>
+                      <PhoneInput placeholder="98XXXXXXXX" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30"
+                        autoComplete="current-password"
+                        type="password"
+                        placeholder="*********"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="py-2">
+              <div className="flex justify-end pb-2">
+                <Link
+                  className="text-primary hover:text-primary/50"
+                  to="/resetpassword"
+                >
+                  Forgot password ?
+                </Link>
+              </div>
+              <Button className="w-full" type="submit">
+                Login
+              </Button>
+            </div>
+            <div className="flex gap-2">
+              <p>Don't have an account ?</p>
+              <Link
+                className="text-primary hover:text-primary/50"
+                to="/register"
+              >
+                Register
+              </Link>
+            </div>
+          </form>
+        </Form>
       </div>
     </div>
   );

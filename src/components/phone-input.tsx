@@ -1,11 +1,7 @@
 import { CheckIcon, ChevronsUpDown } from "lucide-react";
-
 import * as React from "react";
-
 import * as RPNInput from "react-phone-number-input";
-
 import flags from "react-phone-number-input/flags";
-
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -68,7 +64,10 @@ PhoneInput.displayName = "PhoneInput";
 const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, ...props }, ref) => (
     <Input
-      className={cn("rounded-e-lg rounded-s-none bg-[#EFECFF]", className)}
+      className={cn(
+        "rounded-e-lg rounded-s-none border border-primary/30",
+        className
+      )}
       {...props}
       ref={ref}
     />
@@ -104,7 +103,9 @@ const CountrySelect = ({
         <Button
           type="button"
           variant={"outline"}
-          className={cn("flex gap-1 rounded-e-none rounded-s-lg px-3")}
+          className={cn(
+            "flex gap-1 rounded-e-none rounded-s-lg px-3 border-primary/30"
+          )}
           disabled={disabled}
         >
           <FlagComponent country={value} countryName={value} />

@@ -10,3 +10,5 @@ export const userRegisterSchema = z.object({
     .min(5, { message: "Password must be at least 5 character long" }),
   confirmpassword: z.string().min(5, { message: "Enter a valid password" }),
 });
+
+export type TUserRegisterSchema = z.infer<typeof userRegisterSchema>;

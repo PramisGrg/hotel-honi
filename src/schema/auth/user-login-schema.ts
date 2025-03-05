@@ -6,3 +6,5 @@ export const userLoginSchema = z.object({
     .string()
     .min(5, { message: "Phone number and password don't match" }),
 });
+
+export type TUserLoginSchema = z.infer<typeof userLoginSchema>;
