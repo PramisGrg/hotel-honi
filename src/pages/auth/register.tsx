@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 import { PhoneInput } from "@/components/phone-input";
 import axiosInstance from "@/services/axios";
 import { toast } from "sonner";
-import ErrorResponse from "@/types";
+import ErrorResponse from "@/types/auth.types";
 import endpoints from "@/lib/api.contant";
 
 const Register = () => {
@@ -38,7 +38,7 @@ const Register = () => {
     const dialCode = values.phoneNumber.slice(1, 4);
     const phoneNumber = values.phoneNumber.slice(4);
 
-    const requestData = {
+    const requiredValue = {
       name: values.name,
       dialCode: dialCode,
       phoneNumber: phoneNumber,
@@ -53,7 +53,7 @@ const Register = () => {
     try {
       const response = await axiosInstance.post(
         endpoints.auth.register,
-        requestData
+        requiredValue
       );
       toast.success(response.data.message);
       navigate(`/verify?${queryString}`);

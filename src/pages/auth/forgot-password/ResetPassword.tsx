@@ -18,7 +18,7 @@ import { z } from "zod";
 import axiosInstance from "@/services/axios";
 import { toast } from "sonner";
 import endpoints from "@/lib/api.contant";
-import ErrorResponse from "@/types";
+import ErrorResponse from "@/types/auth.types";
 interface IAuthResetPasswordResponse {
   message: string;
   data: {

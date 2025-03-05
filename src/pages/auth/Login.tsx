@@ -13,16 +13,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PhoneInput } from "@/components/phone-input";
-import axiosInstance from "@/services/axios";
-import ErrorResponse from "@/types";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-import endpoints from "@/lib/api.contant";
-import Cookies from "js-cookie";
 import { TUserLoginSchema } from "@/schema/auth/user-login-schema";
+import { useLoginUserQuery } from "@/queries/auth/login-user-query";
+import { TUserLogin } from "@/types/auth.types";
 
 const Login = () => {
-  const navigate = useNavigate();
+  const userLogin = useLoginUserQuery();
 
   const form = useForm<TUserLoginSchema>({
     resolver: zodResolver(userLoginSchema),
@@ -36,31 +32,33 @@ const Login = () => {
     const dialCode = values.phoneNumber.slice(1, 4);
     const phoneNumber = values.phoneNumber.slice(4);
 
-    const requiredValues = {
+    const requiredValues: TUserLogin = {
       dialCode: dialCode,
       phoneNumber: phoneNumber,
       password: values.password,
     };
 
-    try {
-      const response = await axiosInstance.post(
-        endpoints.auth.login,
-        requiredValues
-      );
-      Cookies.set("token", response.data.data.token);
-      const res = response?.data?.message;
-      const activeHotelId = response?.data?.data?.activeHotelId;
-      toast.success(res);
-      if (activeHotelId) {
-        navigate("/dashboard/home");
-      } else {
-        navigate("/onboarding");
-      }
-    } catch (error: unknown) {
-      const err = (error as ErrorResponse)?.response?.data?.message;
-      toast.error(err);
-      form.reset();
-    }
+    userLogin.mutate(requiredValues);
+
+    // try {
+    //   const response = await axiosInstance.post(
+    //     endpoints.auth.login,
+    //     requiredValues
+    //   );
+    //   Cookies.set("token", response.data.data.token);
+    //   const res = response?.data?.message;
+    //   const activeHotelId = response?.data?.data?.activeHotelId;
+    //   toast.success(res);
+    //   if (activeHotelId) {
+    //     navigate("/dashboard/home");
+    //   } else {
+    //     navigate("/onboarding");
+    //   }
+    // } catch (error: unknown) {
+    //   const err = (error as ErrorResponse)?.response?.data?.message;
+    //   toast.error(err);
+    //   form.reset();
+    // }
   }
   return (
     <div className="flex max-w-lg mx-auto items-center justify-center h-screen px-8">
