@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import {
   TUserRegisterSchema,
   userRegisterSchema,
-} from "@/schema/auth/user-register-schema";
-import { Link, useNavigate } from "react-router-dom";
+} from "@/schema/auth/user.register.schema";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,13 +16,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PhoneInput } from "@/components/phone-input";
-import axiosInstance from "@/services/axios";
-import { toast } from "sonner";
-import ErrorResponse from "@/types/auth.types";
-import endpoints from "@/lib/api.contant";
+import { useRegisterUserQuery } from "@/queries/auth/register.user.query";
+import { TUserRegister } from "@/types/auth.types";
 
 const Register = () => {
-  const navigate = useNavigate();
+  const registerUser = useRegisterUserQuery();
 
   const form = useForm<TUserRegisterSchema>({
     resolver: zodResolver(userRegisterSchema),
@@ -38,30 +36,14 @@ const Register = () => {
     const dialCode = values.phoneNumber.slice(1, 4);
     const phoneNumber = values.phoneNumber.slice(4);
 
-    const requiredValue = {
+    const requiredValue: TUserRegister = {
       name: values.name,
       dialCode: dialCode,
       phoneNumber: phoneNumber,
       password: values.password,
     };
 
-    const queryString = new URLSearchParams({
-      param1: dialCode,
-      param2: phoneNumber,
-    }).toString();
-
-    try {
-      const response = await axiosInstance.post(
-        endpoints.auth.register,
-        requiredValue
-      );
-      toast.success(response.data.message);
-      navigate(`/verify?${queryString}`);
-    } catch (error: unknown) {
-      const err = (error as ErrorResponse)?.response?.data?.message;
-      toast.error(err);
-      form.reset();
-    }
+    registerUser.mutate(requiredValue);
   }
 
   return (

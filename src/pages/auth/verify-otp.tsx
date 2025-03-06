@@ -1,87 +1,73 @@
-import axiosInstance from "@/services/axios";
 import {
   InputOTP,
   InputOTPGroup,
+  InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import ErrorResponse from "@/types/auth.types";
-import { toast } from "sonner";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import leftImage from "../../assets/leftImage.png";
-import endpoints from "@/lib/api.contant";
+
+interface TParams {
+  dialCode: string | null;
+  phoneNumber: string | null;
+}
 
 const VerifyOTP = () => {
-  const [params, setParams] = useState<{
-    param1?: string | null;
-    param2?: string | null;
-  }>({});
-
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [params, setParams] = useState<TParams>({
+    dialCode: null,
+    phoneNumber: null,
+  });
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const param1 = queryParams.get("param1");
-    const param2 = queryParams.get("param2");
-    setParams({ param1, param2 });
-  }, [location.search]);
+    const queryParams = new URLSearchParams(window.location.search);
+    const dialCode = queryParams.get("dialCode");
+    const phoneNumber = queryParams.get("phoneNumber");
+    setParams({ dialCode, phoneNumber });
+  }, []);
 
-  const handleChange = (value: string) => {
-    if (value.length === 6) {
-      validateOtp(value);
+  const handleOtp = (otp: string) => {
+    if (otp.length === 6) {
+      console.log(otp, "This is value");
+      validateOtp(otp);
     }
   };
 
   const validateOtp = async (otp: string) => {
-    const { param1, param2 } = params;
+    const { dialCode, phoneNumber } = params;
     const data = {
       otp: otp,
-      dialCode: param1,
-      phoneNumber: param2,
-      oneSignalId: "oneSignalId123",
+      dialCode,
+      phoneNumber,
     };
 
-    try {
-      await axiosInstance.patch(endpoints.auth.register, data);
-      toast.success("OTP verified successfully!");
-      navigate("/login");
-    } catch (error: unknown) {
-      const errMessage =
-        (error as ErrorResponse)?.response?.data?.message ||
-        "OTP verification failed";
-      toast.error(errMessage);
-      navigate("/");
-    }
+    console.log(data, "This is data");
+    console.log(params, "This is paras");
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-6 bg-[#EFECFF]">
-      <div className="bg-red-300 max-w-[1120px] w-full grid md:grid-cols-2">
-        <div className="bg-white md:order-1 order-2">
-          <div className="space-y-4 flex flex-col items-center justify-center h-[600px]">
-            <div className="py-4">
-              <h1 className="text-2xl font-bold">Verify OTP</h1>
-              <h3 className="text-sm">
-                Please enter the OTP sent to your phone number
-              </h3>
-            </div>
-
-            <InputOTP maxLength={6} onChange={handleChange}>
-              <InputOTPGroup className="space-x-2 w-full">
-                <InputOTPSlot className="bg-[#EFECFF] w-12 h-12" index={0} />
-                <InputOTPSlot className="bg-[#EFECFF] w-12 h-12" index={1} />
-                <InputOTPSlot className="bg-[#EFECFF] w-12 h-12" index={2} />
-                <InputOTPSlot className="bg-[#EFECFF] w-12 h-12" index={3} />
-                <InputOTPSlot className="bg-[#EFECFF] w-12 h-12" index={4} />
-                <InputOTPSlot className="bg-[#EFECFF] w-12 h-12" index={5} />
-              </InputOTPGroup>
-            </InputOTP>
-          </div>
+    <div className="flex max-w-lg mx-auto items-center justify-center h-screen px-8">
+      <div className="flex flex-col justify-center border rounded-md px-8 space-y-8 min-h-[300px]">
+        <div className="space-y-2">
+          <h1 className="text-3xl text-netural-700 font-bold">Verify OTP</h1>
+          <p className="text-normal text-neutral-500">
+            Please enter your otp here
+          </p>
         </div>
-        <div className="md:order-2 order-1 md:block hidden h-[600px]">
-          <img className="h-full w-full object-cover" src={leftImage} />
-        </div>
+        <InputOTP maxLength={6} onChange={handleOtp}>
+          <InputOTPGroup>
+            <InputOTPSlot index={0} />
+            <InputOTPSlot index={1} />
+          </InputOTPGroup>
+          <InputOTPSeparator />
+          <InputOTPGroup>
+            <InputOTPSlot index={2} />
+            <InputOTPSlot index={3} />
+          </InputOTPGroup>
+          <InputOTPSeparator />
+          <InputOTPGroup>
+            <InputOTPSlot index={4} />
+            <InputOTPSlot index={5} />
+          </InputOTPGroup>
+        </InputOTP>
       </div>
     </div>
   );

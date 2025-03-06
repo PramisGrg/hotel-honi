@@ -23,3 +23,10 @@ export interface TLoginResponse {
   message: string;
   data: TLoginResponseData;
 }
+
+export interface TUserRegister {
+  name: string;
+  dialCode: string;
+  phoneNumber: string;
+  password: string;
+}

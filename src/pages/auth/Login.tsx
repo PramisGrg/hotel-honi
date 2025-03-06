@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { userLoginSchema } from "@/schema/auth/user-login-schema";
+import { userLoginSchema } from "@/schema/auth/user.login.schema";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,8 +13,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PhoneInput } from "@/components/phone-input";
-import { TUserLoginSchema } from "@/schema/auth/user-login-schema";
-import { useLoginUserQuery } from "@/queries/auth/login-user-query";
+import { TUserLoginSchema } from "@/schema/auth/user.login.schema";
+import { useLoginUserQuery } from "@/queries/auth/login.user.query";
 import { TUserLogin } from "@/types/auth.types";
 
 const Login = () => {
@@ -95,7 +95,7 @@ const Login = () => {
                     <FormLabel className="font-semibold">Password</FormLabel>
                     <FormControl>
                       <Input
-                        className="border-primary/30"
+                        className="border-primary/30 focus:border-none"
                         autoComplete="current-password"
                         type="password"
                         placeholder="*********"
