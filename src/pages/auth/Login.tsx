@@ -64,7 +64,7 @@ const Login = () => {
     <div className="flex max-w-lg mx-auto items-center justify-center h-screen px-8">
       <div className="border border-neutral-200 rounded-md w-full p-8 space-y-4">
         <div>
-          <h1 className="text-3xl text-netural-700 font-bold">Log in</h1>
+          <h1 className="text-3xl text-neutral-700 font-bold">Log in</h1>
           <p className="text-normal text-neutral-500">
             Please provide your login details
           </p>
@@ -111,7 +111,7 @@ const Login = () => {
               <div className="flex justify-end pb-2">
                 <Link
                   className="text-primary hover:text-primary/50"
-                  to="/resetpassword"
+                  to="/reset-password"
                 >
                   Forgot password ?
                 </Link>

@@ -11,3 +11,5 @@ export const setPasswordSchema = z
     message: "Password do not match",
     path: ["confirmpassword"],
   });
+
+export type TSetPasswordSchema = z.infer<typeof setPasswordSchema>;

@@ -23,10 +23,49 @@ export interface TLoginResponse {
   message: string;
   data: TLoginResponseData;
 }
-
 export interface TUserRegister {
   name: string;
   dialCode: string;
   phoneNumber: string;
+  password: string;
+}
+
+//verify otp
+export interface TVerifyOtp {
+  dialCode: string | null;
+  phoneNumber: string | null;
+  otp: string;
+}
+
+//reset password
+interface TResetPasswordData {
+  id: string;
+  token: string;
+}
+export interface TResetPasswordResponse {
+  message: string;
+  data: TResetPasswordData;
+}
+
+export interface TResetPassword {
+  dialCode: string;
+  phoneNumber: string;
+}
+
+//verify forgot otp
+export interface TVerifyForgotOtp {
+  id: string | null;
+  otp: string;
+}
+export interface TVerifyForgotOtpResponse {
+  data: {
+    resetToken: string;
+  };
+  message: string;
+}
+
+//set password
+export interface TSetPassword {
+  token: string | null;
   password: string;
 }
