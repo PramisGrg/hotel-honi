@@ -1,4 +1,4 @@
-import Sidebar from "@/components/common/Sidebar";
+import Sidebar from "@/components/sidebar/Sidebar";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { MdOutlineTableRestaurant } from "react-icons/md";

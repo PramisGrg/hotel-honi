@@ -1,4 +1,4 @@
-import Sidebar from "../common/Sidebar";
+import Sidebar from "../sidebar/Sidebar";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { useStore } from "@/hooks/use-store";
 import { cn } from "@/lib/utils";

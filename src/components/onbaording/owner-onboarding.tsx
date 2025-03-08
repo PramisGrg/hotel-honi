@@ -1,7 +1,7 @@
 import { Hotel } from "lucide-react";
 import { useState } from "react";
-import { CreateHotelOnboarding } from "./create-hotel-onboarding";
 import { Button } from "../ui/button";
+import { CreateHotelOnboarding } from "./create-hotel-onboarding";
 
 const OwnerOnBaording = () => {
   const [isOpen, setIsOpen] = useState(false);

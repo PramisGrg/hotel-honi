@@ -1,4 +1,4 @@
-import Sidebar from "@/components/common/Sidebar";
+import Sidebar from "@/components/sidebar/Sidebar";
 import Home from "@/components/setting/home";
 import Miscellaneous from "@/components/setting/miscellaneous";
 import Tax from "@/components/setting/tax";

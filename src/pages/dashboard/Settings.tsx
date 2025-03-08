@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Sidebar from "@/components/common/Sidebar";
+import Sidebar from "@/components/sidebar/Sidebar";
 import { editProfileSchema } from "@/schema/EditProfileSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
