@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
-import { Hotel, Search } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useStore } from "@/hooks/use-store";
+import OwnerOnBaording from "@/components/onbaording/owner-onboarding";
+import SidebarOnboarding from "@/components/onbaording/sidebar-onboarding";
 import { useSidebar } from "@/hooks/use-sidebar";
-import SidebarOnboarding from "@/components/common/sidebar-onboarding";
-import { CreateHotelOnboarding } from "@/components/dashboard-in/hotel/create-hotel-onboarding";
+import { useStore } from "@/hooks/use-store";
+import { cn } from "@/lib/utils";
 import { useGetInvitations } from "@/queries/invitations/get-invitation-query";
-import { useNavigate } from "react-router-dom";
 import { useInvitationAction } from "@/queries/invitations/invitation-action";
+import { Hotel, Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Hotel {
   name: string;
@@ -39,6 +39,7 @@ const OnBoarding = () => {
     data?: InvitationsResponse;
     refetch: () => void;
   };
+
   const invitationAction = useInvitationAction();
 
   useEffect(() => {
@@ -130,41 +131,28 @@ const OnBoarding = () => {
     );
   };
 
-  const renderOwnerView = () => (
-    <div className="items-center justify-center flex flex-col p-8 space-y-4 w-[450px] border border-dotted">
-      <div className="bg-gray-100 p-8 rounded-full">
-        <Hotel className="text-blue-700 h-16 w-16" />
-      </div>
-      <h1 className="font-semibold text-xl">First, add hotel</h1>
-      <p className="text-gray-500">Create and manage hotel using HotelHoni</p>
-      <div className="bg-[#EFECFF] py-2 w-full text-center cursor-pointer rounded-md">
-        <CreateHotelOnboarding />
-      </div>
-    </div>
-  );
-
   return (
     <>
       <SidebarOnboarding />
       <main
         className={cn(
-          "min-h-[calc(100vh_-_56px)] bg-zinc-50 dark:bg-zinc-900 transition-[margin-left] ease-in-out duration-300",
+          "min-h-[calc(100vh_-_56px)] bg-zinc-50 transition-[margin-left] ease-in-out duration-300",
           !settings.disabled && (!getOpenState() ? "lg:ml-[90px]" : "lg:ml-72")
         )}
       >
         <div className="flex items-center justify-center h-screen">
           <div className="p-10 rounded-md border space-y-6 bg-white">
             <h1 className="font-semibold text-xl">
-              Welcome to <span className="text-blue-700">Hotel Honi</span>
+              Welcome to <span className="text-primary">RestroFlow</span>
             </h1>
-            <h2 className="text-lg">Are you a hotel owner?</h2>
+            <h2 className="text-lg text-neutral-500">Are you a hotel owner?</h2>
 
             <div className="flex space-x-4 w-full rounded-md border p-3">
               <button
                 onClick={() => setIsOwner(true)}
                 className={cn(
                   "py-2 px-4 rounded-md w-1/2 transition-colors",
-                  isOwner ? "bg-[#EFECFF]" : "hover:bg-gray-50"
+                  isOwner ? "bg-red-50" : "hover:bg-gray-50"
                 )}
               >
                 Yes, I am an owner
@@ -173,7 +161,7 @@ const OnBoarding = () => {
                 onClick={() => setIsOwner(false)}
                 className={cn(
                   "py-2 px-4 rounded-md w-1/2 transition-colors",
-                  !isOwner ? "bg-[#EFECFF]" : "hover:bg-gray-50"
+                  !isOwner ? "bg-red-50" : "hover:bg-gray-50"
                 )}
               >
                 No, I am staff
@@ -181,7 +169,7 @@ const OnBoarding = () => {
             </div>
 
             <div className="items-center justify-center flex flex-col p-6 space-y-4 w-[450px] border border-dotted">
-              {isOwner ? renderOwnerView() : renderStaffView()}
+              {isOwner ? <OwnerOnBaording /> : renderStaffView()}
             </div>
           </div>
         </div>

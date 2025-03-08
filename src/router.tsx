@@ -6,6 +6,7 @@ import VerifyOTP from "./pages/auth/verify-otp";
 import ResetPassword from "./pages/auth/forgot-password/reset-password";
 import SetPassword from "./pages/auth/forgot-password/set-password";
 import VerifyOtpForgot from "./pages/auth/forgot-password/verify-otp-forgot";
+import OnBoarding from "./pages/onboarding/onbaording";
 
 export const router = createBrowserRouter([
   {
@@ -35,5 +36,9 @@ export const router = createBrowserRouter([
   {
     path: "set-password",
     element: <SetPassword />,
+  },
+  {
+    path: "onboarding",
+    element: <OnBoarding />,
   },
 ]);

@@ -5,7 +5,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -14,11 +13,18 @@ import { useState } from "react";
 import { useCreateHotel } from "@/queries/hotel/create-hotel-query";
 import { useNavigate } from "react-router-dom";
 
-export function CreateHotelOnboarding() {
+interface TOnboardingSidebarProps {
+  isOpen: boolean;
+  setIsOpen: (value: boolean) => void;
+}
+
+export function CreateHotelOnboarding({
+  isOpen,
+  setIsOpen,
+}: TOnboardingSidebarProps) {
   const [hotelName, setHotelName] = useState("");
   const [address, setAddress] = useState("");
   const [primaryContact, setPrimaryContact] = useState("");
-  const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -36,7 +42,7 @@ export function CreateHotelOnboarding() {
       await createHotelMutation.mutateAsync(data);
       setHotelName("");
       setAddress("");
-      setOpen(false);
+      setIsOpen(false);
       navigate("/dashboard/home");
     } catch (error) {
       console.error("Error creating hotel:", error);
@@ -44,10 +50,7 @@ export function CreateHotelOnboarding() {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <span>Create hotel</span>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-[550px] space-y-2">
         <DialogHeader>
           <DialogTitle>Create Hotel</DialogTitle>
