@@ -24,7 +24,7 @@ export const useVerifyOtpForgotQuery = () => {
 
   return useMutation<TVerifyForgotOtpResponse, TError, TVerifyForgotOtp>({
     mutationFn: async (data: TVerifyForgotOtp) => {
-      toast("Verifying otp...");
+      toast.loading("Verifying otp...");
       const response = await axiosAuthInstance.post(
         endpoints.auth.verifyOTP,
         data

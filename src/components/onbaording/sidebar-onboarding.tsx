@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { CircleCheck } from "lucide-react";
 import { Circle } from "lucide-react";
+import logo from "@/assets/restroflow.png";
 
 export default function SidebarOnbaording() {
   const sidebar = useStore(useSidebar, (x) => x);
@@ -33,16 +34,11 @@ export default function SidebarOnbaording() {
           asChild
         >
           <Link to="/dashboard" className="flex items-center gap-2">
-            <h1
-              className={cn(
-                "font-bold text-neutral-600 text-xl whitespace-nowrap transition-[transform,opacity,display] ease-in-out duration-300",
-                !getOpenState()
-                  ? "-translate-x-96 opacity-0 hidden"
-                  : "translate-x-0 opacity-100"
-              )}
-            >
-              RestroFlow
-            </h1>
+            <img
+              className="md:w-44 md:h-44 h-4 w-4 object-cover mt-10"
+              src={logo}
+              alt="logo of Restro flow"
+            />
           </Link>
         </Button>
         <div className="py-8 space-y-8">

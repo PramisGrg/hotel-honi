@@ -1,4 +1,4 @@
-import { useGetActiveHotel } from "@/queries/hotel/active-hotel-query";
+import { useGetActiveHotel } from "@/queries/hotel/get.active.hotel.query";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { useForm } from "react-hook-form";

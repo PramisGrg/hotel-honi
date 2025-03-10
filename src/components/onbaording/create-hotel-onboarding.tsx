@@ -7,7 +7,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useCreateHotel } from "@/queries/hotel/create-hotel-query";
+import { useCreateHotel } from "@/queries/hotel/create.hotel.query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -36,9 +36,7 @@ export function CreateHotelOnboarding({
     resolver: zodResolver(createHotelSchema),
   });
 
-  // const navigate = useNavigate();
-
-  // const createHotelMutation = useCreateHotel();
+  const createHotel = useCreateHotel();
 
   // try {
   //   await createHotelMutation.mutateAsync(data);
@@ -52,6 +50,7 @@ export function CreateHotelOnboarding({
 
   const onSubmit = (values: TCreateHotelSchema) => {
     console.log(values);
+    createHotel.mutate(values);
   };
 
   return (

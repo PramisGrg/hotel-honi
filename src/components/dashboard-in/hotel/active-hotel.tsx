@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { UseHotelInfoStore } from "@/store/hotel-store";
 import { AllHotel } from "./all-hotel";
-import { useGetActiveHotel } from "@/queries/hotel/active-hotel-query";
+import { useGetActiveHotel } from "@/queries/hotel/get.active.hotel.query";
 
 const ActiveHotel = () => {
   const {

@@ -11,7 +11,7 @@ export const useRegisterUserQuery = () => {
 
   return useMutation<TLoginResponse, TError, TUserRegister>({
     mutationFn: async (values: TUserRegister) => {
-      toast("Registering...");
+      toast.loading("Registering...");
       const response = await axiosAuthInstance.post(
         endpoints.auth.register,
         values

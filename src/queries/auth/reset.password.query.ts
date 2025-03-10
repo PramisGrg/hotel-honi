@@ -11,7 +11,7 @@ export const useResetPasswordQuery = () => {
 
   return useMutation<TResetPasswordResponse, TError, TResetPassword>({
     mutationFn: async (value: TResetPassword) => {
-      toast("Resetting old password...");
+      toast.loading("Resetting old password...");
       const response = await axiosAuthInstance.post(
         endpoints.auth.resetPasswordSend,
         value

@@ -11,7 +11,7 @@ export const useVerifyOtpQuery = () => {
 
   return useMutation<TLoginResponse, TError, TVerifyOtp>({
     mutationFn: async (value: TVerifyOtp) => {
-      toast("Verifying otp...");
+      toast.loading("Verifying otp...");
       const response = await axiosAuthInstance.patch(
         endpoints.auth.register,
         value

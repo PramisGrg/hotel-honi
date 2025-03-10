@@ -7,6 +7,8 @@ import ResetPassword from "./pages/auth/forgot-password/reset-password";
 import SetPassword from "./pages/auth/forgot-password/set-password";
 import VerifyOtpForgot from "./pages/auth/forgot-password/verify-otp-forgot";
 import OnBoarding from "./pages/onboarding/onbaording";
+import Dashboard from "./pages/dashboard/dashboard";
+import DashboardLayout from "./layout/app-layout";
 
 export const router = createBrowserRouter([
   {
@@ -40,5 +42,15 @@ export const router = createBrowserRouter([
   {
     path: "onboarding",
     element: <OnBoarding />,
+  },
+  {
+    path: "dashboard",
+    element: <DashboardLayout />,
+    children: [
+      {
+        index: true,
+        element: <Dashboard />,
+      },
+    ],
   },
 ]);

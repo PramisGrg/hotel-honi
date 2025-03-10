@@ -1,11 +1,15 @@
 import endpoints from "@/lib/api.contant";
+import { TCreateHotelSchema } from "@/schema/hotel/create.hotel.schema";
 import { axiosAuthInstance } from "@/services/axios";
+import { TError } from "@/types/error.type";
+import { TCreateHotelResponse } from "@/types/hotel.types";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export const useCreateHotel = () => {
-  return useMutation({
-    mutationFn: async (data: { name: string; address: string }) => {
+  return useMutation<TCreateHotelResponse, TError, TCreateHotelSchema>({
+    mutationFn: async (data: TCreateHotelSchema) => {
+      toast.loading("Creating hotel ...");
       const response = await axiosAuthInstance.post(
         endpoints.hotel.createHotel,
         data
@@ -18,9 +22,7 @@ export const useCreateHotel = () => {
     },
 
     onError: (error) => {
-      console.log("Error", error);
-      // console.log(error?.response.data.message);
-      toast.error("Failed to create hotel");
+      toast.error(error.response.data.message);
     },
   });
 };

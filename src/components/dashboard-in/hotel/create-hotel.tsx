@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { useCreateHotel } from "@/queries/hotel/create-hotel-query";
+import { useCreateHotel } from "@/queries/hotel/create.hotel.query";
 
 interface CreateHotelProps {
   onHotelCreated: () => void;

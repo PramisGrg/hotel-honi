@@ -1,10 +1,11 @@
-import Sidebar from "../sidebar/Sidebar";
+import Navbar from "@/components/navbar/navbar";
+import Sidebar from "../components/sidebar/Sidebar";
 import { useSidebar } from "@/hooks/use-sidebar";
 import { useStore } from "@/hooks/use-store";
 import { cn } from "@/lib/utils";
 import { Outlet } from "react-router-dom";
 
-export default function AppLayout() {
+export default function DashboardLayout() {
   const sidebar = useStore(useSidebar, (x) => x);
   if (!sidebar) return null;
   const { getOpenState, settings } = sidebar;
@@ -17,6 +18,7 @@ export default function AppLayout() {
           !settings.disabled && (!getOpenState() ? "lg:ml-[90px]" : "lg:ml-72")
         )}
       >
+        <Navbar />
         <Outlet />
       </main>
     </>
