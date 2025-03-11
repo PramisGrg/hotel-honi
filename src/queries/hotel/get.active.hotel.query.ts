@@ -1,5 +1,5 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { useQuery } from "@tanstack/react-query";
 
 export interface ActiveHotel {
@@ -17,9 +17,7 @@ export const useGetActiveHotel = () => {
   return useQuery<ActiveHotelType>({
     queryKey: ["activeHotel"],
     queryFn: async () => {
-      const response = await axiosAuthInstance.get(
-        endpoints.hotel.getActiveHotel
-      );
+      const response = await axiosInstance.get(endpoints.hotel.getActiveHotel);
       return response.data as ActiveHotelType;
     },
   });

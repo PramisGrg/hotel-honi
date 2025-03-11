@@ -1,5 +1,5 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { TVerifyForgotOtp, TVerifyForgotOtpResponse } from "@/types/auth.types";
 import { TError } from "@/types/error.type";
 import { useMutation } from "@tanstack/react-query";
@@ -23,12 +23,9 @@ export const useVerifyOtpForgotQuery = () => {
   // };
 
   return useMutation<TVerifyForgotOtpResponse, TError, TVerifyForgotOtp>({
-    mutationFn: async (data: TVerifyForgotOtp) => {
+    mutationFn: async (data) => {
       toast.loading("Verifying otp...");
-      const response = await axiosAuthInstance.post(
-        endpoints.auth.verifyOTP,
-        data
-      );
+      const response = await axiosInstance.post(endpoints.auth.verifyOTP, data);
       return response.data;
     },
     onSuccess: (data) => {

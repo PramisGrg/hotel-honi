@@ -1,5 +1,5 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { TResetPassword, TResetPasswordResponse } from "@/types/auth.types";
 import { TError } from "@/types/error.type";
 import { useMutation } from "@tanstack/react-query";
@@ -10,9 +10,9 @@ export const useResetPasswordQuery = () => {
   const navigate = useNavigate();
 
   return useMutation<TResetPasswordResponse, TError, TResetPassword>({
-    mutationFn: async (value: TResetPassword) => {
+    mutationFn: async (value) => {
       toast.loading("Resetting old password...");
-      const response = await axiosAuthInstance.post(
+      const response = await axiosInstance.post(
         endpoints.auth.resetPasswordSend,
         value
       );

@@ -1,5 +1,5 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -12,7 +12,7 @@ export function useInvitationAction() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (customer: InventoryAction) => {
-      const response = await axiosAuthInstance.patch(
+      const response = await axiosInstance.patch(
         endpoints.invitations.invitationAction,
         customer
       );

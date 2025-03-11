@@ -1,5 +1,5 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { TLoginResponse, TUserRegister } from "@/types/auth.types";
 import { TError } from "@/types/error.type";
 import { useMutation } from "@tanstack/react-query";
@@ -10,9 +10,9 @@ export const useRegisterUserQuery = () => {
   const navigate = useNavigate();
 
   return useMutation<TLoginResponse, TError, TUserRegister>({
-    mutationFn: async (values: TUserRegister) => {
+    mutationFn: async (values) => {
       toast.loading("Registering...");
-      const response = await axiosAuthInstance.post(
+      const response = await axiosInstance.post(
         endpoints.auth.register,
         values
       );

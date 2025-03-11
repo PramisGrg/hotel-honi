@@ -11,7 +11,7 @@ export const useLoginUserQuery = () => {
   const navigate = useNavigate();
 
   return useMutation<TLoginResponse, TError, TUserLogin>({
-    mutationFn: async (loginValues: TUserLogin) => {
+    mutationFn: async (loginValues) => {
       toast.loading("Logging in...");
       const response = await axiosInstance.post<TLoginResponse>(
         endpoints.auth.login,

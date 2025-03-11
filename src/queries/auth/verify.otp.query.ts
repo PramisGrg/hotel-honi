@@ -1,5 +1,5 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { TLoginResponse, TVerifyOtp } from "@/types/auth.types";
 import { TError } from "@/types/error.type";
 import { useMutation } from "@tanstack/react-query";
@@ -10,9 +10,9 @@ export const useVerifyOtpQuery = () => {
   const navigate = useNavigate();
 
   return useMutation<TLoginResponse, TError, TVerifyOtp>({
-    mutationFn: async (value: TVerifyOtp) => {
+    mutationFn: async (value) => {
       toast.loading("Verifying otp...");
-      const response = await axiosAuthInstance.patch(
+      const response = await axiosInstance.patch(
         endpoints.auth.register,
         value
       );

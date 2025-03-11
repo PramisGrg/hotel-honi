@@ -1,5 +1,5 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { TResetPasswordResponse, TSetPassword } from "@/types/auth.types";
 import { TError } from "@/types/error.type";
 import { useMutation } from "@tanstack/react-query";
@@ -10,9 +10,9 @@ export const useSetPasswordQuery = () => {
   const navigate = useNavigate();
 
   return useMutation<TResetPasswordResponse, TError, TSetPassword>({
-    mutationFn: async (value: TSetPassword) => {
+    mutationFn: async (value) => {
       toast.loading("Setting new password...");
-      const response = await axiosAuthInstance.post(
+      const response = await axiosInstance.post(
         endpoints.auth.setPassword,
         value
       );
