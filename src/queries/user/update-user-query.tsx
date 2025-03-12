@@ -2,7 +2,7 @@ import endpoints from "@/lib/api.contant";
 import { axiosAuthInstance } from "@/services/axios";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useGetUserStore } from "@/store/user-store";
+import { useGetUserStore } from "@/store/user.store";
 
 export const useUpdateUser = () => {
   const { username, setName, setUsername, setPhone } = useGetUserStore(

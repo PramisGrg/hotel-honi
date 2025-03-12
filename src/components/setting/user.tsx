@@ -13,7 +13,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import { EditUserSchema } from "@/schema/edit-user-info-schema";
-import { useGetUserStore } from "@/store/user-store";
+import { useGetUserStore } from "@/store/user.store";
 import { useUpdateUser } from "@/queries/user/update-user-query";
 import ChangeUserPassword from "@/pages/auth/change-user-password";
 import { useDropzone } from "react-dropzone";

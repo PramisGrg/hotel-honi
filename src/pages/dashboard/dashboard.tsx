@@ -6,16 +6,20 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
+import AppLayout from "@/layout/dashboard-layout";
 import { useGetActiveHotel } from "@/queries/hotel/get.active.hotel.query";
 import { useGetAllHotels } from "@/queries/hotel/get.all.hotels.query";
 import { useSwitchHotelQuery } from "@/queries/hotel/switch.hotel.query";
+import { useUserStore } from "@/store/user.store";
 
 const Dashboard = () => {
   const { data: allHotels } = useGetAllHotels();
 
   const allHotelsData = allHotels?.data;
 
-  const { data: activeHotel, failureCount, isLoading } = useGetActiveHotel();
+  const { user } = useUserStore();
+
+  const { failureCount, isLoading } = useGetActiveHotel();
 
   const activateHotel = useSwitchHotelQuery();
 
@@ -65,9 +69,9 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="flex">
-      <h1>Hi</h1>
-    </div>
+    <AppLayout>
+      <h1>{user?.name}</h1>
+    </AppLayout>
   );
 };
 
