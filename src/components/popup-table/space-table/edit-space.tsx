@@ -2,56 +2,54 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { UseEditSpaceQuery } from "@/queries/table/space-table/edit-space-query";
+import { useEditSpaceQuery } from "@/queries/table/space-table/edit.space.query";
+import {
+  addSpaceSchema,
+  TAddSpaceSchema,
+} from "@/schema/table/room-and-space/add.space.schema";
 import { useTableIdStore } from "@/store/table-id-store";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { MdOutlineEdit } from "react-icons/md";
-import { toast } from "sonner";
-
-export interface DataTypeSpace {
-  name: string;
-}
 
 export function EditSpace() {
-  const [name, setName] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { selectSpaceId } = useTableIdStore((state) => ({
     selectSpaceId: state.selectSpaceId,
   }));
 
-  const editSpace = UseEditSpaceQuery();
+  const editSpace = useEditSpaceQuery();
 
-  const handleEdit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectSpaceId) {
-      toast.error("No menu item selected for editing");
-      return;
-    }
-    const data: DataTypeSpace = {
-      name,
-    };
+  const form = useForm<TAddSpaceSchema>({
+    resolver: zodResolver(addSpaceSchema),
+  });
 
+  const onSubmit = (name: TAddSpaceSchema) => {
     editSpace.mutate(
-      { id: selectSpaceId, data },
+      { id: selectSpaceId, name },
       {
-        onSuccess: () => {
+        onSettled: () => {
+          form.reset();
           setIsDialogOpen(false);
-        },
-        onError: () => {
-          setName("");
         },
       }
     );
-    setIsDialogOpen(false);
   };
 
   return (
@@ -68,29 +66,32 @@ export function EditSpace() {
             Edit your Space here 🤪
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleEdit}>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                id="name"
-                className="col-span-3"
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Space</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your room"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
+              <div className="pt-4">
+                <Button type="submit">Add Space</Button>
+              </div>
             </div>
-          </div>
-          <DialogFooter>
-            <Button
-              className="bg-blue-500 hover:text-gray-200 duration-300 hover:shadow-md"
-              type="submit"
-            >
-              Save changes
-            </Button>
-          </DialogFooter>
-        </form>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

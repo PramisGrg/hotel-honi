@@ -1,5 +1,5 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { useQuery } from "@tanstack/react-query";
 
 interface UseGetSpaceQueryParams {
@@ -22,7 +22,7 @@ export const UseGetSpaceQuery = ({
   return useQuery({
     queryKey: ["Spaces", { take, skip, search }],
     queryFn: async () => {
-      const response = await axiosAuthInstance.get(endpoints.spaces.getSpaces, {
+      const response = await axiosInstance.get(endpoints.spaces.getSpaces, {
         params,
       });
       return response.data;

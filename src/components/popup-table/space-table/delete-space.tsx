@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { UseDeleteSpaceQuery } from "@/queries/table/space-table/delete-space-query";
+import { useDeleteSpaceQuery } from "@/queries/table/space-table/delete.space.query";
 import { useTableIdStore } from "@/store/table-id-store";
 import { MdOutlineDelete } from "react-icons/md";
 
@@ -18,7 +18,7 @@ export function DeleteSpace() {
     selectSpaceId: state.selectSpaceId,
   }));
 
-  const deleteSpace = UseDeleteSpaceQuery();
+  const deleteSpace = useDeleteSpaceQuery();
 
   const handleDelete = () => {
     if (selectSpaceId) {

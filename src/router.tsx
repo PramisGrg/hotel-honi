@@ -10,6 +10,7 @@ import OnBoarding from "./pages/onboarding/onbaording";
 import Dashboard from "./pages/dashboard/dashboard";
 import DashboardLayout from "./layout/app-layout";
 import Room from "./pages/table/room-and-space/room";
+import Space from "./pages/table/room-and-space/sapce";
 
 export const router = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ export const router = createBrowserRouter([
       {
         path: "room",
         element: <Room />,
+      },
+      {
+        path: "space",
+        element: <Space />,
       },
     ],
   },

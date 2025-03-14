@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { UseDeleteRoomQuery } from "@/queries/table/room-table/delete-room-query";
+import { useDeleteRoomQuery } from "@/queries/table/room-table/delete.room.query";
 import { useTableIdStore } from "@/store/table-id-store";
 import { MdOutlineDelete } from "react-icons/md";
 
@@ -18,13 +18,12 @@ export function DeleteRoom() {
     selectRoomId: state.selectRoomId,
   }));
 
-  const deleteRoom = UseDeleteRoomQuery();
+  const deleteRoom = useDeleteRoomQuery();
 
   const handleDelete = () => {
     if (selectRoomId) {
       deleteRoom.mutate(selectRoomId);
     }
-    console.log("Elete");
   };
 
   return (

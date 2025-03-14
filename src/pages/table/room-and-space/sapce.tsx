@@ -1,9 +1,10 @@
 import { SpaceTable } from "@/components/table/space-table";
 import { useEffect, useState } from "react";
 import { spacecolumns } from "@/components/columns/space-columns";
-import { UseGetSpaceQuery } from "@/queries/table/space-table/get-spaces-query";
+import { UseGetSpaceQuery } from "@/queries/table/space-table/get.spaces.query";
 import { useDebounce } from "@/hooks/debounce";
 import { useDebounceValue } from "@/store/debounce-store";
+import AppLayout from "@/layout/dashboard-layout";
 
 const Space = () => {
   const { debounceSpaceValue } = useDebounceValue((state) => ({
@@ -23,18 +24,13 @@ const Space = () => {
   }, [spaces]);
 
   return (
-    <div className="flex">
-      <div className="w-full space-y-6 p-8">
-        <div className="">
-          <h1 className="text-xl">Space</h1>
-          <p className="text-sm text-gray-600">
-            View and manage all your spaces
-          </p>
-        </div>
-
-        <SpaceTable columns={spacecolumns} data={allSpaces} />
+    <AppLayout className="space-y-6">
+      <div className="flex flex-col">
+        <h1 className="text-xl text-neutral-700">Spaces</h1>
+        <p className="text-neutral-400">View and manage all your spaces</p>
       </div>
-    </div>
+      <SpaceTable columns={spacecolumns} data={allSpaces} />
+    </AppLayout>
   );
 };
 

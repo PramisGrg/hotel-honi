@@ -29,8 +29,6 @@ export function EditRoom() {
     selectRoomId: state.selectRoomId,
   }));
 
-  console.log(selectRoomId);
-
   const editRoom = useEditRoomQuery();
 
   const form = useForm<TAddRoomSchema>();
