@@ -2,19 +2,29 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { UseEditTableQuery } from "@/queries/table/table-table/edit-table-query";
+import { useEditTableQuery } from "@/queries/table/table-table/edit.table.query";
+import {
+  addTableSchema,
+  TAddTableSchema,
+} from "@/schema/table/room-and-space/add.table.schema";
 import { useTableIdStore } from "@/store/table-id-store";
-import { DialogDescription } from "@radix-ui/react-dialog";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { MdOutlineEdit } from "react-icons/md";
-import { toast } from "sonner";
 
 export interface DataTypeTable {
   name: string;
@@ -22,39 +32,27 @@ export interface DataTypeTable {
 }
 
 export function EditTable() {
-  const [name, setName] = useState("");
-  const [capacity, setCapacity] = useState<number>(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { selectTableId } = useTableIdStore((state) => ({
     selectTableId: state.selectTableId,
   }));
 
-  const editTable = UseEditTableQuery();
+  const editTable = useEditTableQuery();
 
-  const handleEdit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectTableId) {
-      toast.error("No menu item selected for editing");
-      return;
-    }
-    const data: DataTypeTable = {
-      name,
-      capacity,
-    };
+  const form = useForm<TAddTableSchema>({
+    resolver: zodResolver(addTableSchema),
+  });
 
+  const onSubmit = (data: TAddTableSchema) => {
     editTable.mutate(
       { id: selectTableId, data },
       {
-        onSuccess: () => {
+        onSettled: () => {
           setIsDialogOpen(false);
-        },
-        onError: () => {
-          setName("");
         },
       }
     );
-    setIsDialogOpen(false);
   };
 
   return (
@@ -67,44 +65,50 @@ export function EditTable() {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Edit Table</DialogTitle>
-          <DialogDescription className="text-gray-400">
-            Edit your table here 🤪
-          </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleEdit}>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                id="name"
-                className="col-span-3"
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Table Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your table name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Capacity
-              </Label>
-              <Input
-                value={capacity}
-                onChange={(e) => setCapacity(Number(e.target.value))}
-                id="name"
-                className="col-span-3"
+              <FormField
+                control={form.control}
+                name="capacity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Capactiy</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your table capacity"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
+              <div className="pt-4">
+                <Button type="submit">Add Table</Button>
+              </div>
             </div>
-          </div>
-          <DialogFooter>
-            <Button
-              className="bg-blue-500 hover:text-gray-200 duration-300 hover:shadow-md"
-              type="submit"
-            >
-              Save changes
-            </Button>
-          </DialogFooter>
-        </form>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

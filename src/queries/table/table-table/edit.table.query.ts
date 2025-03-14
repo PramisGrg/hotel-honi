@@ -1,37 +1,35 @@
-import { DataTypeTable } from "@/components/popup-table/table-table/edit-table";
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import { TAddTableSchema } from "@/schema/table/room-and-space/add.table.schema";
+import axiosInstance from "@/services/axios";
+import { TLoginResponse } from "@/types/auth.types";
+import { TError } from "@/types/error.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 interface EditTableParams {
-  id: string;
-  data: DataTypeTable;
+  id: string | undefined;
+  data: TAddTableSchema;
 }
 
-export function UseEditTableQuery() {
+export function useEditTableQuery() {
   const queryClient = useQueryClient();
-  return useMutation<unknown, Error, EditTableParams>({
+  return useMutation<TLoginResponse, TError, EditTableParams>({
     mutationFn: async ({ id, data }: EditTableParams) => {
       if (!id) {
         throw new Error("No menu item ID provided for editing");
       }
-      const response = await axiosAuthInstance.patch(
+      const response = await axiosInstance.patch(
         `${endpoints.tables.editTable}/${id}`,
         data
       );
       return response.data;
     },
     onSuccess: (data) => {
-      console.log(data);
       queryClient.invalidateQueries({ queryKey: ["Tables"] });
-      toast.success("Category updated successfully");
+      toast.success(data.message);
     },
     onError: (error) => {
-      toast.error(
-        error.message || "An error occurred while updating the category"
-      );
-      console.log(error);
+      toast.error(error.response.data.message);
     },
   });
 }

@@ -1,20 +1,14 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-type Tables = {
-  name: string;
-  capacity: number;
-};
-
-export function UseAddTableQuery() {
+export function UseDeleteTableQuery() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (space: Tables) => {
-      const response = await axiosAuthInstance.post(
-        endpoints.tables.addTable,
-        space
+    mutationFn: async (id: string) => {
+      const response = await axiosInstance.delete(
+        `${endpoints.tables.deleteTable}/${id}`
       );
       return response.data;
     },

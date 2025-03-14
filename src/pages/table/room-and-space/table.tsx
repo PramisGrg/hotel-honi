@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { tablecolumns } from "@/components/columns/table-columns";
 import { TableTable } from "@/components/table/table-table";
-import { useGetTableQuery } from "@/queries/table/table-table/get-table-query";
+import { useGetTableQuery } from "@/queries/table/table-table/get.table.query";
 import { useDebounce } from "@/hooks/debounce";
 import { useDebounceValue } from "@/store/debounce-store";
+import AppLayout from "@/layout/dashboard-layout";
 
 const Table = () => {
   const { debounceTableValue } = useDebounceValue((state) => ({
@@ -23,18 +24,13 @@ const Table = () => {
   }, [tables]);
 
   return (
-    <div className="flex">
-      <div className="w-full p-8 space-y-6">
-        <div>
-          <h1 className="text-xl">Tables</h1>
-          <p className="text-sm text-gray-600">
-            View and manage all your tables
-          </p>
-        </div>
-
-        <TableTable columns={tablecolumns} data={allTables} />
+    <AppLayout className="space-y-6">
+      <div className="flex flex-col">
+        <h1 className="text-xl text-neutral-700">Tables</h1>
+        <p className="text-neutral-400">View and manage all your tables</p>
       </div>
-    </div>
+      <TableTable columns={tablecolumns} data={allTables} />
+    </AppLayout>
   );
 };
 

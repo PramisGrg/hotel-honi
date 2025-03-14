@@ -11,6 +11,7 @@ import Dashboard from "./pages/dashboard/dashboard";
 import DashboardLayout from "./layout/app-layout";
 import Room from "./pages/table/room-and-space/room";
 import Space from "./pages/table/room-and-space/sapce";
+import Table from "./pages/table/room-and-space/table";
 
 export const router = createBrowserRouter([
   {
@@ -64,6 +65,10 @@ export const router = createBrowserRouter([
       {
         path: "space",
         element: <Space />,
+      },
+      {
+        path: "table",
+        element: <Table />,
       },
     ],
   },

@@ -2,47 +2,49 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
-import { UseAddTableQuery } from "@/queries/table/table-table/add-table-query";
+import { useAddTableQuery } from "@/queries/table/table-table/add.table.query";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import {
+  addTableSchema,
+  TAddTableSchema,
+} from "@/schema/table/room-and-space/add.table.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const AddTable = () => {
-  const [name, setName] = useState<string>("");
-  const [capacity, setCapacity] = useState<number>(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const createTable = UseAddTableQuery();
+  const createTable = useAddTableQuery();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const table = {
-      name,
-      capacity,
-    };
-    createTable.mutate(table, {
-      onSuccess: () => {
+  const form = useForm<TAddTableSchema>({
+    resolver: zodResolver(addTableSchema),
+  });
+
+  const onSubmit = (values: TAddTableSchema) => {
+    createTable.mutate(values, {
+      onSettled: () => {
         setIsDialogOpen(false);
       },
-      onError: () => {
-        setName("");
-      },
     });
-    console.log("Pramis");
-    console.log(table);
   };
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-500" onClick={() => setIsDialogOpen(true)}>
-          Add Table
-        </Button>
+        <Button onClick={() => setIsDialogOpen(true)}>Add Table</Button>
       </DialogTrigger>
       <DialogContent className="min-w-[400px]">
         <DialogHeader>
@@ -51,35 +53,49 @@ const AddTable = () => {
             Please provide table name to add
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="name">Table Name</Label>
-              <Input
-                value={name}
-                id="name"
-                onChange={(e) => setName(e.target.value)}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Table Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your table name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div>
-              <Label htmlFor="capacity">Capacity</Label>
-              <Input
-                value={capacity}
-                id="name"
-                type="number"
-                onChange={(e) => setCapacity(Number(e.target.value))}
+              <FormField
+                control={form.control}
+                name="capacity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Capactiy</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your table capacity"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
+              <div className="pt-4">
+                <Button type="submit">Add Table</Button>
+              </div>
             </div>
-            <DialogFooter>
-              <Button
-                className="bg-blue-600 duration-500 hover:text-gray-300"
-                type="submit"
-              >
-                Save changes
-              </Button>
-            </DialogFooter>
-          </div>
-        </form>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

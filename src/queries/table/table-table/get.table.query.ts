@@ -1,5 +1,5 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { useQuery } from "@tanstack/react-query";
 
 interface UseGetTableQueryParams {
@@ -22,7 +22,7 @@ export const useGetTableQuery = ({
   return useQuery({
     queryKey: ["Tables", { take, skip, search }],
     queryFn: async () => {
-      const response = await axiosAuthInstance.get(endpoints.tables.getTables, {
+      const response = await axiosInstance.get(endpoints.tables.getTables, {
         params,
       });
       return response.data;
