@@ -1,5 +1,5 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance, { axiosAuthInstance } from "@/services/axios";
 import { useQuery } from "@tanstack/react-query";
 
 export interface KotItem {
@@ -35,9 +35,7 @@ export const useGetOrder = () => {
   return useQuery<OrderResponse>({
     queryKey: ["Order"],
     queryFn: async () => {
-      const response = await axiosAuthInstance.get(
-        endpoints.orderAndKot.getOrder
-      );
+      const response = await axiosInstance.get(endpoints.orderAndKot.getOrder);
       return response.data;
     },
   });

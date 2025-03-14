@@ -1,16 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DeleteRoom } from "../popup-table/room-table/delete-room";
 import { EditRoom } from "../popup-table/room-table/edit-room";
+import { TGetRoomResponseData } from "@/types/table.types";
 
-export type RoomTableRef = {
-  id: string;
-  name: string;
-  capacity: number;
-  price: string;
-  status: "AVAILABLE" | "UNAVAILABLE";
-};
-
-export const roomcolumns: ColumnDef<RoomTableRef>[] = [
+export const roomcolumns: ColumnDef<TGetRoomResponseData>[] = [
   {
     accessorKey: "name",
     header: "Room Name",
@@ -27,7 +20,7 @@ export const roomcolumns: ColumnDef<RoomTableRef>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ getValue }) => {
-      const status = getValue() as RoomTableRef["status"];
+      const status = getValue() as TGetRoomResponseData["status"];
       const statusClass =
         status === "AVAILABLE" ? "text-green-600" : "text-red-600";
       return <span className={statusClass}>{status}</span>;

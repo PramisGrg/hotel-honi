@@ -34,9 +34,21 @@ export interface TGetAllHotelResponse {
 }
 
 //Switching hotel
-export interface TActivateHotelResponse {
+export interface TSwitchHotelResponse {
   message: string;
   data: {
     token: string;
   };
+}
+
+//Active hotel
+export interface TActiveHotelResponseData {
+  id: string;
+  name: string;
+  address: string;
+  primaryContact: string;
+}
+export interface TActivateHotelResponse {
+  message: string;
+  data: TActiveHotelResponseData;
 }

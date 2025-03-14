@@ -7,7 +7,6 @@ import {
   useReactTable,
   Row,
 } from "@tanstack/react-table";
-
 import {
   Table,
   TableBody,
@@ -60,15 +59,13 @@ export function RoomTable<TData extends TableTableColumnsRef, TValue>({
   };
 
   return (
-    <div className="">
+    <div>
       <div className="flex justify-between">
-        <div className="py-2">
-          <AddRoom />
-        </div>
+        <AddRoom />
         <div className="w-96 py-2">
           <Input
             onChange={handleRoomChange}
-            placeholder="Search rooms..."
+            placeholder="Search rooms ..."
             className="max-w-sm"
           />
         </div>

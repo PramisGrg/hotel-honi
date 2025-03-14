@@ -8,9 +8,10 @@ import { ImageWrapper } from "@/lib/image.wrapper";
 import { useGetActiveHotel } from "@/queries/hotel/get.active.hotel.query";
 import { useGetAllHotels } from "@/queries/hotel/get.all.hotels.query";
 import { useUserStore } from "@/store/user.store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SpinnerSwitch from "@/components/common/spinner-switch";
 import { useSwitchHotelQuery } from "@/queries/hotel/switch.hotel.query";
+import { useActiveHotelStore } from "@/store/active.hotel.store";
 
 interface ActiveHotelProps {
   image?: string | null;
@@ -23,6 +24,13 @@ export function ActiveHotel({ image, isOpen, setIsOpen }: ActiveHotelProps) {
   const allHotels = useGetAllHotels();
   const activeHotel = useGetActiveHotel();
   const switchHotel = useSwitchHotelQuery();
+  const { setActiveHotel } = useActiveHotelStore();
+
+  useEffect(() => {
+    if (activeHotel.data?.data) {
+      setActiveHotel(activeHotel.data.data);
+    }
+  }, [activeHotel.data?.data, setActiveHotel]);
 
   const activeHotelData = activeHotel.data?.data;
 

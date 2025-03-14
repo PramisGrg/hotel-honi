@@ -2,65 +2,47 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { UseEditRoomQuery } from "@/queries/table/room-table/edit-room-query";
+import { useEditRoomQuery } from "@/queries/table/room-table/edit.room.query";
+import { TAddRoomSchema } from "@/schema/table/room-and-space/add.room.schema";
 import { useTableIdStore } from "@/store/table-id-store";
-import { DialogDescription } from "@radix-ui/react-dialog";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { MdOutlineEdit } from "react-icons/md";
-import { toast } from "sonner";
-
-export interface DataTypeRoom {
-  name: string;
-  capacity: number;
-  price: string;
-}
 
 export function EditRoom() {
-  const [name, setName] = useState("");
-  const [capacity, setCapacity] = useState<number>(0);
-  const [price, setPrice] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { selectRoomId } = useTableIdStore((state) => ({
     selectRoomId: state.selectRoomId,
   }));
 
-  const editRoom = UseEditRoomQuery();
+  console.log(selectRoomId);
 
-  const handleEdit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const editRoom = useEditRoomQuery();
+
+  const form = useForm<TAddRoomSchema>();
+
+  const onSubmit = (values: TAddRoomSchema) => {
     if (!selectRoomId) {
-      toast.error("No menu item selected for editing");
+      console.error("Room ID is undefined");
       return;
     }
-    const data: DataTypeRoom = {
-      name,
-      capacity,
-      price,
-    };
 
-    console.log(data);
-    editRoom.mutate(
-      { id: selectRoomId, data },
-      {
-        onSuccess: () => {
-          setIsDialogOpen(false);
-        },
-        onError: () => {
-          setName("");
-          setPrice("");
-          setCapacity(0);
-        },
-      }
-    );
-    setIsDialogOpen(false);
+    console.log(values);
+    editRoom.mutate({ selectRoomId, data: values });
   };
 
   return (
@@ -73,55 +55,67 @@ export function EditRoom() {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Edit Room</DialogTitle>
-          <DialogDescription className="text-gray-400">
-            Edit your room here 🤪
-          </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleEdit}>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                id="name"
-                className="col-span-3"
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Room</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your room"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Capacity
-              </Label>
-              <Input
-                value={capacity}
-                onChange={(e) => setCapacity(Number(e.target.value))}
-                id="name"
-                className="col-span-3"
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Price</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter the price of room"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Price
-              </Label>
-              <Input
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                id="name"
-                className="col-span-3"
+              <FormField
+                control={form.control}
+                name="capacity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Capacity</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter the capacity of room"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
+              <div className="pt-4">
+                <Button type="submit">Edit Room</Button>
+              </div>
             </div>
-          </div>
-          <DialogFooter>
-            <Button
-              className="bg-blue-500 hover:text-gray-200 duration-300 hover:shadow-md"
-              type="submit"
-            >
-              Save changes
-            </Button>
-          </DialogFooter>
-        </form>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

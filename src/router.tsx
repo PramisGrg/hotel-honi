@@ -9,6 +9,7 @@ import VerifyOtpForgot from "./pages/auth/forgot-password/verify-otp-forgot";
 import OnBoarding from "./pages/onboarding/onbaording";
 import Dashboard from "./pages/dashboard/dashboard";
 import DashboardLayout from "./layout/app-layout";
+import Room from "./pages/table/room-and-space/room";
 
 export const router = createBrowserRouter([
   {
@@ -50,6 +51,14 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Dashboard />,
+      },
+      {
+        path: "order",
+        element: <Room />,
+      },
+      {
+        path: "room",
+        element: <Room />,
       },
     ],
   },

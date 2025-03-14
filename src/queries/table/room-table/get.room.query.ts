@@ -1,8 +1,9 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
+import { TGetRoomResponse } from "@/types/table.types";
 import { useQuery } from "@tanstack/react-query";
 
-interface UseGetRoomQueryParams {
+interface RoomQueryParams {
   take?: number;
   skip?: number;
   search?: string;
@@ -12,19 +13,22 @@ export const useGetRoomQuery = ({
   take = 25,
   skip = 0,
   search = "",
-}: UseGetRoomQueryParams) => {
+}: RoomQueryParams) => {
   const params = {
     take,
     skip,
     search,
   };
 
-  return useQuery({
+  return useQuery<TGetRoomResponse, Error>({
     queryKey: ["Rooms", { take, skip, search }],
     queryFn: async () => {
-      const response = await axiosAuthInstance.get(endpoints.rooms.getRooms, {
-        params,
-      });
+      const response = await axiosInstance.get<TGetRoomResponse>(
+        endpoints.rooms.getRooms,
+        {
+          params,
+        }
+      );
       return response.data;
     },
   });

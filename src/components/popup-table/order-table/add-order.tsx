@@ -8,7 +8,7 @@ import {
 import { useState } from "react";
 import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
 import { useGetTableQuery } from "@/queries/table/table-table/get-table-query";
-import { useGetRoomQuery } from "@/queries/table/room-table/get-room-query";
+import { useGetRoomQuery } from "@/queries/table/room-table/get.room.query";
 import { useGetDishes } from "@/queries/table/dishes-menu/get-dishes-query";
 import { Minus, Plus } from "lucide-react";
 import { useCreateOrder } from "@/queries/order-and-kot/create-order";

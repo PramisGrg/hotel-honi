@@ -1,7 +1,7 @@
 import endpoints from "@/lib/api.contant";
 import axiosInstance from "@/services/axios";
 import { TError } from "@/types/error.type";
-import { TActivateHotelResponse } from "@/types/hotel.types";
+import { TSwitchHotelResponse } from "@/types/hotel.types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
@@ -9,9 +9,9 @@ import { toast } from "sonner";
 export const useSwitchHotelQuery = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<TActivateHotelResponse, TError, string>({
+  return useMutation<TSwitchHotelResponse, TError, string>({
     mutationFn: async (hotelId) => {
-      const response = await axiosInstance.patch<TActivateHotelResponse>(
+      const response = await axiosInstance.patch<TSwitchHotelResponse>(
         endpoints.hotel.switchHotel,
         {
           hotelId,

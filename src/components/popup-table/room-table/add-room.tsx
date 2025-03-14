@@ -2,40 +2,43 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useAddRoomQuery } from "@/queries/table/room-table/add.room.query";
+import {
+  addRoomSchema,
+  TAddRoomSchema,
+} from "@/schema/table/room-and-space/add.room.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
-import { UseAddRoomQuery } from "@/queries/table/room-table/add-room-query";
+import { useForm } from "react-hook-form";
 
 const AddRoom = () => {
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [capacity, setCapacity] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const createRoom = UseAddRoomQuery();
+  const createRoom = useAddRoomQuery();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const room = {
-      name,
-      price,
-      capacity,
-    };
+  const form = useForm<TAddRoomSchema>({
+    resolver: zodResolver(addRoomSchema),
+  });
 
-    createRoom.mutate(room, {
-      onSuccess: () => {
+  const onSubmit = (values: TAddRoomSchema) => {
+    console.log(values, "This is answer");
+    createRoom.mutate(values, {
+      onSettled: () => {
         setIsDialogOpen(false);
-      },
-      onError: () => {
-        setName("");
-        setCapacity(0);
-        setPrice("");
+        form.reset();
       },
     });
   };
@@ -43,53 +46,72 @@ const AddRoom = () => {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-500" onClick={() => setIsDialogOpen(true)}>
-          Add Room
-        </Button>
+        <Button onClick={() => setIsDialogOpen(true)}>Add Room</Button>
       </DialogTrigger>
       <DialogContent className="min-w-[400px]">
         <DialogHeader>
           <DialogTitle>Add Room</DialogTitle>
-          <DialogDescription className="text-gray-400">
-            Please provide Room to add
-          </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="name">Room Name</Label>
-              <Input
-                value={name}
-                id="name"
-                onChange={(e) => setName(e.target.value)}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Room</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your room"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div>
-              <Label htmlFor="name">Price</Label>
-              <Input
-                value={price}
-                id="name"
-                onChange={(e) => setPrice(e.target.value)}
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Price</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter the price of room"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div>
-              <Label htmlFor="name">Capacity</Label>
-              <Input
-                value={capacity}
-                id="name"
-                onChange={(e) => setCapacity(Number(e.target.value))}
+              <FormField
+                control={form.control}
+                name="capacity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Capacity</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter the capacity of room"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
+              <div className="pt-4">
+                <Button type="submit">Add Room</Button>
+              </div>
             </div>
-            <DialogFooter>
-              <Button
-                className="bg-blue-600 duration-500 hover:text-gray-300"
-                type="submit"
-              >
-                Save changes
-              </Button>
-            </DialogFooter>
-          </div>
-        </form>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

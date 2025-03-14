@@ -1,4 +1,5 @@
 import SpinnerCircle from "@/components/common/spinner-circle";
+import UserDetails from "@/components/dashboard/user.details";
 import {
   Dialog,
   DialogContent,
@@ -10,17 +11,12 @@ import AppLayout from "@/layout/dashboard-layout";
 import { useGetActiveHotel } from "@/queries/hotel/get.active.hotel.query";
 import { useGetAllHotels } from "@/queries/hotel/get.all.hotels.query";
 import { useSwitchHotelQuery } from "@/queries/hotel/switch.hotel.query";
-import { useUserStore } from "@/store/user.store";
 
 const Dashboard = () => {
   const { data: allHotels } = useGetAllHotels();
-
   const allHotelsData = allHotels?.data;
 
-  const { user } = useUserStore();
-
   const { failureCount, isLoading } = useGetActiveHotel();
-
   const activateHotel = useSwitchHotelQuery();
 
   const handleSwtichToggle = (hotelId: string) => {
@@ -70,7 +66,7 @@ const Dashboard = () => {
 
   return (
     <AppLayout>
-      <h1>{user?.name}</h1>
+      <UserDetails />
     </AppLayout>
   );
 };
