@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { UseDeletCategoryQuery } from "@/queries/table/category-menu/delete-category";
+import { useDeletCategoryQuery } from "@/queries/table/category-menu/delete.category.query";
 import { useTableIdStore } from "@/store/table-id-store";
 import { MdOutlineDelete } from "react-icons/md";
 
@@ -18,11 +18,9 @@ export function DeleteCategory() {
     selectCategoryId: state.selectCategoryId,
   }));
 
-  const deleteDish = UseDeletCategoryQuery();
+  const deleteDish = useDeletCategoryQuery();
 
   const handleDelete = () => {
-    console.log("Delete");
-    console.log(selectCategoryId);
     if (selectCategoryId) {
       deleteDish.mutate(selectCategoryId);
     }

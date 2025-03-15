@@ -1,7 +1,7 @@
 import { dishescolumns } from "@/components/columns/dishes-columns";
 import { DishesTable } from "@/components/table/dishes-table";
 import { useEffect, useState } from "react";
-import { useGetDishes } from "@/queries/table/dishes-menu/get-dishes-query";
+import { useGetDishes } from "@/queries/table/dishes-menu/get.dishes.query";
 
 const Dishes = () => {
   const [dishes, setDishes] = useState([]);

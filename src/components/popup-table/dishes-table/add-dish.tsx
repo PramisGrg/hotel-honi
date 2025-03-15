@@ -16,9 +16,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
-import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
-import { UseAddDishesQuery } from "@/queries/table/dishes-menu/add-dishes-query";
-import { UseGetCategory } from "@/queries/table/category-menu/get-category-query";
+import { DialogTrigger } from "@radix-ui/react-dialog";
+import { UseAddDishesQuery } from "@/queries/table/dishes-menu/add.dishes.query";
+import { UseGetCategory } from "@/queries/table/category-menu/get.category.query";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { DishesSchema, DishesType } from "@/schema/table/dish-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,7 +29,7 @@ interface Category {
   name: string;
 }
 
-const AddMenuItems = () => {
+const AddDish = () => {
   const {
     register,
     handleSubmit,
@@ -84,16 +84,11 @@ const AddMenuItems = () => {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-500" onClick={() => setIsDialogOpen(true)}>
-          Add New Item
-        </Button>
+        <Button onClick={() => setIsDialogOpen(true)}>Add Menu Items</Button>
       </DialogTrigger>
       <DialogContent className="min-w-[900px]">
         <DialogHeader>
           <DialogTitle>Add Menu Items</DialogTitle>
-          <DialogDescription>
-            Please provide all details about the items to add
-          </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 grid-cols-2 py-4">
@@ -164,12 +159,7 @@ const AddMenuItems = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button
-              className="bg-blue-600 duration-500 hover:text-gray-300"
-              type="submit"
-            >
-              Save changes
-            </Button>
+            <Button type="submit">Save changes</Button>
           </DialogFooter>
         </form>
       </DialogContent>
@@ -177,4 +167,4 @@ const AddMenuItems = () => {
   );
 };
 
-export default AddMenuItems;
+export default AddDish;

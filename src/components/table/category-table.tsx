@@ -73,7 +73,7 @@ export function CategoryTable<TData extends DataRow, TValue>({
         </div>
         <div className="w-96 py-2">
           <Input
-            placeholder="Filter names..."
+            placeholder="Search Categories..."
             value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
               table.getColumn("name")?.setFilterValue(event.target.value)

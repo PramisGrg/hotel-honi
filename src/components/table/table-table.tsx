@@ -19,16 +19,16 @@ import {
 import React from "react";
 import { Input } from "../ui/input";
 import { useTableIdStore } from "@/store/table-id-store";
-import { TableTableColumnsRef } from "../columns/table-columns";
+import { TGetTableResponseData } from "@/types/table.types";
 import AddTable from "../popup-table/table-table/add-table";
 import { useDebounceValue } from "@/store/debounce-store";
 
-interface DataTableProps<TData extends TableTableColumnsRef, TValue> {
+interface DataTableProps<TData extends TGetTableResponseData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function TableTable<TData extends TableTableColumnsRef, TValue>({
+export function TableTable<TData extends TGetTableResponseData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -51,7 +51,7 @@ export function TableTable<TData extends TableTableColumnsRef, TValue>({
     setDebounceTableValue: state.setDebounceTableValue,
   }));
 
-  const handleClick = (row: Row<TableTableColumnsRef>) => {
+  const handleClick = (row: Row<TGetTableResponseData>) => {
     console.log(row.original.id);
     setSelectTableId(row.original.id);
   };

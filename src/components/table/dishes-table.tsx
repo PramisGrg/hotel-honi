@@ -18,9 +18,9 @@ import {
 } from "@/components/ui/table";
 import React from "react";
 import { Input } from "../ui/input";
-import AddMenuItems from "../popup-table/dishes-table/add-menu";
 import { useTableIdStore } from "@/store/table-id-store";
 import { useDebounceValue } from "@/store/debounce-store";
+import AddDish from "../popup-table/dishes-table/add-dish";
 
 interface DataRow {
   id: string;
@@ -68,7 +68,7 @@ export function DishesTable<TData extends DataRow, TValue>({
     <div className="">
       <div className="flex justify-between">
         <div className="py-2">
-          <AddMenuItems />
+          <AddDish />
         </div>
         <div className="w-96 py-2">
           <Input

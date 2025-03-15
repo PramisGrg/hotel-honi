@@ -17,16 +17,16 @@ import {
 } from "@/components/ui/table";
 import { Input } from "../ui/input";
 import { useTableIdStore } from "@/store/table-id-store";
-import { TableTableColumnsRef } from "../columns/table-columns";
+import { TGetRoomResponseData } from "@/types/table.types";
 import AddRoom from "../popup-table/room-table/add-room";
 import { useDebounceValue } from "@/store/debounce-store";
 
-interface DataTableProps<TData extends TableTableColumnsRef, TValue> {
+interface DataTableProps<TData extends TGetRoomResponseData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function RoomTable<TData extends TableTableColumnsRef, TValue>({
+export function RoomTable<TData extends TGetRoomResponseData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -49,7 +49,7 @@ export function RoomTable<TData extends TableTableColumnsRef, TValue>({
     setDebounceRoomValue: state.setDebounceRoomValue,
   }));
 
-  const handleClick = (row: Row<TableTableColumnsRef>) => {
+  const handleClick = (row: Row<TGetRoomResponseData>) => {
     console.log(row.original.id);
     setSelectRoomId(row.original.id);
   };

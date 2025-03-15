@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { UseEditDishesQuery } from "@/queries/table/dishes-menu/edit-dishes-query";
+import { UseEditDishesQuery } from "@/queries/table/dishes-menu/edit.dishes.query";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { MdOutlineEdit } from "react-icons/md";
@@ -23,7 +23,7 @@ export interface DataTypeMenu {
   category: string;
 }
 
-export function EditMenuItems() {
+export function EditDish() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState<number | undefined>(undefined);
   const [description, setDescription] = useState("");

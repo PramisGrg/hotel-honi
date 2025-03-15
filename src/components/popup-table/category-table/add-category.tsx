@@ -2,35 +2,41 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
-import { UseAddCategoryQuery } from "@/queries/table/category-menu/add-category-query";
+import { DialogTrigger } from "@radix-ui/react-dialog";
+import { useAddCategoryQuery } from "@/queries/table/category-menu/add.category.query";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  addCategorySchema,
+  TAddCategorySchema,
+} from "@/schema/table/food-and-menu/add.category.schema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const AddCategory = () => {
-  const [name, setName] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const createCategory = UseAddCategoryQuery();
+  const createCategory = useAddCategoryQuery();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(name);
-    const category = {
-      name,
-    };
+  const form = useForm<TAddCategorySchema>({
+    resolver: zodResolver(addCategorySchema),
+  });
 
-    createCategory.mutate(category, {
-      onSuccess: () => {
+  const onSubmit = (value: TAddCategorySchema) => {
+    createCategory.mutate(value, {
+      onSettled: () => {
         setIsDialogOpen(false);
-      },
-      onError: () => {
-        setName("");
       },
     });
   };
@@ -38,37 +44,38 @@ const AddCategory = () => {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-500" onClick={() => setIsDialogOpen(true)}>
-          Add Category
-        </Button>
+        <Button onClick={() => setIsDialogOpen(true)}>Add Category</Button>
       </DialogTrigger>
       <DialogContent className="min-w-[400px]">
         <DialogHeader>
           <DialogTitle>Add Category</DialogTitle>
-          <DialogDescription className="text-gray-400">
-            Please provide category name of food to add
-          </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="name">Category Name</Label>
-              <Input
-                value={name}
-                id="name"
-                onChange={(e) => setName(e.target.value)}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Category</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your category name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
+              <div className="pt-4">
+                <Button type="submit">Add Category</Button>
+              </div>
             </div>
-            <DialogFooter>
-              <Button
-                className="bg-blue-600 duration-500 hover:text-gray-300"
-                type="submit"
-              >
-                Save changes
-              </Button>
-            </DialogFooter>
-          </div>
-        </form>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

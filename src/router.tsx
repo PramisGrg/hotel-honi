@@ -12,6 +12,8 @@ import DashboardLayout from "./layout/app-layout";
 import Room from "./pages/table/room-and-space/room";
 import Space from "./pages/table/room-and-space/sapce";
 import Table from "./pages/table/room-and-space/table";
+import Dishes from "./pages/table/food-menu/dish";
+import Category from "./pages/table/food-menu/category";
 
 export const router = createBrowserRouter([
   {
@@ -69,6 +71,14 @@ export const router = createBrowserRouter([
       {
         path: "table",
         element: <Table />,
+      },
+      {
+        path: "dish",
+        element: <Dishes />,
+      },
+      {
+        path: "category",
+        element: <Category />,
       },
     ],
   },

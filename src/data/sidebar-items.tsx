@@ -78,11 +78,11 @@ export function getMenuList(): Group[] {
           icon: Utensils,
           submenus: [
             {
-              href: "/dashboard/dishes",
+              href: "/dashboard/dish",
               label: "Dishes",
             },
             {
-              href: "/dashboard/categories",
+              href: "/dashboard/category",
               label: "Categories",
             },
           ],

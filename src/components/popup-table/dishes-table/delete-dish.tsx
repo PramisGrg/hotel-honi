@@ -9,11 +9,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { UseDeletDishesQuery } from "@/queries/table/dishes-menu/delete-dishes-query";
+import { UseDeletDishesQuery } from "@/queries/table/dishes-menu/delete.dishes.query";
 import { useTableIdStore } from "@/store/table-id-store";
 import { MdOutlineDelete } from "react-icons/md";
 
-export function DeleteMenuItems() {
+export function DeleteDish() {
   const { selectCategoryId } = useTableIdStore((state) => ({
     selectCategoryId: state.selectCategoryId,
   }));

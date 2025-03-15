@@ -1,6 +1,6 @@
-import { DataTypeMenu } from "@/components/popup-table/dishes-table/edit-menu";
+import { DataTypeMenu } from "@/components/popup-table/dishes-table/edit-dish";
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -16,7 +16,7 @@ export function UseEditDishesQuery() {
       if (!id) {
         throw new Error("No menu item ID provided for editing");
       }
-      const response = await axiosAuthInstance.patch(
+      const response = await axiosInstance.patch(
         `${endpoints.dishes.editDishes}/${id}`,
         data
       );
