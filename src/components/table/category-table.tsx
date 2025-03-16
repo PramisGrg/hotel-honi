@@ -60,8 +60,6 @@ export function CategoryTable<TData extends DataRow, TValue>({
   }));
 
   const handleClick = (row: Row<DataRow>) => {
-    console.log("clicked");
-    console.log(row.original.id);
     setSelectCategotyId(row.original.id);
   };
 

@@ -1,5 +1,6 @@
 import endpoints from "@/lib/api.contant";
 import axiosInstance from "@/services/axios";
+import { TGetCategoryResponse } from "@/types/table.types";
 import { useQuery } from "@tanstack/react-query";
 
 export const UseGetCategory = () => {
@@ -7,12 +8,15 @@ export const UseGetCategory = () => {
     take: 25,
     skip: 0,
   };
-  return useQuery({
+  return useQuery<TGetCategoryResponse, Error>({
     queryKey: ["Category"],
     queryFn: async () => {
-      const response = await axiosInstance.get(endpoints.category.getCategory, {
-        params,
-      });
+      const response = await axiosInstance.get<TGetCategoryResponse>(
+        endpoints.category.getCategory,
+        {
+          params,
+        }
+      );
       return response.data;
     },
   });

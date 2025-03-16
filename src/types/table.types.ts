@@ -37,3 +37,16 @@ export interface TGetTableResponse {
   message: string;
   data: TGetTableResponseData[];
 }
+
+//Get Category
+export interface TGetCategoryResponseData {
+  id: string;
+  name: string;
+  image: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface TGetCategoryResponse {
+  message: string;
+  data: TGetCategoryResponseData[];
+}

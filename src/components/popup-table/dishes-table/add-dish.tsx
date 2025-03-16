@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -20,28 +19,30 @@ import { DialogTrigger } from "@radix-ui/react-dialog";
 import { UseAddDishesQuery } from "@/queries/table/dishes-menu/add.dishes.query";
 import { UseGetCategory } from "@/queries/table/category-menu/get.category.query";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { DishesSchema, DishesType } from "@/schema/table/dish-schema";
+import { DishesType } from "@/schema/table/dish-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ReusableDropzone from "@/hooks/reusable-dropzone";
-
-interface Category {
-  id: string;
-  name: string;
-}
+import {
+  addDishSchema,
+  TAddDishSchema,
+} from "@/schema/table/food-and-menu/add.dish.schema";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { TGetCategoryResponseData } from "@/types/table.types";
 
 const AddDish = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    setValue,
-  } = useForm<DishesType>({
-    resolver: zodResolver(DishesSchema),
+  const form = useForm<TAddDishSchema>({
+    resolver: zodResolver(addDishSchema),
   });
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<TGetCategoryResponseData[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
@@ -90,7 +91,7 @@ const AddDish = () => {
         <DialogHeader>
           <DialogTitle>Add Menu Items</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        {/* <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 grid-cols-2 py-4">
             <div className="w-[400px] space-y-4">
               <div>
@@ -161,7 +162,111 @@ const AddDish = () => {
           <DialogFooter>
             <Button type="submit">Save changes</Button>
           </DialogFooter>
-        </form>
+        </form> */}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Dish</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your dish name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Price</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your dish price"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Price</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your dish price"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Description</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter short dish description"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Category</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {categories.map((item) => (
+                            <SelectItem key={item.id} value={item.id}>
+                              {item.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="pt-4">
+                <Button type="submit">Add Dishes</Button>
+              </div>
+            </div>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

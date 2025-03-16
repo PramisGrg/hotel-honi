@@ -1,13 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { EditCategory } from "../popup-table/category-table/edit-category";
 import { DeleteCategory } from "../popup-table/category-table/delete-category";
+import { TGetCategoryResponseData } from "@/types/table.types";
 
-export type CategoryColuumnRef = {
-  id: string;
-  name: string;
-};
-
-export const categorycolumns: ColumnDef<CategoryColuumnRef>[] = [
+export const categorycolumns: ColumnDef<TGetCategoryResponseData>[] = [
   {
     accessorKey: "name",
     header: " Category Name",

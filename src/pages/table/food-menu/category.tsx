@@ -3,9 +3,10 @@ import { CategoryTable } from "@/components/table/category-table";
 import { categorycolumns } from "@/components/columns/category-columns";
 import { UseGetCategory } from "@/queries/table/category-menu/get.category.query";
 import AppLayout from "@/layout/dashboard-layout";
+import { TGetCategoryResponseData } from "@/types/table.types";
 
 const Category = () => {
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<TGetCategoryResponseData[]>([]);
 
   const { data: categoryData } = UseGetCategory();
   useEffect(() => {
