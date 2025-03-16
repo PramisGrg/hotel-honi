@@ -5,27 +5,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useEffect, useState } from "react";
-import { DialogTrigger } from "@radix-ui/react-dialog";
-import { UseAddDishesQuery } from "@/queries/table/dishes-menu/add.dishes.query";
-import { UseGetCategory } from "@/queries/table/category-menu/get.category.query";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { DishesType } from "@/schema/table/dish-schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import ReusableDropzone from "@/hooks/reusable-dropzone";
-import {
-  addDishSchema,
-  TAddDishSchema,
-} from "@/schema/table/food-and-menu/add.dish.schema";
 import {
   Form,
   FormControl,
@@ -34,44 +13,57 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { UseGetCategory } from "@/queries/table/category-menu/get.category.query";
+import { useAddDishQuery } from "@/queries/table/dishes-menu/add.dishes.query";
+import {
+  addDishSchema,
+  TAddDishSchema,
+} from "@/schema/table/food-and-menu/add.dish.schema";
 import { TGetCategoryResponseData } from "@/types/table.types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { DialogTrigger } from "@radix-ui/react-dialog";
+import { useCallback, useEffect, useState } from "react";
+import { useDropzone } from "react-dropzone";
+import { useForm } from "react-hook-form";
 
 const AddDish = () => {
   const form = useForm<TAddDishSchema>({
     resolver: zodResolver(addDishSchema),
   });
 
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      form.setValue("image", acceptedFiles, { shouldValidate: true });
+    },
+    [form]
+  );
+
+  const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
+    onDrop,
+    accept: { "image/*": [] },
+    multiple: false,
+  });
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [categories, setCategories] = useState<TGetCategoryResponseData[]>([]);
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const createDishes = UseAddDishesQuery();
+  const createDish = useAddDishQuery();
   const { data: categoryData } = UseGetCategory();
 
-  const handleFileSelected = (files: File[]) => {
-    setSelectedFiles(files);
-    if (files.length > 0) {
-      setValue("image", files[0], { shouldValidate: true });
-    }
-  };
-
-  const onSubmit: SubmitHandler<DishesType> = (data) => {
-    const formData = {
-      ...data,
-      image: selectedFiles[0],
-      category: selectedCategory,
-    };
-
-    createDishes.mutate(formData, {
-      onSuccess: () => {
+  const onSubmit = (value: TAddDishSchema) => {
+    createDish.mutate(value, {
+      onSettled: () => {
         setIsDialogOpen(false);
-        reset();
-        setSelectedFiles([]);
-        setCategories([]);
-      },
-      onError: () => {
-        reset();
+        form.reset();
+        form.setValue("image", [], { shouldValidate: false });
       },
     });
   };
@@ -91,178 +83,138 @@ const AddDish = () => {
         <DialogHeader>
           <DialogTitle>Add Menu Items</DialogTitle>
         </DialogHeader>
-        {/* <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid gap-4 grid-cols-2 py-4">
-            <div className="w-[400px] space-y-4">
-              <div>
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" {...register("name")} />
-              </div>
-              {errors.name && (
-                <p className="text-red-400 text-sm">
-                  {errors.name.message as string}
-                </p>
-              )}
-              <div>
-                <Label htmlFor="price">Price</Label>
-                <Input id="price" {...register("price")} />
-              </div>
-              {errors.price && (
-                <p className="text-red-400 text-sm">
-                  {errors.price.message as string}
-                </p>
-              )}
-              <div>
-                <Label htmlFor="description">Description</Label>
-                <Input id="description" {...register("description")} />
-              </div>
-              {errors.description && (
-                <p className="text-red-400 text-sm">
-                  {errors.description.message as string}
-                </p>
-              )}
-              <div>
-                <Label htmlFor="category">Category</Label>
-                <Select
-                  onValueChange={(value) => {
-                    setSelectedCategory(value);
-                    setValue("category", value, { shouldValidate: true });
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((item) => (
-                      <SelectItem key={item.id} value={item.id}>
-                        {item.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {errors.category && (
-                  <p className="text-red-400 text-sm">
-                    {errors.category.message}
-                  </p>
-                )}
-              </div>
-            </div>
-            <div>
-              <ReusableDropzone
-                onFileSelected={handleFileSelected}
-                selectedFiles={selectedFiles}
-              />
-              {errors.image && (
-                <p className="text-red-400 text-sm">
-                  {errors.image.message as string}
-                </p>
-              )}
-            </div>
-          </div>
-          <DialogFooter>
-            <Button type="submit">Save changes</Button>
-          </DialogFooter>
-        </form> */}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-            <div className="space-y-2">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="font-semibold">Dish</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="border-primary/30 focus:border-none"
-                        placeholder="Enter your dish name"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="font-semibold">Price</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="border-primary/30 focus:border-none"
-                        placeholder="Enter your dish price"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="font-semibold">Price</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="border-primary/30 focus:border-none"
-                        placeholder="Enter your dish price"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="font-semibold">Description</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="border-primary/30 focus:border-none"
-                        placeholder="Enter short dish description"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="category"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="font-semibold">Category</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {categories.map((item) => (
-                            <SelectItem key={item.id} value={item.id}>
-                              {item.name}
-                            </SelectItem>
+            <div className="grid grid-cols-2 gap-10">
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-semibold">Dish</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="border-primary/30 focus:border-none"
+                          placeholder="Enter your dish name"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="price"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-semibold">Price</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="border-primary/30 focus:border-none"
+                          placeholder="Enter your dish price"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-semibold">
+                        Description
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className="border-primary/30 focus:border-none"
+                          placeholder="Enter short dish description"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="category"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-semibold">Category</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <SelectTrigger>
+                            <SelectValue
+                              className="border-primary/30 focus:border-none"
+                              placeholder="Category"
+                            />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {categories.map((item) => (
+                              <SelectItem key={item.id} value={item.id}>
+                                {item.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={() => (
+                    <FormItem>
+                      <FormLabel className="font-semibold">Image</FormLabel>
+                      <FormControl>
+                        <div
+                          {...getRootProps()}
+                          className="border-2 border-dashed border-gray-300 p-4 rounded-lg text-center cursor-pointer hover:bg-gray-100"
+                        >
+                          <input {...getInputProps()} />
+                          <p className="text-gray-500">
+                            Drag & drop an image here, or click to select
+                          </p>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                      {acceptedFiles.length > 0 && (
+                        <div className="mt-2">
+                          {acceptedFiles.map((file) => (
+                            <div
+                              key={file.name}
+                              className="flex items-center gap-2"
+                            >
+                              <img
+                                src={URL.createObjectURL(file)}
+                                alt="Preview"
+                                className="w-16 h-16 object-cover rounded"
+                              />
+                              <span className="text-sm">{file.name}</span>
+                            </div>
                           ))}
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                        </div>
+                      )}
+                    </FormItem>
+                  )}
+                />
+              </div>
               <div className="pt-4">
-                <Button type="submit">Add Dishes</Button>
+                <Button disabled={createDish.isPending} type="submit">
+                  Add Dishes
+                </Button>
               </div>
             </div>
           </form>

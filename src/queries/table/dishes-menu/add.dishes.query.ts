@@ -1,23 +1,23 @@
 import endpoints from "@/lib/api.contant";
+import { TAddDishSchema } from "@/schema/table/food-and-menu/add.dish.schema";
 import axiosInstance from "@/services/axios";
+import { TLoginResponse } from "@/types/auth.types";
+import { TError } from "@/types/error.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-type Dish = {
-  image: File;
-  category: string | null;
-  name: string;
-  price: string;
-  description: string;
-};
-
-export function UseAddDishesQuery() {
+export function useAddDishQuery() {
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async (dish: Dish) => {
+  return useMutation<TLoginResponse, TError, TAddDishSchema>({
+    mutationFn: async (dish) => {
       const response = await axiosInstance.postForm(
         endpoints.dishes.addDishes,
-        dish
+        dish,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       return response.data;
     },
@@ -25,8 +25,8 @@ export function UseAddDishesQuery() {
       queryClient.invalidateQueries({ queryKey: ["Dishes"] });
       toast.success(data.message);
     },
-    onError: () => {
-      toast.error("Please satisfy the given conditions");
+    onError: (error) => {
+      toast.error(error.response.data.message);
     },
   });
 }
