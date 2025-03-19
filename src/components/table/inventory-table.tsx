@@ -71,7 +71,7 @@ export function InventoryTable<TData extends DataRow, TValue>({
         </div>
         <div className="w-96 py-2">
           <Input
-            placeholder="Filter names..."
+            placeholder="Filter inventory..."
             value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
               table.getColumn("name")?.setFilterValue(event.target.value)

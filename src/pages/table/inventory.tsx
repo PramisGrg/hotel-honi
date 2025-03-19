@@ -1,6 +1,7 @@
 import { inventorycolumns } from "@/components/columns/inventory-column";
 import { InventoryTable } from "@/components/table/inventory-table";
-import { useGetInventory } from "@/queries/table/inventory-table/get-inventory";
+import AppLayout from "@/layout/dashboard-layout";
+import { useGetInventory } from "@/queries/table/inventory-table/get.inventory.query";
 import { useEffect, useState } from "react";
 
 const Inventory = () => {
@@ -15,17 +16,13 @@ const Inventory = () => {
   }, [inventory]);
 
   return (
-    <div className="flex">
-      <div className="w-full p-10 space-y-6">
-        <div className="space-y-2">
-          <h1 className="text-xl font-semibold">Inventory</h1>
-          <p className="text-sm text-gray-600">
-            View and manage all your inventory
-          </p>
-        </div>
-        <InventoryTable columns={inventorycolumns} data={allInventory} />
+    <AppLayout className="space-y-6">
+      <div className="flex flex-col">
+        <h1 className="text-xl text-neutral-700">Inventory</h1>
+        <p className="text-neutral-400">View and manage all your invnetory</p>
       </div>
-    </div>
+      <InventoryTable columns={inventorycolumns} data={allInventory} />
+    </AppLayout>
   );
 };
 

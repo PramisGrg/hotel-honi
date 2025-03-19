@@ -14,6 +14,7 @@ import Space from "./pages/table/room-and-space/sapce";
 import Table from "./pages/table/room-and-space/table";
 import Dishes from "./pages/table/food-menu/dish";
 import Category from "./pages/table/food-menu/category";
+import Inventory from "./pages/table/inventory";
 
 export const router = createBrowserRouter([
   {
@@ -79,6 +80,10 @@ export const router = createBrowserRouter([
       {
         path: "category",
         element: <Category />,
+      },
+      {
+        path: "inventory",
+        element: <Inventory />,
       },
     ],
   },

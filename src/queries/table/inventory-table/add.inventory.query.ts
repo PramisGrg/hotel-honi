@@ -1,20 +1,16 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import { TAddInventorySchema } from "@/schema/table/inventory.schema";
+import axiosInstance from "@/services/axios";
+import { TLoginResponse } from "@/types/auth.types";
+import { TError } from "@/types/error.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export interface InventoryType {
-  name: string;
-  description: string;
-  quantity: string;
-  image: File;
-}
-
 export function useAddInventoryQuery() {
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async (inventory: InventoryType) => {
-      const response = await axiosAuthInstance.postForm(
+  return useMutation<TLoginResponse, TError, TAddInventorySchema>({
+    mutationFn: async (inventory) => {
+      const response = await axiosInstance.postForm(
         endpoints.inventory.addInventory,
         inventory
       );
@@ -24,8 +20,8 @@ export function useAddInventoryQuery() {
       queryClient.invalidateQueries({ queryKey: ["Inventory"] });
       toast.success(data.message);
     },
-    onError: () => {
-      toast.error("Please satisfy the given conditions");
+    onError: (error) => {
+      toast.error(error.response.data.message);
     },
   });
 }

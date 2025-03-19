@@ -1,5 +1,5 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetInventory = () => {
@@ -10,7 +10,7 @@ export const useGetInventory = () => {
   return useQuery({
     queryKey: ["Inventory"],
     queryFn: async () => {
-      const response = await axiosAuthInstance.get(
+      const response = await axiosInstance.get(
         endpoints.inventory.getInventory,
         {
           params,

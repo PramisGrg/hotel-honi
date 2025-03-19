@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useDeleteInventory } from "@/queries/table/inventory-table/delete-inventory-query";
+import { useDeleteInventory } from "@/queries/table/inventory-table/delete.inventory.query";
 import { useTableIdStore } from "@/store/table-id-store";
 import { MdOutlineDelete } from "react-icons/md";
 

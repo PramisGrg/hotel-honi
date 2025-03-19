@@ -12,13 +12,15 @@ import { useState } from "react";
 import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
 import ReusableDropzone from "@/hooks/reusable-dropzone";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { InventorySchema } from "@/schema/table/inventory-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { InventoryFormData } from "@/schema/table/inventory-schema";
 import { MdOutlineEdit } from "react-icons/md";
-import { useEditInventory } from "@/queries/table/inventory-table/edit-inventory-query";
+import { useEditInventory } from "@/queries/table/inventory-table/edit.inventory.query";
 import { useTableIdStore } from "@/store/table-id-store";
 import { toast } from "sonner";
+import {
+  addInventorySchema,
+  TAddInventorySchema,
+} from "@/schema/table/inventory.schema";
 
 const EditInventory = () => {
   const {
@@ -27,8 +29,8 @@ const EditInventory = () => {
     handleSubmit,
     setValue,
     reset,
-  } = useForm<InventoryFormData>({
-    resolver: zodResolver(InventorySchema),
+  } = useForm<TAddInventorySchema>({
+    resolver: zodResolver(addInventorySchema),
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);

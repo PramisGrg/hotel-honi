@@ -1,6 +1,6 @@
-import { InventoryType } from "./add-inventory-query";
+import { InventoryType } from "./add.inventory.query";
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -16,7 +16,7 @@ export function useEditInventory() {
       if (!id) {
         throw new Error("No inventory item ID provided for editing");
       }
-      const response = await axiosAuthInstance.patch(
+      const response = await axiosInstance.patch(
         `${endpoints.inventory.editInventory}/${id}`,
         formData
       );
