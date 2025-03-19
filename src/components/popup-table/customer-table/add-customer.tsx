@@ -2,40 +2,41 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
-import { UseAddCustomerQuery } from "@/queries/table/customer-table/add-customer-query";
+import { useAddCustomerQuery } from "@/queries/table/customer-table/add.customer.query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  addCustomerSchema,
+  TAddCustomerSchema,
+} from "@/schema/table/customer-and-supplier/add.customer.schema";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 const AddCustomer = () => {
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [contactNumber, setContactNumber] = useState("");
-  const [emailAddress, setEmailAdddress] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const createCustomer = UseAddCustomerQuery();
+  const createCustomer = useAddCustomerQuery();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const customer = {
-      name,
-      address,
-      contactNumber,
-      emailAddress,
-    };
+  const form = useForm<TAddCustomerSchema>({
+    resolver: zodResolver(addCustomerSchema),
+  });
 
-    createCustomer.mutate(customer, {
-      onSuccess: () => {
+  const onSubmit = (value: TAddCustomerSchema) => {
+    createCustomer.mutate(value, {
+      onSettled: () => {
         setIsDialogOpen(false);
-      },
-      onError: () => {
-        setName("");
       },
     });
   };
@@ -43,61 +44,93 @@ const AddCustomer = () => {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-500" onClick={() => setIsDialogOpen(true)}>
-          Add Customer
-        </Button>
+        <Button onClick={() => setIsDialogOpen(true)}>Add Customer</Button>
       </DialogTrigger>
       <DialogContent className="min-w-[400px]">
         <DialogHeader>
           <DialogTitle>Add Customer</DialogTitle>
-          <DialogDescription className="text-gray-400">
-            Please provide Customer name to add
-          </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="name">Customer Name</Label>
-              <Input
-                value={name}
-                id="name"
-                onChange={(e) => setName(e.target.value)}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">
+                      Customer name
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your customer name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div>
-              <Label htmlFor="name">Address</Label>
-              <Input
-                value={address}
-                id="name"
-                onChange={(e) => setAddress(e.target.value)}
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Address</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your customer address"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div>
-              <Label htmlFor="name">Contact</Label>
-              <Input
-                value={contactNumber}
-                id="name"
-                onChange={(e) => setContactNumber(e.target.value)}
+              <FormField
+                control={form.control}
+                name="contactNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">
+                      Contact Number
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your customer contact number"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div>
-              <Label htmlFor="name">Email</Label>
-              <Input
-                value={emailAddress}
-                id="name"
-                onChange={(e) => setEmailAdddress(e.target.value)}
+              <FormField
+                control={form.control}
+                name="emailAddress"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your customer email address"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
+              <div className="pt-4">
+                <Button type="submit">Add Customer</Button>
+              </div>
             </div>
-            <DialogFooter>
-              <Button
-                className="bg-blue-600 duration-500 hover:text-gray-300"
-                type="submit"
-              >
-                Save changes
-              </Button>
-            </DialogFooter>
-          </div>
-        </form>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

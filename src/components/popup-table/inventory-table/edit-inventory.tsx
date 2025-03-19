@@ -2,38 +2,45 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useState } from "react";
-import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
-import ReusableDropzone from "@/hooks/reusable-dropzone";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { MdOutlineEdit } from "react-icons/md";
 import { useEditInventory } from "@/queries/table/inventory-table/edit.inventory.query";
-import { useTableIdStore } from "@/store/table-id-store";
-import { toast } from "sonner";
 import {
   addInventorySchema,
   TAddInventorySchema,
 } from "@/schema/table/inventory.schema";
+import { useTableIdStore } from "@/store/table-id-store";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
+import { useCallback, useState } from "react";
+import { useDropzone } from "react-dropzone";
+import { useForm } from "react-hook-form";
+import { MdOutlineEdit } from "react-icons/md";
+import { toast } from "sonner";
 
 const EditInventory = () => {
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    setValue,
-    reset,
-  } = useForm<TAddInventorySchema>({
+  const form = useForm<TAddInventorySchema>({
     resolver: zodResolver(addInventorySchema),
+    defaultValues: {
+      name: "",
+      price: "",
+      description: "",
+      quantity: "",
+      unit: "",
+      image: [],
+    },
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const { selectInventoryId } = useTableIdStore((state) => ({
     selectInventoryId: state.selectInventoryId,
@@ -46,32 +53,22 @@ const EditInventory = () => {
       toast.error("No menu item selected for editing");
       return;
     }
-    const formData = {
-      ...data,
-      image: selectedFiles[0],
-    };
 
-    editInventory.mutate(
-      { id: selectInventoryId, formData },
-      {
-        onSuccess: () => {
-          setIsDialogOpen(false);
-          reset();
-          setSelectedFiles([]);
-        },
-        onError: () => {
-          reset();
-        },
-      }
-    );
+    editInventory.mutate({ id: selectInventoryId, data });
   };
 
-  const handleFileSelected = (files: File[]) => {
-    setSelectedFiles(files);
-    if (files.length > 0) {
-      setValue("image", files[0], { shouldValidate: true });
-    }
-  };
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      form.setValue("image", acceptedFiles, { shouldValidate: true });
+    },
+    [form]
+  );
+
+  const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
+    onDrop,
+    accept: { "image/*": [] },
+    multiple: false,
+  });
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -87,64 +84,146 @@ const EditInventory = () => {
             Edit your inventory here
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-2 py-4">
-            <div className="w-[350px] space-y-4">
-              <div>
-                <Label htmlFor="name">Inventory Name</Label>
-                <Input id="name" {...register("name")} />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <div className="grid grid-cols-2 gap-10">
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-semibold">Inventory</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="border-primary/30 focus:border-none"
+                          placeholder="Enter your inventory name"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="price"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-semibold">Price</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="border-primary/30 focus:border-none"
+                          placeholder="Enter your inventory price"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-semibold">
+                        Description
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className="border-primary/30 focus:border-none"
+                          placeholder="Enter short inventory description"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="quantity"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-semibold">Quantity</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="border-primary/30 focus:border-none"
+                          placeholder="Enter inventory quantity"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="unit"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-semibold">Unit</FormLabel>
+                      <FormControl>
+                        <Input
+                          className="border-primary/30 focus:border-none"
+                          placeholder="Enter inventory unit"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-              {errors.name && (
-                <p className="text-red-400 text-sm">{errors.name.message}</p>
-              )}
-              <div>
-                <Label htmlFor="price">Quantity</Label>
-                <Input id="price" {...register("quantity")} />
-              </div>
-              {errors.quantity && (
-                <p className="text-red-400 text-sm">
-                  {errors.quantity.message}
-                </p>
-              )}
-              <div>
-                <Label htmlFor="description">Description</Label>
-                <Input id="description" {...register("description")} />
-              </div>
-              {errors.description && (
-                <p className="text-red-400 text-sm">
-                  {errors.description.message}
-                </p>
-              )}
-              <div>
-                <Label htmlFor="unit">Unit</Label>
-                <Input id="unit" {...register("unit")} />
-                {errors.unit && (
-                  <p className="text-red-400 text-sm">{errors.unit.message}</p>
-                )}
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={() => (
+                    <FormItem>
+                      <FormLabel className="font-semibold">Image</FormLabel>
+                      <FormControl>
+                        <div
+                          {...getRootProps()}
+                          className="border-2 border-dashed border-gray-300 p-4 rounded-lg text-center cursor-pointer hover:bg-gray-100"
+                        >
+                          <input {...getInputProps()} />
+                          <p className="text-gray-500">
+                            Drag & drop an image here, or click to select
+                          </p>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                      {acceptedFiles.length > 0 && (
+                        <div className="mt-2">
+                          {acceptedFiles.map((file) => (
+                            <div
+                              key={file.name}
+                              className="flex items-center gap-2"
+                            >
+                              <img
+                                src={URL.createObjectURL(file)}
+                                alt="Preview"
+                                className="w-16 h-16 object-cover rounded"
+                              />
+                              <span className="text-sm">{file.name}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </FormItem>
+                  )}
+                />
               </div>
             </div>
-            <div>
-              <ReusableDropzone
-                onFileSelected={handleFileSelected}
-                selectedFiles={selectedFiles}
-              />
-              {errors.image && (
-                <p className="text-red-400 text-sm">
-                  {errors.image.message as string}
-                </p>
-              )}
+            <div className="pt-4">
+              <Button disabled={editInventory.isPending} type="submit">
+                Add Inventory
+              </Button>
             </div>
-          </div>
-          <DialogFooter>
-            <Button
-              className="bg-blue-600 duration-500 hover:text-gray-300"
-              type="submit"
-              disabled={editInventory.isPending}
-            >
-              {editInventory.isPending ? "Saving..." : "Edit Inventory"}
-            </Button>
-          </DialogFooter>
-        </form>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

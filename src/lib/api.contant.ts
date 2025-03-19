@@ -64,8 +64,8 @@ const endpoints = {
     deleteSupplier: mainEndpoint + "/supplier/delete",
     editSupplier: mainEndpoint + "/supplier/update",
   },
-
   inventory: {
+    getInventoryById: mainEndpoint + "/inventory",
     getInventory: mainEndpoint + "/inventory/all",
     addInventory: mainEndpoint + "/inventory/create",
     deleteInventory: mainEndpoint + "/inventory/delete",

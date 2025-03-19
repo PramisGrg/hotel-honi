@@ -1,10 +1,11 @@
 import { CustomerTable } from "@/components/table/customer-table";
 import { useDebounce } from "@/hooks/debounce";
 import { customercolumns } from "@/components/columns/customer-columns";
-import { UseGetCustomerQuery } from "@/queries/table/customer-table/get-cutomer-query";
+import { useGetCustomerQuery } from "@/queries/table/customer-table/get.cutomer.query";
 import { useDebounceValue } from "@/store/debounce-store";
 import { useEffect, useState } from "react";
-import { CustomerType } from "@/queries/table/customer-table/get-cutomer-query";
+import { CustomerType } from "@/queries/table/customer-table/get.cutomer.query";
+import AppLayout from "@/layout/dashboard-layout";
 
 const Customer = () => {
   const [allCustomer, setAllCustomer] = useState<CustomerType[]>([]);
@@ -15,7 +16,7 @@ const Customer = () => {
 
   const debounceSearchCustomer = useDebounce(debounceCustomerValue, 750);
 
-  const { data: customers } = UseGetCustomerQuery({
+  const { data: customers } = useGetCustomerQuery({
     search: debounceSearchCustomer,
   });
 
@@ -26,18 +27,13 @@ const Customer = () => {
   }, [customers]);
 
   return (
-    <div className="flex">
-      <div className="w-full p-8 space-y-6">
-        <div>
-          <h1 className="text-xl">Customer</h1>
-          <p className="text-sm text-gray-600">
-            View and manage all your Customers
-          </p>
-        </div>
-
-        <CustomerTable columns={customercolumns} data={allCustomer} />
+    <AppLayout className="space-y-6">
+      <div className="flex flex-col">
+        <h1 className="text-xl text-neutral-700">Customer</h1>
+        <p className="text-neutral-400">View and manage all your customers</p>
       </div>
-    </div>
+      <CustomerTable columns={customercolumns} data={allCustomer} />
+    </AppLayout>
   );
 };
 

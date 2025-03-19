@@ -1,6 +1,6 @@
 import { DataTypeCustomer } from "@/components/popup-table/customer-table/edit-customer";
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -9,7 +9,7 @@ interface EditCustomerParams {
   data: DataTypeCustomer;
 }
 
-export function UseEditCustomerQuery() {
+export function useEditCustomerQuery() {
   const queryClient = useQueryClient();
   return useMutation<unknown, Error, EditCustomerParams>({
     mutationFn: async ({ id, data }: EditCustomerParams) => {
@@ -18,7 +18,7 @@ export function UseEditCustomerQuery() {
       }
       console.log("Mutation ID:", id);
       console.log("Mutation Data:", data);
-      const response = await axiosAuthInstance.patch(
+      const response = await axiosInstance.patch(
         `${endpoints.customers.editCustomer}/${id}`,
         data
       );

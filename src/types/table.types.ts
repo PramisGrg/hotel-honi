@@ -68,3 +68,17 @@ export interface TGetInventoryResponse {
   message: string;
   data: TGetInventoryResponseData[];
 }
+
+//Get Customer
+export interface TGetCustomerResponseData {
+  id: string;
+  name: string;
+  address: string;
+  contactNumber: string;
+  email: string;
+  balance: string;
+}
+export interface TGetCustomerResponse {
+  message: string;
+  data: TGetCategoryResponseData[];
+}

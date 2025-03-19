@@ -21,7 +21,7 @@ import {
 import { calculatePrice } from "@/helper/calculate-price";
 import { useGetPayment } from "@/queries/payment/get-payment";
 import { useGetStaff } from "@/queries/staff/get-staff-query";
-import { UseGetCustomerQuery } from "@/queries/table/customer-table/get-cutomer-query";
+import { UseGetCustomerQuery } from "@/queries/table/customer-table/get.cutomer.query";
 import { Button } from "../ui/button";
 import { useCheckout } from "@/queries/checkout/checkout";
 import { toast } from "sonner";
@@ -167,7 +167,6 @@ export function Checkout({
         console.error("Error generating PDF:", error);
       });
   };
-  
 
   const showStaffAndCustomer = () => {
     return (

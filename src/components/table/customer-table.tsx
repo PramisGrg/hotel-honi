@@ -68,7 +68,7 @@ export function CustomerTable<TData extends CustomerColumnRef, TValue>({
         <div className="w-96 py-2">
           <Input
             onChange={handleRoomChange}
-            placeholder="Search Customer..."
+            placeholder="Search customer..."
             className="max-w-sm"
           />
         </div>

@@ -1,24 +1,26 @@
-import { InventoryType } from "./add.inventory.query";
 import endpoints from "@/lib/api.contant";
+import { TAddInventorySchema } from "@/schema/table/inventory.schema";
 import axiosInstance from "@/services/axios";
+import { TLoginResponse } from "@/types/auth.types";
+import { TError } from "@/types/error.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 interface EditInventoryParams {
   id: string;
-  formData: InventoryType;
+  data: TAddInventorySchema;
 }
 
 export function useEditInventory() {
   const queryClient = useQueryClient();
-  return useMutation<unknown, Error, EditInventoryParams>({
-    mutationFn: async ({ id, formData }: EditInventoryParams) => {
+  return useMutation<TLoginResponse, TError, EditInventoryParams>({
+    mutationFn: async ({ id, data }: EditInventoryParams) => {
       if (!id) {
         throw new Error("No inventory item ID provided for editing");
       }
       const response = await axiosInstance.patch(
         `${endpoints.inventory.editInventory}/${id}`,
-        formData
+        data
       );
       return response.data;
     },
@@ -27,9 +29,7 @@ export function useEditInventory() {
       toast.success("Inventory updated successfully");
     },
     onError: (error) => {
-      toast.error(
-        error.message || "An error occurred while updating the inventory"
-      );
+      toast.error(error.response.data.message);
     },
   });
 }

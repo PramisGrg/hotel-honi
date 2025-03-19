@@ -98,11 +98,11 @@ export function getMenuList(): Group[] {
           icon: SquareUserRound,
           submenus: [
             {
-              href: "/dashboard/customers",
+              href: "/dashboard/customer",
               label: "Customer",
             },
             {
-              href: "/dashboard/suppliers",
+              href: "/dashboard/supplier",
               label: "Supplier",
             },
           ],

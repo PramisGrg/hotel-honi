@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { UseDeleteCustomerQuery } from "@/queries/table/customer-table/delete-customer-query";
+import { useDeleteCustomerQuery } from "@/queries/table/customer-table/delete.customer.query";
 import { useTableIdStore } from "@/store/table-id-store";
 import { MdOutlineDelete } from "react-icons/md";
 
@@ -18,7 +18,7 @@ export function DeleteCustomer() {
     selectCustomerId: state.selectCustomerId,
   }));
 
-  const deleteCustomer = UseDeleteCustomerQuery();
+  const deleteCustomer = useDeleteCustomerQuery();
 
   const handleDelete = () => {
     if (selectCustomerId) {

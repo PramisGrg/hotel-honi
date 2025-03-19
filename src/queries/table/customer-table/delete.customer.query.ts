@@ -1,13 +1,13 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export function UseDeleteCustomerQuery() {
+export function useDeleteCustomerQuery() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      const response = await axiosAuthInstance.delete(
+      const response = await axiosInstance.delete(
         `${endpoints.customers.deleteCustomer}/${id}`
       );
       return response.data;

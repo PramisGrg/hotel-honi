@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { UseEditCustomerQuery } from "@/queries/table/customer-table/edit-customer-query";
+import { useEditCustomerQuery } from "@/queries/table/customer-table/edit.customer.query";
 import { useTableIdStore } from "@/store/table-id-store";
 import { DialogDescription } from "@radix-ui/react-dialog";
 import { useState } from "react";
@@ -34,7 +34,7 @@ export function EditCustomer() {
     selectCustomerId: state.selectCustomerId,
   }));
 
-  const editCustomer = UseEditCustomerQuery();
+  const editCustomer = useEditCustomerQuery();
 
   const handleEdit = (e: React.FormEvent) => {
     e.preventDefault();

@@ -4,6 +4,7 @@ import { suppliercolumns } from "@/components/columns/supplier-columns";
 import { useDebounceValue } from "@/store/debounce-store";
 import { useEffect, useState } from "react";
 import { UseGetSupplierQuery } from "@/queries/table/supplier-table/get-supplier-query";
+import AppLayout from "@/layout/dashboard-layout";
 
 const Supplier = () => {
   const [allSupplier, setAllSupplier] = useState([]);
@@ -25,17 +26,13 @@ const Supplier = () => {
   }, [supplier]);
 
   return (
-    <div className="flex">
-      <div className="w-full p-8 space-y-6">
-        <div>
-          <h1 className="text-xl">Suppliers</h1>
-          <p className="text-sm text-gray-600">
-            View and manage all your Suppliers
-          </p>
-        </div>
-        <SupplierTable columns={suppliercolumns} data={allSupplier} />
+    <AppLayout className="space-y-6">
+      <div className="flex flex-col">
+        <h1 className="text-xl text-neutral-700">Customer</h1>
+        <p className="text-neutral-400">View and manage all your customers</p>
       </div>
-    </div>
+      <SupplierTable columns={suppliercolumns} data={allSupplier} />
+    </AppLayout>
   );
 };
 
