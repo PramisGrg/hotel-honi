@@ -1,17 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DeleteInventory } from "../popup-table/inventory-table/delete-inventory";
 import EditInventory from "../popup-table/inventory-table/edit-inventory";
+import { TGetInventoryResponseData } from "@/types/table.types";
 
-export type InventoryCloumnRef = {
-  id: string;
-  name: string;
-  image: string;
-  quantity: number;
-  description: string;
-  unit: string;
-};
-
-export const inventorycolumns: ColumnDef<InventoryCloumnRef>[] = [
+export const inventorycolumns: ColumnDef<TGetInventoryResponseData>[] = [
   {
     accessorKey: "name",
     header: " Inventory Name",

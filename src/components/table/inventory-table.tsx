@@ -21,20 +21,17 @@ import React from "react";
 import { Input } from "../ui/input";
 import { useTableIdStore } from "@/store/table-id-store";
 import AddInventory from "../popup-table/inventory-table/add-inventory";
+import { TGetInventoryResponseData } from "@/types/table.types";
 
-interface DataRow {
-  id: string;
-}
-
-interface DataTableProps<TData extends DataRow, TValue> {
+interface DataTableProps<TData extends TGetInventoryResponseData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function InventoryTable<TData extends DataRow, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
+export function InventoryTable<
+  TData extends TGetInventoryResponseData,
+  TValue
+>({ columns, data }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
@@ -59,7 +56,7 @@ export function InventoryTable<TData extends DataRow, TValue>({
     setSelectInventoryId: state.setSelectInventoryId,
   }));
 
-  const handleClick = (row: Row<DataRow>) => {
+  const handleClick = (row: Row<TGetInventoryResponseData>) => {
     setSelectInventoryId(row.original.id);
   };
 

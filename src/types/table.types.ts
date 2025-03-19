@@ -50,3 +50,21 @@ export interface TGetCategoryResponse {
   message: string;
   data: TGetCategoryResponseData[];
 }
+
+//Get Inventory
+export interface TGetInventoryResponseData {
+  id: string;
+  name: string;
+  quantity: string;
+  price: string;
+  unit: string;
+  image: string;
+  description: string;
+  hotelId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface TGetInventoryResponse {
+  message: string;
+  data: TGetInventoryResponseData[];
+}

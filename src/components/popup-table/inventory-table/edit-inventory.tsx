@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
 import ReusableDropzone from "@/hooks/reusable-dropzone";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MdOutlineEdit } from "react-icons/md";
 import { useEditInventory } from "@/queries/table/inventory-table/edit.inventory.query";
@@ -41,7 +41,7 @@ const EditInventory = () => {
 
   const editInventory = useEditInventory();
 
-  const onSubmit: SubmitHandler<InventoryFormData> = (data) => {
+  const onSubmit = (data: TAddInventorySchema) => {
     if (!selectInventoryId) {
       toast.error("No menu item selected for editing");
       return;
