@@ -80,5 +80,5 @@ export interface TGetCustomerResponseData {
 }
 export interface TGetCustomerResponse {
   message: string;
-  data: TGetCategoryResponseData[];
+  data: TGetCustomerResponseData[];
 }

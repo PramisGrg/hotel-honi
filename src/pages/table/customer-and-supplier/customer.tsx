@@ -4,11 +4,13 @@ import { customercolumns } from "@/components/columns/customer-columns";
 import { useGetCustomerQuery } from "@/queries/table/customer-table/get.cutomer.query";
 import { useDebounceValue } from "@/store/debounce-store";
 import { useEffect, useState } from "react";
-import { CustomerType } from "@/queries/table/customer-table/get.cutomer.query";
 import AppLayout from "@/layout/dashboard-layout";
+import { TGetCustomerResponseData } from "@/types/table.types";
 
 const Customer = () => {
-  const [allCustomer, setAllCustomer] = useState<CustomerType[]>([]);
+  const [allCustomer, setAllCustomer] = useState<TGetCustomerResponseData[]>(
+    []
+  );
 
   const { debounceCustomerValue } = useDebounceValue((state) => ({
     debounceCustomerValue: state.debounceCustomerValue,

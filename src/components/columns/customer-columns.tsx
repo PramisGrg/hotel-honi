@@ -8,7 +8,7 @@ export type CustomerColumnRef = {
   address: string;
   contactNumber: string;
   email: string;
-  balance: number;
+  balance: string;
 };
 
 export const customercolumns: ColumnDef<CustomerColumnRef>[] = [
