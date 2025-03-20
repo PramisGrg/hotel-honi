@@ -1,17 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DeleteSupplier } from "../popup-table/supplier-table/delete-supplier";
 import { EditSupplier } from "../popup-table/supplier-table/edit-supplier";
+import { TGetCustomerResponseData } from "@/types/table.types";
 
-export type SupplierColumnRef = {
-  id: string;
-  name: string;
-  address: string;
-  contactNumber: string;
-  email: string;
-  balance: number;
-};
-
-export const suppliercolumns: ColumnDef<SupplierColumnRef>[] = [
+export const suppliercolumns: ColumnDef<TGetCustomerResponseData>[] = [
   {
     accessorKey: "name",
     header: "Supplier Name",

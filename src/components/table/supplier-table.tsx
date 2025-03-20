@@ -16,17 +16,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useTableIdStore } from "@/store/table-id-store";
-import { SupplierColumnRef } from "../columns/supplier-columns";
 import { Input } from "../ui/input";
 import { useDebounceValue } from "@/store/debounce-store";
 import AddSupplier from "../popup-table/supplier-table/add-supplier";
+import { TGetCustomerResponseData } from "@/types/table.types";
 
-interface DataTableProps<TData extends SupplierColumnRef, TValue> {
+interface DataTableProps<TData extends TGetCustomerResponseData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function SupplierTable<TData extends SupplierColumnRef, TValue>({
+export function SupplierTable<TData extends TGetCustomerResponseData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -50,7 +50,7 @@ export function SupplierTable<TData extends SupplierColumnRef, TValue>({
     setSelectSupplierId: state.setSelectSupplierId,
   }));
 
-  const handleClick = (row: Row<SupplierColumnRef>) => {
+  const handleClick = (row: Row<TGetCustomerResponseData>) => {
     setSelectSupplierId(row.original.id);
   };
 

@@ -2,69 +2,52 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { UseEditSupplierQuery } from "@/queries/table/supplier-table/edit-supplier-query";
+import { useEditSupplierQuery } from "@/queries/table/supplier-table/edit.supplier.query";
+import {
+  addSupplierSchema,
+  TAddSupplierSchema,
+} from "@/schema/table/customer-and-supplier/add.supplier.schema";
 import { useTableIdStore } from "@/store/table-id-store";
-import { DialogDescription } from "@radix-ui/react-dialog";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { MdOutlineEdit } from "react-icons/md";
-import { toast } from "sonner";
-
-export interface DataTypeCustomer {
-  name: string;
-  address: string;
-  contactNumber: string;
-  email: string;
-  balance: string;
-}
 
 export function EditSupplier() {
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [contactNumber, setContactNumber] = useState("");
-  const [email, setEmail] = useState("");
-  const [balance, setBalance] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  const form = useForm<TAddSupplierSchema>({
+    resolver: zodResolver(addSupplierSchema),
+  });
   const { selectSupplierId } = useTableIdStore((state) => ({
     selectSupplierId: state.selectSupplierId,
   }));
 
-  const editSupplier = UseEditSupplierQuery();
+  const editSupplier = useEditSupplierQuery();
 
-  const handleEdit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectSupplierId) {
-      toast.error("No menu item selected for editing");
-      return;
-    }
-    const data: DataTypeCustomer = {
-      name,
-      address,
-      contactNumber,
-      email,
-      balance,
-    };
-
-    console.log(data);
+  const onSubmit = (data: TAddSupplierSchema) => {
+    if (!selectSupplierId) return;
     editSupplier.mutate(
       { id: selectSupplierId, data },
       {
-        onSuccess: () => {
+        onSettled: () => {
           setIsDialogOpen(false);
-        },
-        onError: () => {
-          setName("");
         },
       }
     );
-    setIsDialogOpen(false);
   };
 
   return (
@@ -77,77 +60,88 @@ export function EditSupplier() {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Edit Supplier</DialogTitle>
-          <DialogDescription className="text-gray-400">
-            Edit your supplier here
-          </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleEdit}>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Supplier Name
-              </Label>
-              <Input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                id="name"
-                className="col-span-3"
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Supplier</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your supplier name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Address
-              </Label>
-              <Input
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                id="name"
-                className="col-span-3"
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Address</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter the your supplier address"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Contact
-              </Label>
-              <Input
-                value={contactNumber}
-                onChange={(e) => setContactNumber(e.target.value)}
-                id="name"
-                className="col-span-3"
+              <FormField
+                control={form.control}
+                name="emailAddress"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your supplier email"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="balance" className="text-right">
-                Balance
-              </Label>
-              <Input
-                value={balance}
-                onChange={(e) => setBalance(e.target.value)}
-                id="name"
-                className="col-span-3"
+              <FormField
+                control={form.control}
+                name="contactNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">
+                      Contact Number
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your supplier contact number"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
+              <div className="pt-4">
+                <Button disabled={editSupplier.isPending} type="submit">
+                  Edit Supplier
+                </Button>
+              </div>
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Email
-              </Label>
-              <Input
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                id="name"
-                className="col-span-3"
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              className="bg-blue-500 hover:text-gray-200 duration-300 hover:shadow-md"
-              type="submit"
-            >
-              Save changes
-            </Button>
-          </DialogFooter>
-        </form>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

@@ -3,11 +3,14 @@ import { useDebounce } from "@/hooks/debounce";
 import { suppliercolumns } from "@/components/columns/supplier-columns";
 import { useDebounceValue } from "@/store/debounce-store";
 import { useEffect, useState } from "react";
-import { UseGetSupplierQuery } from "@/queries/table/supplier-table/get-supplier-query";
+import { UseGetSupplierQuery } from "@/queries/table/supplier-table/get.supplier.query";
 import AppLayout from "@/layout/dashboard-layout";
+import { TGetCustomerResponseData } from "@/types/table.types";
 
 const Supplier = () => {
-  const [allSupplier, setAllSupplier] = useState([]);
+  const [allSupplier, setAllSupplier] = useState<TGetCustomerResponseData[]>(
+    []
+  );
 
   const { debounceSupplierValue } = useDebounceValue((state) => ({
     debounceSupplierValue: state.debounceSupplierValue,
@@ -28,8 +31,8 @@ const Supplier = () => {
   return (
     <AppLayout className="space-y-6">
       <div className="flex flex-col">
-        <h1 className="text-xl text-neutral-700">Customer</h1>
-        <p className="text-neutral-400">View and manage all your customers</p>
+        <h1 className="text-xl text-neutral-700">Supplier</h1>
+        <p className="text-neutral-400">View and manage all your supplier</p>
       </div>
       <SupplierTable columns={suppliercolumns} data={allSupplier} />
     </AppLayout>

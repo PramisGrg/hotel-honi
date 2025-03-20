@@ -2,41 +2,41 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
+  DialogTrigger,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
-import { UseAddSupplierQuery } from "@/queries/table/supplier-table/add-supplier-query";
+import { useAddSupplierQuery } from "@/queries/table/supplier-table/add.supplier.query";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  addSupplierSchema,
+  TAddSupplierSchema,
+} from "@/schema/table/customer-and-supplier/add.supplier.schema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const AddSupplier = () => {
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [contactNumber, setContactNumber] = useState("");
-  const [emailAddress, setEmailAdddress] = useState("");
-  const [balance, setBalance] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const createSupplier = UseAddSupplierQuery();
+  const form = useForm<TAddSupplierSchema>({
+    resolver: zodResolver(addSupplierSchema),
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const supplier = {
-      name,
-      address,
-      contactNumber,
-      emailAddress,
-    };
+  const createSupplier = useAddSupplierQuery();
 
-    createSupplier.mutate(supplier, {
-      onSuccess: () => {
+  const onSubmit = (value: TAddSupplierSchema) => {
+    createSupplier.mutate(value, {
+      onSettled: () => {
         setIsDialogOpen(false);
-      },
-      onError: () => {
-        setName("");
       },
     });
   };
@@ -44,69 +44,93 @@ const AddSupplier = () => {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-500" onClick={() => setIsDialogOpen(true)}>
-          Add Supplier
-        </Button>
+        <Button onClick={() => setIsDialogOpen(true)}>Add Supplier</Button>
       </DialogTrigger>
       <DialogContent className="min-w-[400px]">
         <DialogHeader>
           <DialogTitle>Add Supplier</DialogTitle>
-          <DialogDescription className="text-gray-400">
-            Please provide Supplier name to add.
-          </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="name">Supplier Name</Label>
-              <Input
-                value={name}
-                id="name"
-                onChange={(e) => setName(e.target.value)}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Supplier</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your supplier name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div>
-              <Label htmlFor="name">Address</Label>
-              <Input
-                value={address}
-                id="name"
-                onChange={(e) => setAddress(e.target.value)}
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Address</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter the your supplier address"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div>
-              <Label htmlFor="name">Contact</Label>
-              <Input
-                value={contactNumber}
-                id="name"
-                onChange={(e) => setContactNumber(e.target.value)}
+              <FormField
+                control={form.control}
+                name="emailAddress"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your supplier email"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div>
-              <Label htmlFor="balance">Balance</Label>
-              <Input
-                value={balance}
-                id="balance"
-                onChange={(e) => setBalance(e.target.value)}
+              <FormField
+                control={form.control}
+                name="contactNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">
+                      Contact Number
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your supplier contact number"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
+              <div className="pt-4">
+                <Button disabled={createSupplier.isPending} type="submit">
+                  Add Supplier
+                </Button>
+              </div>
             </div>
-            <div>
-              <Label htmlFor="name">Email</Label>
-              <Input
-                value={emailAddress}
-                id="name"
-                onChange={(e) => setEmailAdddress(e.target.value)}
-              />
-            </div>
-            <DialogFooter>
-              <Button
-                className="bg-blue-600 duration-500 hover:text-gray-300"
-                type="submit"
-              >
-                Save changes
-              </Button>
-            </DialogFooter>
-          </div>
-        </form>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

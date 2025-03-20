@@ -1,28 +1,20 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
+import { TError } from "@/types/error.type";
+import { TGetCustomerResponse } from "@/types/table.types";
 import { useQuery } from "@tanstack/react-query";
 
-interface useGetSupplierQueryParams {
-  take?: number;
-  skip?: number;
-  search?: string;
-}
-
-export const UseGetSupplierQuery = ({
-  take = 25,
-  skip = 0,
-  search = "",
-}: useGetSupplierQueryParams) => {
+export const UseGetSupplierQuery = ({ take = 25, skip = 0, search = "" }) => {
   const params = {
     take,
     skip,
     search,
   };
 
-  return useQuery({
+  return useQuery<TGetCustomerResponse, TError>({
     queryKey: ["Suppliers", { take, skip, search }],
     queryFn: async () => {
-      const response = await axiosAuthInstance.get(
+      const response = await axiosInstance.get(
         endpoints.suppliers.getSuppliers,
         {
           params,

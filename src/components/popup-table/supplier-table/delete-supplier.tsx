@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { UseDeleteSupplierQuery } from "@/queries/table/supplier-table/delete-supplier-query";
+import { useDeleteSupplierQuery } from "@/queries/table/supplier-table/delete.supplier.query";
 import { useTableIdStore } from "@/store/table-id-store";
 import { MdOutlineDelete } from "react-icons/md";
 
@@ -18,7 +18,7 @@ export function DeleteSupplier() {
     selectSupplierId: state.selectSupplierId,
   }));
 
-  const deleteSupplier = UseDeleteSupplierQuery();
+  const deleteSupplier = useDeleteSupplierQuery();
 
   const handleDelete = () => {
     if (selectSupplierId) {
