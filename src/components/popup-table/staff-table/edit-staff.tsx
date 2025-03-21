@@ -1,46 +1,35 @@
-import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Label } from "@/components/ui/label";
 import { useTableIdStore } from "@/store/table-id-store";
-import { DialogDescription } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { MdOutlineEdit } from "react-icons/md";
-import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useGetRoles } from "@/queries/role/get-role-query";
-import { Role } from "./invite-staff";
-import { useUpdateStaff } from "@/queries/staff/update-staff-query";
-
-export interface DataTypeStaff {
-  staffId: string;
-  type: string;
-}
+import { useUpdateStaff } from "@/queries/staff/update.staff.query";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useForm } from "react-hook-form";
+import { TEditRole } from "@/types/table.types";
 
 export function EditStaff() {
-  const [open, setOpen] = useState(false);
-  const [role, setRole] = useState("");
-  const [roleId, setRoleId] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { selectStaffId } = useTableIdStore((state) => ({
@@ -48,35 +37,23 @@ export function EditStaff() {
   }));
 
   const editStaff = useUpdateStaff();
+  const { data: roles } = useGetRoles();
 
-  const { data: rolesData } = useGetRoles();
+  const form = useForm<TEditRole>();
 
-  const roles = (rolesData?.data ?? []) as Role[];
-
-  const handleEdit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectStaffId) {
-      toast.error("No menu item selected for editing");
-      return;
-    }
-
+  const onSubmit = (data: TEditRole) => {
     const requiredValues = {
       staffId: selectStaffId,
       role: {
-        type: role,
-        id: roleId,
+        type: data.roleName,
+        id: data.roleId,
       },
     };
-
     editStaff.mutate(requiredValues, {
-      onSuccess: () => {
+      onSettled: () => {
         setIsDialogOpen(false);
       },
-      onError: () => {
-        setRole("");
-      },
     });
-    setIsDialogOpen(false);
   };
 
   return (
@@ -88,74 +65,51 @@ export function EditStaff() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit Space</DialogTitle>
-          <DialogDescription className="text-gray-400">
-            Edit your Space here 🤪
-          </DialogDescription>
+          <DialogTitle>Edit Staff Role</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleEdit}>
-          <div className="grid gap-4 py-4">
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="type">Type</Label>
-              <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={open}
-                    className="w-full justify-between"
-                  >
-                    {role
-                      ? roles.find((roles) => roles.name === role)?.name
-                      : "Select Role..."}
-                    <ChevronsUpDown className="opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0">
-                  <Command>
-                    <CommandInput placeholder="Search framework..." />
-                    <CommandList>
-                      <CommandEmpty>No framework found.</CommandEmpty>
-                      <CommandGroup>
-                        {roles.map((roles) => (
-                          <CommandItem
-                            key={roles.id}
-                            value={roles.name}
-                            onSelect={(currentValue) => {
-                              setRole(
-                                currentValue === role ? "" : currentValue
-                              );
-                              setRoleId(currentValue === role ? "" : roles.id);
-                              setOpen(false);
-                            }}
-                          >
-                            {roles.name}
-                            <Check
-                              className={cn(
-                                "ml-auto",
-                                role === roles.name
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                          </CommandItem>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="roleId"
+                render={() => (
+                  <FormItem>
+                    <FormLabel>Role</FormLabel>
+                    <Select
+                      onValueChange={(selectedId) => {
+                        const selectedRole = roles?.data.find(
+                          (role) => role.id === selectedId
+                        );
+                        form.setValue("roleId", selectedId);
+                        form.setValue("roleName", selectedRole?.name || "");
+                      }}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a role" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {roles?.data.map((role) => (
+                          <SelectItem key={role.id} value={role.id}>
+                            {role.name}
+                          </SelectItem>
                         ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="pt-4">
+                <Button disabled={editStaff.isPending} type="submit">
+                  Invite Staff
+                </Button>
+              </div>
             </div>
-          </div>
-          <DialogFooter>
-            <Button
-              className="bg-blue-500 hover:text-gray-200 duration-300 hover:shadow-md"
-              type="submit"
-            >
-              Save changes
-            </Button>
-          </DialogFooter>
-        </form>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

@@ -1,72 +1,49 @@
-import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogTrigger,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
-import { z } from "zod";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PhoneInput } from "@/components/phone-input";
 import { useGetRoles } from "@/queries/role/get-role-query";
-import { useInviteStaff } from "@/queries/staff/invite-staff-query";
-
-export interface Role {
-  id: string;
-  name: string;
-  customName: string | null;
-  permissions: string[];
-  createdAt: string;
-  updatedAt: string;
-}
-
-const InviteStaffSchema = z.object({
-  phoneNumber: z.string().min(8, { message: "Enter a valid phone number" }),
-});
-
-type InviteStaffType = z.infer<typeof InviteStaffSchema>;
+import { useInviteStaff } from "@/queries/staff/invite.staff.query";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  SelectContent,
+  SelectItem,
+  SelectValue,
+  Select,
+  SelectTrigger,
+} from "@/components/ui/select";
+import {
+  inviteStaffSchema,
+  TInviteStaffSchema,
+} from "@/schema/table/invite.staff.schema";
+import { PhoneInput } from "@/components/phone-input";
 
 const InviteStaff = () => {
-  const [open, setOpen] = useState(false);
-  const [role, setRole] = useState("");
-  const [roleId, setRoleId] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<InviteStaffType>({
-    resolver: zodResolver(InviteStaffSchema),
+  const form = useForm<TInviteStaffSchema>({
+    resolver: zodResolver(inviteStaffSchema),
   });
 
-  const { data: rolesData } = useGetRoles();
-
-  const roles = (rolesData?.data ?? []) as Role[];
+  const { data: roles } = useGetRoles();
 
   const inviteStaff = useInviteStaff();
 
-  const onSubmit = (data: InviteStaffType) => {
+  const onSubmit = (data: TInviteStaffSchema) => {
     const dialCode = data.phoneNumber.slice(1, 4);
     const phoneNumber = data.phoneNumber.slice(4);
 
@@ -74,16 +51,12 @@ const InviteStaff = () => {
       dialCode: dialCode,
       phoneNumber: phoneNumber,
       role: {
-        type: role,
-        id: roleId,
+        type: data.roleName,
+        id: data.roleId,
       },
     };
-
     inviteStaff.mutate(requiredValues, {
-      onSuccess: () => {
-        setIsDialogOpen(false);
-      },
-      onError: () => {
+      onSettled: () => {
         setIsDialogOpen(false);
       },
     });
@@ -92,100 +65,71 @@ const InviteStaff = () => {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-500" onClick={() => setIsDialogOpen(true)}>
-          Invite Staff
-        </Button>
+        <Button onClick={() => setIsDialogOpen(true)}>Invite Staff</Button>
       </DialogTrigger>
       <DialogContent className="min-w-[400px]">
         <DialogHeader>
           <DialogTitle>Invite Staff</DialogTitle>
-          <DialogDescription className="text-gray-400">
-            Please invite staff to add to your hotel
-          </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="phoneNumber">Phone Number</Label>
-              <Controller
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
                 name="phoneNumber"
-                control={control}
                 render={({ field }) => (
-                  <PhoneInput
-                    value={field.value}
-                    onChange={(value) => field.onChange(value)}
-                    placeholder="98XXXXXXXX"
-                    className=""
-                  />
+                  <FormItem>
+                    <FormLabel className="font-semibold">
+                      Phone Number
+                    </FormLabel>
+                    <FormControl>
+                      <PhoneInput placeholder="98XXXXXXXX" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
               />
-              {errors.phoneNumber && (
-                <span className="text-sm text-red-500">
-                  {errors.phoneNumber.message}
-                </span>
-              )}
-            </div>
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="type">Type</Label>
-              <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={open}
-                    className="w-full justify-between"
-                  >
-                    {role
-                      ? roles.find((roles) => roles.name === role)?.name
-                      : "Select Role..."}
-                    <ChevronsUpDown className="opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0">
-                  <Command>
-                    <CommandInput placeholder="Search framework..." />
-                    <CommandList>
-                      <CommandEmpty>No framework found.</CommandEmpty>
-                      <CommandGroup>
-                        {roles.map((roles) => (
-                          <CommandItem
-                            key={roles.id}
-                            value={roles.name}
-                            onSelect={(currentValue) => {
-                              setRole(
-                                currentValue === role ? "" : currentValue
-                              );
-                              setRoleId(currentValue === role ? "" : roles.id);
-                              setOpen(false);
-                            }}
-                          >
-                            {roles.name}
-                            <Check
-                              className={cn(
-                                "ml-auto",
-                                role === roles.name
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                          </CommandItem>
+
+              <FormField
+                control={form.control}
+                name="roleId"
+                render={() => (
+                  <FormItem>
+                    <FormLabel>Role</FormLabel>
+                    <Select
+                      onValueChange={(selectedId) => {
+                        const selectedRole = roles?.data.find(
+                          (role) => role.id === selectedId
+                        );
+                        form.setValue("roleId", selectedId);
+                        form.setValue("roleName", selectedRole?.name || "");
+                      }}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a role" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {roles?.data.map((role) => (
+                          <SelectItem key={role.id} value={role.id}>
+                            {role.name}
+                          </SelectItem>
                         ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="pt-4">
+                <Button disabled={inviteStaff.isPending} type="submit">
+                  Invite Staff
+                </Button>
+              </div>
             </div>
-            <DialogFooter>
-              <Button
-                className="bg-blue-600 duration-500 hover:text-gray-300"
-                type="submit"
-              >
-                Invite Staff
-              </Button>
-            </DialogFooter>
-          </div>
-        </form>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

@@ -1,25 +1,23 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
+import { TLoginResponse } from "@/types/auth.types";
+import { TError } from "@/types/error.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 interface EditStaffParams {
-  staffId: string;
+  staffId: string | undefined;
   role: {
     type: string;
     id: string;
   };
 }
 
-interface UpdateStaffResponse {
-  message: string;
-}
-
 export function useUpdateStaff() {
   const queryClient = useQueryClient();
-  return useMutation<UpdateStaffResponse, Error, EditStaffParams>({
-    mutationFn: async (data: EditStaffParams) => {
-      const response = await axiosAuthInstance.patch(
+  return useMutation<TLoginResponse, TError, EditStaffParams>({
+    mutationFn: async (data) => {
+      const response = await axiosInstance.patch(
         endpoints.staff.updateStaff,
         data
       );
@@ -30,9 +28,7 @@ export function useUpdateStaff() {
       toast.success(data.message);
     },
     onError: (error) => {
-      toast.error(
-        error.message || "An error occurred while updating the category"
-      );
+      toast.error(error.response.data.message);
     },
   });
 }

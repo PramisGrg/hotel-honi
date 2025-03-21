@@ -82,3 +82,22 @@ export interface TGetCustomerResponse {
   message: string;
   data: TGetCustomerResponseData[];
 }
+
+//Get Roles
+export interface TGetRoleResponseData {
+  createdAt: string;
+  id: string;
+  name: string;
+  permissions: string[];
+  updatedAt: string;
+}
+export interface TGetRoleResponse {
+  message: string;
+  data: TGetCategoryResponseData[];
+}
+
+//Edit Role
+export interface TEditRole {
+  roleId: string;
+  roleName: string;
+}

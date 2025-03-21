@@ -17,6 +17,7 @@ import Category from "./pages/table/food-menu/category";
 import Inventory from "./pages/table/inventory";
 import Customer from "./pages/table/customer-and-supplier/customer";
 import Supplier from "./pages/table/customer-and-supplier/supplier";
+import Staff from "./pages/table/staff";
 
 export const router = createBrowserRouter([
   {
@@ -94,6 +95,10 @@ export const router = createBrowserRouter([
       {
         path: "supplier",
         element: <Supplier />,
+      },
+      {
+        path: "staff",
+        element: <Staff />,
       },
     ],
   },

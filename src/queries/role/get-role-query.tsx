@@ -1,12 +1,15 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
+import { TGetRoleResponse } from "@/types/table.types";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetRoles = () => {
-  return useQuery({
+  return useQuery<TGetRoleResponse, Error>({
     queryKey: ["getInvitation"],
     queryFn: async () => {
-      const response = await axiosAuthInstance.get(endpoints.role.getRole);
+      const response = await axiosInstance.get<TGetRoleResponse>(
+        endpoints.role.getRole
+      );
       return response.data;
     },
   });
