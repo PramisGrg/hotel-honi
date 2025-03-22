@@ -1,5 +1,5 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { useQuery } from "@tanstack/react-query";
 
 interface PaymentType {
@@ -16,7 +16,7 @@ export const useGetPayment = () => {
   return useQuery<PaymentResponse>({
     queryKey: ["Payment"],
     queryFn: async () => {
-      const response = await axiosAuthInstance.get(endpoints.payment);
+      const response = await axiosInstance.get(endpoints.payment);
       return response.data;
     },
   });

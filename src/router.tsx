@@ -18,6 +18,7 @@ import Inventory from "./pages/table/inventory";
 import Customer from "./pages/table/customer-and-supplier/customer";
 import Supplier from "./pages/table/customer-and-supplier/supplier";
 import Staff from "./pages/table/staff";
+import HotelSetting from "./pages/hotel-settings";
 
 export const router = createBrowserRouter([
   {
@@ -99,6 +100,10 @@ export const router = createBrowserRouter([
       {
         path: "staff",
         element: <Staff />,
+      },
+      {
+        path: "hotel-setting",
+        element: <HotelSetting />,
       },
     ],
   },

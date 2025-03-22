@@ -1,5 +1,5 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -10,7 +10,7 @@ export const useUpdateHotel = () => {
       address: string;
       primaryContact: string;
     }) => {
-      const response = await axiosAuthInstance.patch(
+      const response = await axiosInstance.patch(
         endpoints.hotel.updateHotel,
         data
       );

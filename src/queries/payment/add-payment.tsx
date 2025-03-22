@@ -1,5 +1,5 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -12,7 +12,7 @@ export function useAddPaymentMethod() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (payment: Payment) => {
-      const response = await axiosAuthInstance.post(endpoints.payment, payment);
+      const response = await axiosInstance.post(endpoints.payment, payment);
       return response.data;
     },
     onSuccess: (data) => {

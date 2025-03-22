@@ -1,24 +1,30 @@
 import { useGetActiveHotel } from "@/queries/hotel/get.active.hotel.query";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { Button } from "../ui/button";
-import { GetHotelSchema, GetHotelSchemaType } from "@/schema/hotel/get-hotel";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useUpdateHotel } from "@/queries/hotel/update-hotel";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import AppLayout from "@/layout/dashboard-layout";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  addGeneralInfoSchema,
+  TAddGeneralInfoSchema,
+} from "@/schema/info/add.general.info";
 
 const HotelBasicInfo = () => {
   const { data: hotelInfo } = useGetActiveHotel();
   const hotelInfoData = hotelInfo?.data;
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isDirty },
-  } = useForm<GetHotelSchemaType>({
-    resolver: zodResolver(GetHotelSchema),
+  const form = useForm<TAddGeneralInfoSchema>({
+    resolver: zodResolver(addGeneralInfoSchema),
     defaultValues: {
       name: "",
       address: "",
@@ -30,69 +36,95 @@ const HotelBasicInfo = () => {
 
   useEffect(() => {
     if (hotelInfoData) {
-      reset({
+      form.reset({
         name: hotelInfoData.name || "",
         address: hotelInfoData.address || "",
         primaryContact: hotelInfoData.primaryContact || "",
       });
     }
-  }, [hotelInfoData, reset]);
+  }, [hotelInfoData, form]);
 
-  const onSubmit = async (data: GetHotelSchemaType) => {
-    console.log(data, "This is form data");
+  const onSubmit = async (data: TAddGeneralInfoSchema) => {
     updateHotel.mutate(data);
   };
 
   return (
-    <div className="p-6 space-y-4 border w-4/6 rounded-md">
-      <div>
-        <h1 className="text-xl font-semibold">Basic Information</h1>
-        <p className="text-gray-400">Update basic information of hotel</p>
-      </div>
-      <div>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 max-w-2xl">
-          <div className="space-y-2">
-            <Label>Hotel name</Label>
-            <Input {...register("name")} />
-            {errors.name && (
-              <p className="text-sm text-red-500">{errors.name.message}</p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label>Address</Label>
-            <Input {...register("address")} />
-            {errors.address && (
-              <p className="text-sm text-red-500">{errors.address.message}</p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label>Primary Contact</Label>
-            <Input {...register("primaryContact")} />
-            {errors.primaryContact && (
-              <p className="text-sm text-red-500">
-                {errors.primaryContact.message}
-              </p>
-            )}
-          </div>
-
-          <div className="flex justify-end space-x-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => reset()}
-              disabled={!isDirty}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" disabled={!isDirty}>
-              Save Changes
-            </Button>
+    <AppLayout>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-2 border p-6 rounded-lg"
+        >
+          <h1 className="text-neutral-600 text-xl">General Info</h1>
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Hotel Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Change your hotel name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="address"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">
+                      Hotel Address
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Change your hotel address"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="primaryContact"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">
+                      Primary Contact
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Change your primary contact"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="pt-4">
+                <Button disabled={!form.formState.isDirty} type="submit">
+                  Update Info
+                </Button>
+              </div>
+            </div>
           </div>
         </form>
-      </div>
-    </div>
+      </Form>
+    </AppLayout>
   );
 };
 

@@ -1,5 +1,5 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -16,7 +16,7 @@ export function useEditPaymentMEthod() {
       if (!id) {
         throw new Error("No Payment ID provided for editing");
       }
-      const response = await axiosAuthInstance.patch(endpoints.payment, {
+      const response = await axiosInstance.patch(endpoints.payment, {
         id,
         name,
         remarks,
