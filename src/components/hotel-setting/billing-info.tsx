@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,113 +10,132 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useGetBill } from "@/queries/bill/get-bill-query";
-
-interface BillData {
-  taxRate: number;
-  serviceChargeType: string;
-  serviceCharge: number;
-}
+import {
+  addBillDataSchema,
+  TAddBillDataSchema,
+} from "@/schema/info/add.billing.info";
+import AppLayout from "@/layout/dashboard-layout";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const BillingInfo = () => {
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors, isDirty },
-    reset,
-  } = useForm({
+  const form = useForm<TAddBillDataSchema>({
+    resolver: zodResolver(addBillDataSchema),
     defaultValues: {
-      taxRate: 0,
-      serviceCharge: 0,
-      serviceChargeType: "PERCENTAGE",
+      taxRate: "",
+      serviceCharge: "",
+      serviceChargeType: "",
     },
   });
 
   const { data: bill } = useGetBill();
   const billData = bill?.data || {};
 
-  const serviceChargeType = watch("serviceChargeType");
-
   useEffect(() => {
     if (bill) {
-      reset({
+      form.reset({
         taxRate: billData.taxRate || 0,
         serviceCharge: billData.serviceCharge || 0,
         serviceChargeType: billData.serviceChargeType || "PERCENTAGE",
       });
     }
-  }, [bill, reset]);
+  }, [bill, form]);
 
-  const onSubmit = async (data: BillData) => {
+  const onSubmit = async (data: TAddBillDataSchema) => {
     console.log(data, "This is data");
   };
 
-  const handleServiceTypeChange = (value: string) => {
-    setValue("serviceChargeType", value, {
-      shouldDirty: true,
-      shouldValidate: true,
-    });
-  };
-
   return (
-    <div className="p-6 space-y-4 w-4/6 border rounded-md">
-      <div>
-        <h1 className="text-xl font-semibold">Billing Information</h1>
-        <p className="text-gray-400">Update billing information of hotel</p>
-      </div>
-
-      <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-2">
-          <Label>Tax Rate</Label>
-          <Input
-            type="number"
-            {...register("taxRate", { valueAsNumber: true })}
-          />
-          {errors.taxRate && (
-            <p className="text-sm text-red-500">{errors.taxRate.message}</p>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <Label>Service Charge Type</Label>
-          <Select
-            value={serviceChargeType}
-            onValueChange={handleServiceTypeChange}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="PERCENTAGE">Percentage</SelectItem>
-              <SelectItem value="NUMBER">Number</SelectItem>
-            </SelectContent>
-          </Select>
-          {errors.serviceChargeType && (
-            <p className="text-sm text-red-500">
-              {errors.serviceChargeType.message}
-            </p>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <Label>Service Charge</Label>
-          <Input
-            type="number"
-            {...register("serviceCharge", { valueAsNumber: true })}
-          />
-          {errors.serviceCharge && (
-            <p className="text-sm text-red-500">
-              {errors.serviceCharge.message}
-            </p>
-          )}
-        </div>
-
-        <Button disabled={!isDirty} type="submit">
-          Update Bill Info
-        </Button>
-      </form>
-    </div>
+    <AppLayout>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-2 border p-6 rounded-lg"
+        >
+          <h1 className="text-neutral-600 text-xl">Bill Info</h1>
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="taxRate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Tax Rate</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter a tax rate for your hotel"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="serviceChargeType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">
+                      Service Charge Type
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger className="border-primary/30 focus:border-none">
+                          <SelectValue placeholder="Select service charge type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="PERCENTAGE">Percentage</SelectItem>
+                          <SelectItem value="NUMBER">Number</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="space-y-4">
+              <FormField
+                control={form.control}
+                name="serviceCharge"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">
+                      Service Charge
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter Service Charge"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="pt-4">
+                <Button disabled={!form.formState.isDirty} type="submit">
+                  Update Bill Info
+                </Button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </Form>
+    </AppLayout>
   );
 };
 
