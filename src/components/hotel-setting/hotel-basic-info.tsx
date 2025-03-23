@@ -3,7 +3,7 @@ import { Input } from "../ui/input";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { Button } from "../ui/button";
-import { useUpdateHotel } from "@/queries/hotel/update-hotel";
+import { useUpdateHotel } from "@/queries/hotel/update.hotel.query";
 import {
   Form,
   FormControl,

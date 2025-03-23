@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetBill } from "@/queries/bill/get-bill-query";
+import { useGetBill } from "@/queries/bill/get.bill.query";
 import {
   addBillDataSchema,
   TAddBillDataSchema,
@@ -24,19 +24,22 @@ import {
   FormMessage,
 } from "../ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useUpdateBill } from "@/queries/bill/update.bill.query";
 
 const BillingInfo = () => {
   const form = useForm<TAddBillDataSchema>({
     resolver: zodResolver(addBillDataSchema),
     defaultValues: {
-      taxRate: "",
-      serviceCharge: "",
+      taxRate: 0,
+      serviceCharge: 0,
       serviceChargeType: "",
     },
   });
 
   const { data: bill } = useGetBill();
-  const billData = bill?.data || {};
+  const billData = bill?.data;
+
+  const updateBill = useUpdateBill();
 
   useEffect(() => {
     if (bill) {
@@ -49,7 +52,7 @@ const BillingInfo = () => {
   }, [bill, form]);
 
   const onSubmit = async (data: TAddBillDataSchema) => {
-    console.log(data, "This is data");
+    updateBill.mutate(data);
   };
 
   return (
@@ -72,6 +75,7 @@ const BillingInfo = () => {
                       <Input
                         className="border-primary/30 focus:border-none"
                         placeholder="Enter a tax rate for your hotel"
+                        type="number"
                         {...field}
                       />
                     </FormControl>
@@ -119,6 +123,7 @@ const BillingInfo = () => {
                       <Input
                         className="border-primary/30 focus:border-none"
                         placeholder="Enter Service Charge"
+                        type="number"
                         {...field}
                       />
                     </FormControl>

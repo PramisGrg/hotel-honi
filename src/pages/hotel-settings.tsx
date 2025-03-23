@@ -1,6 +1,4 @@
-import BillingInfo from "@/components/hotel-setting/billing-info";
 import GeneralInfo from "@/components/hotel-setting/general-info";
-import HotelBasicInfo from "@/components/hotel-setting/hotel-basic-info";
 import PaymentMethod from "@/components/hotel-setting/payment-method";
 import AppLayout from "@/layout/dashboard-layout";
 import { cn } from "@/lib/utils";
