@@ -2,37 +2,40 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
+  DialogTrigger,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { DialogDescription, DialogTrigger } from "@radix-ui/react-dialog";
-import { useAddPaymentMethod } from "@/queries/payment/add-payment";
+import { useAddPaymentMethod } from "@/queries/payment/add.payment";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import {
+  addPaymentSchema,
+  TAddPaymentSchema,
+} from "@/schema/table/payment.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const AddPayment = () => {
-  const [name, setName] = useState("");
-  const [remarks, setRemarks] = useState("");
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  const form = useForm<TAddPaymentSchema>({
+    resolver: zodResolver(addPaymentSchema),
+  });
   const createPayment = useAddPaymentMethod();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const paymentMethod = {
-      name,
-      remarks,
-    };
-
-    createPayment.mutate(paymentMethod, {
-      onSuccess: () => {
+  const onSubmit = (data: TAddPaymentSchema) => {
+    createPayment.mutate(data, {
+      onSettled: () => {
         setIsDialogOpen(false);
-      },
-      onError: () => {
-        setName("");
       },
     });
   };
@@ -40,45 +43,57 @@ const AddPayment = () => {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-500" onClick={() => setIsDialogOpen(true)}>
-          Add payment
-        </Button>
+        <Button onClick={() => setIsDialogOpen(true)}>Add payment</Button>
       </DialogTrigger>
       <DialogContent className="min-w-[400px]">
         <DialogHeader>
           <DialogTitle>Add payment emthod</DialogTitle>
-          <DialogDescription className="text-gray-400">
-            Please provide payment method to add
-          </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="name">Payment Method</Label>
-              <Input
-                value={name}
-                id="name"
-                onChange={(e) => setName(e.target.value)}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">
+                      Payment Method
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your payment method"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div>
-              <Label htmlFor="remarks">Remarks</Label>
-              <Input
-                value={remarks}
-                id="remarks"
-                onChange={(e) => setRemarks(e.target.value)}
+              <FormField
+                control={form.control}
+                name="remarks"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Reamrks</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your payment remarks"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
+              <div className="pt-4">
+                <Button type="submit">Add Payment Method</Button>
+              </div>
             </div>
-            <DialogFooter>
-              <Button
-                className="bg-blue-600 duration-500 hover:text-gray-300"
-                type="submit"
-              >
-                Save changes
-              </Button>
-            </DialogFooter>
-          </div>
-        </form>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

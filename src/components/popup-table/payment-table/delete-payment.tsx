@@ -9,7 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useDeletePaymentMethod } from "@/queries/payment/delete-payment";
+import { useDeletePaymentMethod } from "@/queries/payment/delete.payment";
 import { MdOutlineDelete } from "react-icons/md";
 
 export function DeletePaymentMethod({ paymentId }: { paymentId: string }) {

@@ -1,5 +1,7 @@
 import endpoints from "@/lib/api.contant";
 import axiosInstance from "@/services/axios";
+import { TLoginResponse } from "@/types/auth.types";
+import { TError } from "@/types/error.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -11,7 +13,7 @@ interface EditCategoryParamsType {
 
 export function useEditPaymentMEthod() {
   const queryClient = useQueryClient();
-  return useMutation<unknown, Error, EditCategoryParamsType>({
+  return useMutation<TLoginResponse, TError, EditCategoryParamsType>({
     mutationFn: async ({ id, name, remarks }: EditCategoryParamsType) => {
       if (!id) {
         throw new Error("No Payment ID provided for editing");
@@ -23,14 +25,12 @@ export function useEditPaymentMEthod() {
       });
       return response.data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["Payment"] });
-      toast.success("Payment method updated successfully");
+      toast.success(data.message);
     },
     onError: (error) => {
-      toast.error(
-        error.message || "An error occurred while updating the category"
-      );
+      toast.error(error.response.data.message);
     },
   });
 }

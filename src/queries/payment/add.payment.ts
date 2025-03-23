@@ -1,17 +1,15 @@
 import endpoints from "@/lib/api.contant";
+import { TAddPaymentSchema } from "@/schema/table/payment.schema";
 import axiosInstance from "@/services/axios";
+import { TLoginResponse } from "@/types/auth.types";
+import { TError } from "@/types/error.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-type Payment = {
-  name: string;
-  remarks: string;
-};
-
 export function useAddPaymentMethod() {
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async (payment: Payment) => {
+  return useMutation<TLoginResponse, TError, TAddPaymentSchema>({
+    mutationFn: async (payment) => {
       const response = await axiosInstance.post(endpoints.payment, payment);
       return response.data;
     },
@@ -19,8 +17,8 @@ export function useAddPaymentMethod() {
       queryClient.invalidateQueries({ queryKey: ["Payment"] });
       toast.success(data.message);
     },
-    onError: () => {
-      toast.error("Please satisfy the given conditions");
+    onError: (error) => {
+      toast.error(error.response.data.message);
     },
   });
 }

@@ -1,12 +1,14 @@
 import endpoints from "@/lib/api.contant";
 import axiosInstance from "@/services/axios";
+import { TLoginResponse } from "@/types/auth.types";
+import { TError } from "@/types/error.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export function useDeletePaymentMethod() {
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async (paymentId: string) => {
+  return useMutation<TLoginResponse, TError, string>({
+    mutationFn: async (paymentId) => {
       const response = await axiosInstance.delete(
         `${endpoints.payment}/${paymentId}`
       );
@@ -16,8 +18,8 @@ export function useDeletePaymentMethod() {
       queryClient.invalidateQueries({ queryKey: ["Payment"] });
       toast.success(data.message);
     },
-    onError: () => {
-      toast.error("Please satisfy the given conditions");
+    onError: (error) => {
+      toast.error(error.response.data.message);
     },
   });
 }

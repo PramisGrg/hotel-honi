@@ -1,4 +1,4 @@
-import { useGetPayment } from "@/queries/payment/get-payment";
+import { useGetPayment } from "@/queries/payment/get.payment";
 import * as React from "react";
 import {
   ColumnDef,

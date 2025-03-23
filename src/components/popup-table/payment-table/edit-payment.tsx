@@ -2,40 +2,52 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useEditPaymentMEthod } from "@/queries/payment/edit-payment";
-import { DialogDescription } from "@radix-ui/react-dialog";
+import { useEditPaymentMEthod } from "@/queries/payment/edit.payment";
+import {
+  addPaymentSchema,
+  TAddPaymentSchema,
+} from "@/schema/table/payment.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { MdOutlineEdit } from "react-icons/md";
 
 export function EditPaymentMethod({ paymentId }: { paymentId: string }) {
-  const [name, setName] = useState("");
-  const [remarks, setRemarks] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const editPaymentMethod = useEditPaymentMEthod();
 
-  const handleEdit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const form = useForm<TAddPaymentSchema>({
+    resolver: zodResolver(addPaymentSchema),
+  });
+
+  const onSubmit = (data: TAddPaymentSchema) => {
     if (!paymentId) {
       throw new Error("PaymentId is required");
     }
-    editPaymentMethod.mutate(
-      { id: paymentId, name, remarks },
-      {
-        onSettled: () => {
-          setName("");
-          setRemarks("");
-          setIsDialogOpen(false);
-        },
-      }
-    );
+    const requiredData = {
+      id: paymentId,
+      name: data.name,
+      remarks: data.remarks,
+    };
+    editPaymentMethod.mutate(requiredData, {
+      onSettled: () => {
+        setIsDialogOpen(false);
+      },
+    });
   };
 
   return (
@@ -48,44 +60,52 @@ export function EditPaymentMethod({ paymentId }: { paymentId: string }) {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Edit Payment method</DialogTitle>
-          <DialogDescription className="text-gray-400">
-            Edit your payment method here
-          </DialogDescription>
         </DialogHeader>
-        <form onSubmit={handleEdit}>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                id="name"
-                className="col-span-3"
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+            <div className="space-y-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">
+                      Payment Method
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your payment method"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="remarks" className="text-right">
-                Remarks
-              </Label>
-              <Input
-                value={remarks}
-                onChange={(e) => setRemarks(e.target.value)}
-                id="name"
-                className="col-span-3"
+              <FormField
+                control={form.control}
+                name="remarks"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-semibold">Reamrks</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-primary/30 focus:border-none"
+                        placeholder="Enter your payment remarks"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
+              <div className="pt-4">
+                <Button type="submit">Add Payment Method</Button>
+              </div>
             </div>
-          </div>
-          <DialogFooter>
-            <Button
-              className="bg-blue-500 hover:text-gray-200 duration-300 hover:shadow-md"
-              type="submit"
-            >
-              Save changes
-            </Button>
-          </DialogFooter>
-        </form>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );
