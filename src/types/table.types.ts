@@ -101,3 +101,17 @@ export interface TEditRole {
   roleId: string;
   roleName: string;
 }
+
+//Get Payment
+export interface TGetPaymentResponseData {
+  id: string;
+  hotelId: string;
+  name: string;
+  remarks: string;
+  createdAt: string;
+  updatedAt: string;
+}
+export interface TGetPaymentResponse {
+  data: TGetPaymentResponse[];
+  message: string;
+}

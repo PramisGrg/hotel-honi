@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useEditPaymentMEthod } from "@/queries/payment/edit.payment";
+import { useEditPaymentMethod } from "@/queries/payment/edit.payment";
 import {
   addPaymentSchema,
   TAddPaymentSchema,
@@ -28,7 +28,7 @@ import { MdOutlineEdit } from "react-icons/md";
 export function EditPaymentMethod({ paymentId }: { paymentId: string }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const editPaymentMethod = useEditPaymentMEthod();
+  const editPaymentMethod = useEditPaymentMethod();
 
   const form = useForm<TAddPaymentSchema>({
     resolver: zodResolver(addPaymentSchema),
@@ -38,16 +38,14 @@ export function EditPaymentMethod({ paymentId }: { paymentId: string }) {
     if (!paymentId) {
       throw new Error("PaymentId is required");
     }
-    const requiredData = {
-      id: paymentId,
-      name: data.name,
-      remarks: data.remarks,
-    };
-    editPaymentMethod.mutate(requiredData, {
-      onSettled: () => {
-        setIsDialogOpen(false);
-      },
-    });
+    editPaymentMethod.mutate(
+      { id: paymentId, data },
+      {
+        onSettled: () => {
+          setIsDialogOpen(false);
+        },
+      }
+    );
   };
 
   return (

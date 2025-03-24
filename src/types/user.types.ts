@@ -15,3 +15,12 @@ export interface TGetUserResponse {
   message: string;
   data: TGetUserResponseData;
 }
+
+//Edit User
+export interface TEditUser {
+  dialCode: string;
+  phoneNumber: string;
+  name: string;
+  username: string;
+  file?: string;
+}

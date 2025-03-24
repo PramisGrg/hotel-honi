@@ -1,4 +1,5 @@
 import endpoints from "@/lib/api.contant";
+import { TAddPaymentSchema } from "@/schema/table/payment.schema";
 import axiosInstance from "@/services/axios";
 import { TLoginResponse } from "@/types/auth.types";
 import { TError } from "@/types/error.type";
@@ -7,22 +8,20 @@ import { toast } from "sonner";
 
 interface EditCategoryParamsType {
   id: string;
-  name: string;
-  remarks: string;
+  data: TAddPaymentSchema;
 }
 
-export function useEditPaymentMEthod() {
+export function useEditPaymentMethod() {
   const queryClient = useQueryClient();
   return useMutation<TLoginResponse, TError, EditCategoryParamsType>({
-    mutationFn: async ({ id, name, remarks }: EditCategoryParamsType) => {
+    mutationFn: async ({ id, data }: EditCategoryParamsType) => {
       if (!id) {
         throw new Error("No Payment ID provided for editing");
       }
-      const response = await axiosInstance.patch(endpoints.payment, {
-        id,
-        name,
-        remarks,
-      });
+      const response = await axiosInstance.patch(
+        `${endpoints.payment}/${id}`,
+        data
+      );
       return response.data;
     },
     onSuccess: (data) => {

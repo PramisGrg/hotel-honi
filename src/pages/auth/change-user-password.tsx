@@ -8,15 +8,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { UseChangeUserPassword } from "@/queries/user/change-user-password-query";
-import { ChangeUserPasswordSchema } from "@/schema/change-user-password-schema";
+import { UseChangeUserPassword } from "@/queries/user/change.user.password-query";
+import {
+  changeUserPasswordSchema,
+  TChangeUserPasswordSchema,
+} from "@/schema/user/change.password.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 
 const ChangeUserPassword = () => {
-  const form = useForm<z.infer<typeof ChangeUserPasswordSchema>>({
-    resolver: zodResolver(ChangeUserPasswordSchema),
+  const form = useForm<TChangeUserPasswordSchema>({
+    resolver: zodResolver(changeUserPasswordSchema),
     defaultValues: {
       currentPassword: "",
       newPassword: "",
@@ -28,37 +30,33 @@ const ChangeUserPassword = () => {
 
   const { isDirty } = form.formState;
 
-  async function onSubmit(values: z.infer<typeof ChangeUserPasswordSchema>) {
+  async function onSubmit(values: TChangeUserPasswordSchema) {
     const requiredValues = {
       currentPassword: values.currentPassword,
       newPassword: values.newPassword,
     };
-    console.log(requiredValues);
     changeUserPasswordMutation.mutate(requiredValues);
-    form.reset();
   }
 
   return (
-    <div>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-          <div>
-            <h1 className=" text-black font-semibold">Change Password</h1>
-          </div>
-          <div className="space-y-6 ">
+    <div className="space-y-10">
+      <div className="space-y-4 border-2 p-6 border-gray-200 rounded-xl">
+        <h1 className="font-semibold">Change Password</h1>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
             <FormField
               control={form.control}
               name="currentPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-600">
+                  <FormLabel className="font-semibold">
                     Current Password
                   </FormLabel>
                   <FormControl>
                     <Input
                       autoComplete="current-password"
                       type="password"
-                      className="bg-[#EFECFF]"
+                      className="border-primary/30 focus:border-none"
                       placeholder="*******"
                       {...field}
                     />
@@ -72,12 +70,12 @@ const ChangeUserPassword = () => {
               name="newPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-600">New Password</FormLabel>
+                  <FormLabel className="font-semibold">New Password</FormLabel>
                   <FormControl>
                     <Input
                       autoComplete="current-password"
                       type="password"
-                      className="bg-[#EFECFF]"
+                      className="border-primary/30 focus:border-none"
                       placeholder="*******"
                       {...field}
                     />
@@ -91,14 +89,14 @@ const ChangeUserPassword = () => {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-600">
+                  <FormLabel className="font-semibold">
                     Confirm Password
                   </FormLabel>
                   <FormControl>
                     <Input
                       autoComplete="current-password"
                       type="password"
-                      className="bg-[#EFECFF]"
+                      className="border-primary/30 focus:border-none"
                       placeholder="*******"
                       {...field}
                     />
@@ -107,17 +105,15 @@ const ChangeUserPassword = () => {
                 </FormItem>
               )}
             />
-          </div>
-          <div className="py-2">
-            <Button
-              className={`${isDirty ? "bg-blue-600" : "bg-blue-100"} w-full`}
-              type="submit"
-            >
-              Change Password
-            </Button>
-          </div>
-        </form>
-      </Form>
+
+            <div className="py-2">
+              <Button disabled={!isDirty} type="submit">
+                Change Password
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
     </div>
   );
 };
