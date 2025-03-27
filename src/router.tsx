@@ -20,6 +20,7 @@ import Supplier from "./pages/table/customer-and-supplier/supplier";
 import Staff from "./pages/table/staff";
 import HotelSetting from "./pages/hotel-settings";
 import Setting from "./pages/setting";
+import Order from "./pages/table/order";
 
 export const router = createBrowserRouter([
   {
@@ -64,7 +65,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "order",
-        element: <Room />,
+        element: <Order />,
       },
       {
         path: "room",

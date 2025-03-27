@@ -1,13 +1,12 @@
 import AddOrder from "@/components/popup-table/order-table/add-order";
+import { useGetOrder } from "@/queries/order-and-kot/get.all.order";
 import { Input } from "@/components/ui/input";
-import { useGetOrder } from "@/queries/order-and-kot/get-all-order";
 import { Dot } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Order = () => {
   const { data: order } = useGetOrder();
-  const orders = order?.data || [];
-  console.log(orders, "This is orders");
+  const orderData = order?.data || [];
 
   return (
     <div className="flex">
@@ -22,7 +21,7 @@ const Order = () => {
             <Input className="w-1/3 rounded-md" placeholder="Search Order..." />
           </div>
           <div className="grid grid-cols-4 gap-4 py-6">
-            {orders.map((order) => (
+            {orderData.map((order) => (
               <Link
                 key={order.id}
                 className="border rounded-md p-2 text-sm"

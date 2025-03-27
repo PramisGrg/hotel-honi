@@ -1,5 +1,5 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -16,7 +16,7 @@ export function useCreateOrder() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (order: Order) => {
-      const response = await axiosAuthInstance.post(
+      const response = await axiosInstance.post(
         endpoints.orderAndKot.createOrder,
         order
       );
