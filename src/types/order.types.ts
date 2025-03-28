@@ -63,7 +63,7 @@ export interface TOrderResponse {
 }
 
 //Get Table
-interface TTableResponseData {
+export interface TTableResponseData {
   capacity: number;
   id: string;
   name: string;
