@@ -61,3 +61,36 @@ export interface TOrderResponse {
   message: string;
   data: TOrderResponseData[];
 }
+
+//Get Table
+interface TTableResponseData {
+  capacity: number;
+  id: string;
+  name: string;
+  space: string | null;
+  status: string;
+}
+export interface TTableResponse {
+  message: string;
+  data: TTableResponseData[];
+}
+
+//Get Dish
+interface TCategory {
+  id: string;
+  name: string;
+}
+export interface TDishesResponseData {
+  category: TCategory;
+  createdAt: string;
+  description: string;
+  id: string;
+  image: string;
+  name: string;
+  price: number;
+  updatedAt: string;
+}
+export interface TDishesResponse {
+  message: string;
+  data: TDishesResponseData[];
+}

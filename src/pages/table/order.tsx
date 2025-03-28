@@ -1,25 +1,27 @@
 import AddOrder from "@/components/popup-table/order-table/add-order";
 import { useGetOrder } from "@/queries/order-and-kot/get.all.order";
-import { Input } from "@/components/ui/input";
 import { Dot } from "lucide-react";
 import { Link } from "react-router-dom";
+import NoOrder from "@/components/order/no-order";
+import AppLayout from "@/layout/dashboard-layout";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Order = () => {
-  const { data: order } = useGetOrder();
+  const { data: order, isLoading } = useGetOrder();
   const orderData = order?.data || [];
 
+  if (isLoading) <Skeleton />;
+
   return (
-    <div className="flex">
-      <div className="w-full p-8 space-y-6">
-        <div className="">
-          <h1 className="text-xl">Order</h1>
-          <p className="text-sm text-gray-60 pb-4">
-            View and manage all your staffs
-          </p>
-          <div className="flex justify-between">
-            <AddOrder />
-            <Input className="w-1/3 rounded-md" placeholder="Search Order..." />
-          </div>
+    <AppLayout className="space-y-8">
+      <div className="flex flex-col">
+        <h1 className="text-xl text-neutral-700">Order</h1>
+        <p className="text-neutral-400">View and manage all your orders</p>
+      </div>
+
+      {orderData.length > 0 ? (
+        <div>
+          <AddOrder />
           <div className="grid grid-cols-4 gap-4 py-6">
             {orderData.map((order) => (
               <Link
@@ -27,44 +29,43 @@ const Order = () => {
                 className="border rounded-md p-2 text-sm"
                 to={`/dashboard/kot/${order.id}/${order.status}`}
               >
-                <div>
-                  <div className="flex justify-between">
-                    <p>{order?.table?.name}</p>
-                    <p
-                      className={`lowercase ${
-                        order.status === "PENDING"
-                          ? "text-yellow-500"
-                          : "text-green-500"
-                      }`}
-                    >
-                      {order.status}
-                    </p>
-                  </div>
-                  <p className="text-gray-400 py-2">
-                    Order number :
-                    <span className="text-base pl-2">{order.orderNumber}</span>
-                  </p>
-                  <div>
-                    {order.kots.map((kots) => (
-                      <div key={kots.id} className="p-0 m-0">
-                        {kots.KotItems.map((kotItems) => (
-                          <span key={kotItems.id}>
-                            <span className="flex">
-                              <Dot className="text-green-400 pb-1" />
-                              {kotItems.item.name}
-                            </span>
-                          </span>
-                        ))}
+                <div className="flex justify-between">
+                  <h1>{order?.table?.name}</h1>
+                  <h3
+                    className={`lowercase ${
+                      order.status === "PENDING"
+                        ? "text-yellow-500"
+                        : "text-green-500"
+                    }`}
+                  >
+                    {order.status}
+                  </h3>
+                </div>
+                <p className="text-gray-400 py-2">
+                  Order number :
+                  <span className="text-base pl-2">{order.orderNumber}</span>
+                </p>
+
+                {order.kots.map((kots) => (
+                  <div key={kots.id}>
+                    {kots.KotItems.map((kotItems) => (
+                      <div key={kotItems.id}>
+                        <span className="flex">
+                          <Dot className="text-green-400 pb-1" />
+                          {kotItems.item.name}
+                        </span>
                       </div>
                     ))}
                   </div>
-                </div>
+                ))}
               </Link>
             ))}
           </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        <NoOrder />
+      )}
+    </AppLayout>
   );
 };
 

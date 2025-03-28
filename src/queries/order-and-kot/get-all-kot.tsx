@@ -1,4 +1,4 @@
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { useQuery } from "@tanstack/react-query";
 
 export interface KotItem {
@@ -28,7 +28,7 @@ export const useGetKot = (orderId: string | undefined) => {
   return useQuery<KotRepsonse>({
     queryKey: ["Kot", orderId],
     queryFn: async () => {
-      const response = await axiosAuthInstance.get(`/order/${orderId}/kot/all`);
+      const response = await axiosInstance.get(`/order/${orderId}/kot/all`);
       return response.data;
     },
     enabled: !!orderId, //orderId defined bhaye matra kam garcha natra gardaina

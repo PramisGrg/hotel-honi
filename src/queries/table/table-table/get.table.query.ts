@@ -1,5 +1,6 @@
 import endpoints from "@/lib/api.contant";
 import axiosInstance from "@/services/axios";
+import { TTableResponse } from "@/types/order.types";
 import { useQuery } from "@tanstack/react-query";
 
 interface UseGetTableQueryParams {
@@ -19,12 +20,15 @@ export const useGetTableQuery = ({
     search,
   };
 
-  return useQuery({
+  return useQuery<TTableResponse, Error>({
     queryKey: ["Tables", { take, skip, search }],
     queryFn: async () => {
-      const response = await axiosInstance.get(endpoints.tables.getTables, {
-        params,
-      });
+      const response = await axiosInstance.get<TTableResponse>(
+        endpoints.tables.getTables,
+        {
+          params,
+        }
+      );
       return response.data;
     },
   });
