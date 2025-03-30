@@ -1,5 +1,5 @@
 import endpoints from "@/lib/api.contant";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -22,10 +22,7 @@ interface CheckoutType {
 export const useCheckout = () => {
   return useMutation({
     mutationFn: async (checkout: CheckoutType) => {
-      const response = await axiosAuthInstance.post(
-        endpoints.checkout,
-        checkout
-      );
+      const response = await axiosInstance.post(endpoints.checkout, checkout);
       return response.data;
     },
     onSuccess: (data) => {

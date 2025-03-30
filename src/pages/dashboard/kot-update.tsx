@@ -15,7 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetKot } from "@/queries/order-and-kot/get-all-kot";
+import { useGetKot } from "@/queries/order-and-kot/get.all.kot";
 import { Minus, Plus } from "lucide-react";
 import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -214,7 +214,6 @@ const KotUpdate = () => {
                     <span>{totalPrice}</span>
                   </div>
                   <Button
-                    disabled={!(status === "SERVED")}
                     onClick={() => {
                       setShowCheckoutSheet(true);
                     }}

@@ -22,6 +22,7 @@ import HotelSetting from "./pages/hotel-settings";
 import Setting from "./pages/setting";
 import Order from "./pages/table/order";
 import Kot from "./pages/dashboard/kot";
+import KotUpdate from "./pages/dashboard/kot-update";
 
 export const router = createBrowserRouter([
   {
@@ -115,6 +116,10 @@ export const router = createBrowserRouter([
       {
         path: "kot/:orderId/:status",
         element: <Kot />,
+      },
+      {
+        path: "kot-update/:orderId",
+        element: <KotUpdate />,
       },
     ],
   },

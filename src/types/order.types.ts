@@ -42,6 +42,12 @@ export interface TKots {
   userId: string;
 }
 
+//Get Kot Response
+export interface TKotsResponse {
+  data: TKots[];
+  message: string;
+}
+
 export interface TOrderResponseData {
   createdAt: string;
   hotelId: string;

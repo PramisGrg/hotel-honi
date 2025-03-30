@@ -26,7 +26,7 @@ const Order = () => {
             {orderData.map((order) => (
               <Link
                 key={order.id}
-                className="border rounded-md p-2 text-sm"
+                className="border rounded-md p-2 text-sm cursor-pointer hover:scale-105 transition-all duration-300"
                 to={`/dashboard/kot/${order.id}/${order.status}`}
               >
                 <div className="flex justify-between">

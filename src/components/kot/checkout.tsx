@@ -21,7 +21,7 @@ import {
 import { calculatePrice } from "@/helper/calculate-price";
 import { useGetPayment } from "@/queries/payment/get.payment";
 import { useGetStaff } from "@/queries/staff/get.staff.query";
-import { UseGetCustomerQuery } from "@/queries/table/customer-table/get.cutomer.query";
+import { useGetCustomerQuery } from "@/queries/table/customer-table/get.cutomer.query";
 import { Button } from "../ui/button";
 import { useCheckout } from "@/queries/checkout/checkout";
 import { toast } from "sonner";
@@ -84,7 +84,7 @@ export function Checkout({
   const payment = data?.data || [];
   const { data: staff } = useGetStaff();
   const staffData = staff?.data || [];
-  const { data: customer } = UseGetCustomerQuery({
+  const { data: customer } = useGetCustomerQuery({
     search: "",
   });
   const customerData = customer?.data || [];
@@ -245,7 +245,7 @@ export function Checkout({
       <SheetContent className="min-w-[70vw]" side={"right"}>
         <SheetHeader className="py-4">
           <SheetTitle>Checkout</SheetTitle>
-          <SheetDescription>Total Amount : {totalAmount}</SheetDescription>
+          {/* <SheetDescription>Total Amount : {totalAmount}</SheetDescription> */}
         </SheetHeader>
         <div className="grid grid-cols-2 gap-4 h-[calc(100vh-150px)] overflow-hidden">
           <div className="space-y-4 overflow-y-auto">

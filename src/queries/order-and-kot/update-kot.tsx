@@ -1,4 +1,4 @@
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -19,7 +19,7 @@ export function useUpdateKot() {
       kotItemId,
       ...kotUpdateData
     }: KotUpdateData) => {
-      const response = await axiosAuthInstance.patch(
+      const response = await axiosInstance.patch(
         `/order/${orderId}/kot/${kotId}/${kotItemId}`,
         kotUpdateData
       );
