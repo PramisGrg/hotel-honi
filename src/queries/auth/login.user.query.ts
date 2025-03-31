@@ -12,7 +12,6 @@ export const useLoginUserQuery = () => {
 
   return useMutation<TLoginResponse, TError, TUserLogin>({
     mutationFn: async (loginValues) => {
-      toast.loading("Logging in...");
       const response = await axiosInstance.post<TLoginResponse>(
         endpoints.auth.login,
         loginValues
@@ -22,7 +21,12 @@ export const useLoginUserQuery = () => {
     onSuccess: (data) => {
       toast.success(data.message);
       Cookies.set("token", data.data.token);
-      navigate("/dashboard");
+      const activeHotelId = data.data.activeHotelId;
+      if (activeHotelId) {
+        navigate("/dashboard/home");
+      } else {
+        navigate("/onboarding");
+      }
     },
     onError: (error) => {
       toast.error(error.response.data.message);

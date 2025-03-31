@@ -4,12 +4,13 @@ import axiosInstance from "@/services/axios";
 import { TError } from "@/types/error.type";
 import { TCreateHotelResponse } from "@/types/hotel.types";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 export const useCreateHotel = () => {
+  const navigate = useNavigate();
   return useMutation<TCreateHotelResponse, TError, TCreateHotelSchema>({
     mutationFn: async (data) => {
-      toast.loading("Creating hotel ...");
       const response = await axiosInstance.post(
         endpoints.hotel.createHotel,
         data
@@ -19,6 +20,7 @@ export const useCreateHotel = () => {
 
     onSuccess: (data) => {
       toast.success(data.message);
+      navigate("/dashboard/home");
     },
 
     onError: (error) => {
