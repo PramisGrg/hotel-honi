@@ -1,4 +1,6 @@
 import axiosInstance from "@/services/axios";
+import { TLoginResponse } from "@/types/auth.types";
+import { TError } from "@/types/error.type";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -12,13 +14,8 @@ type KotUpdateData = {
 
 export function useUpdateKot() {
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      orderId,
-      kotId,
-      kotItemId,
-      ...kotUpdateData
-    }: KotUpdateData) => {
+  return useMutation<TLoginResponse, TError, KotUpdateData>({
+    mutationFn: async ({ orderId, kotId, kotItemId, ...kotUpdateData }) => {
       const response = await axiosInstance.patch(
         `/order/${orderId}/kot/${kotId}/${kotItemId}`,
         kotUpdateData
@@ -30,8 +27,7 @@ export function useUpdateKot() {
       toast.success(data.message);
     },
     onError: (error) => {
-      console.log(error);
-      toast.error("Please satisfy the given conditions");
+      toast.error(error.response.data.message);
     },
   });
 }

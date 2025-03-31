@@ -4,13 +4,10 @@ import { Dot } from "lucide-react";
 import { Link } from "react-router-dom";
 import NoOrder from "@/components/order/no-order";
 import AppLayout from "@/layout/dashboard-layout";
-import { Skeleton } from "@/components/ui/skeleton";
 
 const Order = () => {
-  const { data: order, isLoading } = useGetOrder();
+  const { data: order } = useGetOrder();
   const orderData = order?.data || [];
-
-  if (isLoading) <Skeleton />;
 
   return (
     <AppLayout className="space-y-8">

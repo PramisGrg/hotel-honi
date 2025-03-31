@@ -2,12 +2,10 @@ import { Switch } from "../ui/switch";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-// import { useGetBill } from "@/queries/bill/get-bill-query";
 import { Input } from "../ui/input";
 import React, { useState } from "react";
 import {
@@ -27,30 +25,13 @@ import { useCheckout } from "@/queries/checkout/checkout";
 import { toast } from "sonner";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-export interface KotItem {
-  id?: string;
-  kotId: string;
-  quantity: number;
-  status: string;
-  item: {
-    id: string;
-    name: string;
-    price: number;
-  };
-}
-
-export interface Kot {
-  id: string;
-  kotNumber: number;
-  status: string;
-  KotItems: KotItem[];
-}
+import { TKots } from "@/types/order.types";
 interface CheckoutProps {
   showCheckoutSheet: boolean;
   setShowCheckoutSheet: (value: boolean) => void;
   totalAmount: number;
   orderId: string;
-  kotData: Kot[];
+  kotData: TKots[];
 }
 
 export function Checkout({
@@ -60,8 +41,6 @@ export function Checkout({
   orderId,
   kotData,
 }: CheckoutProps) {
-  // const { data: bill } = useGetBill();
-
   const [discountType, setDiscountType] = useState("");
   const [discount, setDiscount] = useState<number>();
   const [serviceCharge, setServiceCharge] = useState<number>();

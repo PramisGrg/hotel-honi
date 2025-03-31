@@ -1,8 +1,11 @@
 import { useGetKot } from "@/queries/order-and-kot/get.all.kot";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
+import { Checkout } from "./checkout";
 
 const OrderSummary = ({ orderId }: { orderId: string }) => {
+  const [showCheckoutSheet, setShowCheckoutSheet] = useState(false);
+
   const { data: kot } = useGetKot(orderId);
   const kotData = kot?.data || [];
 
@@ -13,6 +16,8 @@ const OrderSummary = ({ orderId }: { orderId: string }) => {
     );
     return total + kotTotal;
   }, 0);
+
+  console.log(kotData, "This is kot data");
 
   return (
     <div className="rounded-md border h-[85vh] py-6">
@@ -64,15 +69,23 @@ const OrderSummary = ({ orderId }: { orderId: string }) => {
           </div>
 
           <Button
-            // onClick={() => {
-            //   setShowCheckoutSheet(true);
-            // }}
+            onClick={() => {
+              setShowCheckoutSheet(true);
+            }}
             className="w-full"
           >
             Checkout
           </Button>
         </section>
       </div>
+
+      <Checkout
+        kotData={kotData}
+        orderId={orderId ?? ""}
+        totalAmount={200}
+        showCheckoutSheet={showCheckoutSheet}
+        setShowCheckoutSheet={setShowCheckoutSheet}
+      />
     </div>
   );
 };

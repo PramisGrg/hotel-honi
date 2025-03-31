@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import SpinnerSwitch from "@/components/common/spinner-switch";
 import { useSwitchHotelQuery } from "@/queries/hotel/switch.hotel.query";
 import { useActiveHotelStore } from "@/store/active.hotel.store";
+import { useNavigate } from "react-router-dom";
 
 interface ActiveHotelProps {
   image?: string | null;
@@ -20,6 +21,7 @@ interface ActiveHotelProps {
 }
 export function ActiveHotel({ image, isOpen, setIsOpen }: ActiveHotelProps) {
   const { user } = useUserStore();
+  const navigate = useNavigate();
 
   const allHotels = useGetAllHotels();
   const activeHotel = useGetActiveHotel();
@@ -69,7 +71,13 @@ export function ActiveHotel({ image, isOpen, setIsOpen }: ActiveHotelProps) {
         <div className="flex flex-col items-center gap-4 justify-center">
           <ImageWrapper src={image ?? undefined} />
           <div className="text-neutral-500">{user?.name}</div>
-          <button className="text-sm text-primary underline underline-offset-2">
+          <button
+            onClick={() => {
+              setIsOpen(false);
+              navigate("/dashboard/setting");
+            }}
+            className="text-sm text-primary underline underline-offset-2"
+          >
             Edit Profile
           </button>
         </div>

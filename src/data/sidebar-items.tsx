@@ -1,5 +1,4 @@
 import {
-  Rss,
   Settings,
   SquareUserRound,
   Utensils,
@@ -7,7 +6,6 @@ import {
   LucideIcon,
   ShoppingCart,
   Building,
-  DollarSign,
   User,
   Notebook,
   UserCog,
@@ -38,7 +36,7 @@ export function getMenuList(): Group[] {
       groupLabel: "",
       menus: [
         {
-          href: "/dashboard",
+          href: "/dashboard/home",
           label: "Dashboard",
           icon: LayoutGrid,
           submenus: [],
@@ -117,16 +115,6 @@ export function getMenuList(): Group[] {
     {
       groupLabel: "Settings",
       menus: [
-        {
-          href: "/website",
-          label: "Website",
-          icon: Rss,
-        },
-        {
-          href: "/users",
-          label: "Finance",
-          icon: DollarSign,
-        },
         {
           href: "/dashboard/setting",
           label: "Account",
