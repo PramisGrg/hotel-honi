@@ -5,6 +5,7 @@ import { useGetTableQuery } from "@/queries/table/table-table/get.table.query";
 import { useDebounce } from "@/hooks/debounce";
 import { useDebounceValue } from "@/store/debounce-store";
 import AppLayout from "@/layout/dashboard-layout";
+import { TTableResponseData } from "@/types/order.types";
 
 const Table = () => {
   const { debounceTableValue } = useDebounceValue((state) => ({
@@ -13,7 +14,7 @@ const Table = () => {
 
   const debounceSearchTable = useDebounce(debounceTableValue, 750);
 
-  const [allTables, setAllTables] = useState([]);
+  const [allTables, setAllTables] = useState<TTableResponseData[]>([]);
 
   const { data: tables } = useGetTableQuery({ search: debounceSearchTable });
 

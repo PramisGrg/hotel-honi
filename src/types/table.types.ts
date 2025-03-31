@@ -29,8 +29,8 @@ export interface TGetSpaceResponse {
 //Get Table
 export interface TGetTableResponseData {
   id: string;
-  capcaity: string;
-  status: Status;
+  capacity: number;
+  status: string;
   name: string;
 }
 export interface TGetTableResponse {

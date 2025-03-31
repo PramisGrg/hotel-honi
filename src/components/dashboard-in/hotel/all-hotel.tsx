@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { CreateHotel } from "./create-hotel";
 import { useState } from "react";
-import { axiosAuthInstance } from "@/services/axios";
+import axiosInstance from "@/services/axios";
 import endpoints from "@/lib/api.contant";
 import { UseHotelInfoStore } from "@/store/hotel-store";
 
@@ -59,7 +59,7 @@ export function AllHotel() {
 
   const handleGetAllHotel = async () => {
     try {
-      const response = await axiosAuthInstance.get(endpoints.hotel.allHotel);
+      const response = await axiosInstance.get(endpoints.hotel.allHotel);
       const res = response.data.data;
       setAllHotel(res);
     } catch (error) {

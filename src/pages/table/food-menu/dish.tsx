@@ -2,9 +2,10 @@ import { dishescolumns } from "@/components/columns/dishes-columns";
 import { DishesTable } from "@/components/table/dishes-table";
 import { useEffect, useState } from "react";
 import { useGetDishesQuery } from "@/queries/table/dishes-menu/get.dishes.query";
+import { TDishesResponseData } from "@/types/order.types";
 
 const Dishes = () => {
-  const [dishes, setDishes] = useState([]);
+  const [dishes, setDishes] = useState<TDishesResponseData[]>([]);
 
   const { data: dishesData } = useGetDishesQuery();
   useEffect(() => {
