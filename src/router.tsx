@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import HomePage from "./pages/home-page";
-import Login from "./pages/auth/login";
+import Login from "./pages/auth/login-user";
 import Register from "./pages/auth/register";
 import VerifyOTP from "./pages/auth/verify-otp";
 import ResetPassword from "./pages/auth/forgot-password/reset-password";
